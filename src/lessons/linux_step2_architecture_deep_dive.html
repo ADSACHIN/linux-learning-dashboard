@@ -1,0 +1,1008 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg2:#0d1117;--bg3:#111820;
+  --panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--g2:#00cc6a;
+  --c:#00d4ff;--y:#ffd700;--o:#ff8c00;
+  --r:#ff3b3b;--p:#9d4edd;--bl:#2979ff;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.012) 2px,rgba(0,255,136,.012) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+/* panel */
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pi{font-size:14px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+/* header */
+.hdr{background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden}
+.hdr::after{content:'';position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 16px var(--g);opacity:.5}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--b2);margin-bottom:16px;overflow-x:auto}
+.tab{padding:8px 16px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.tab.active{color:var(--g);border-bottom-color:var(--g)}
+.tab:hover:not(.active){color:var(--t2)}
+.tab-content{display:none}.tab-content.active{display:block}
+/* concept blocks */
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px;border-left:3px solid var(--c)}
+.cb.g{border-left-color:var(--g)}.cb.y{border-left-color:var(--y)}.cb.p{border-left-color:var(--p)}.cb.o{border-left-color:var(--o)}.cb.r{border-left-color:var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--c)}
+.cb.g .cbt{color:var(--g)}.cb.y .cbt{color:var(--y)}.cb.p .cbt{color:var(--p)}.cb.o .cbt{color:var(--o)}.cb.r .cbt{color:var(--r)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+/* terminal */
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tbody{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}.cmd{color:#fff}.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.orn{display:block;color:var(--o)}.ogn{display:block;color:var(--g)}
+/* process tree */
+.ptree{background:var(--bg);border:1px solid var(--b2);padding:16px 20px;font-size:12px;line-height:2}
+/* info/warn */
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.ic{color:var(--c);flex-shrink:0}.wc{color:var(--y);flex-shrink:0}
+/* memory diagram */
+.mem-map{background:var(--bg);border:1px solid var(--b2);padding:16px}
+.mem-row{display:flex;align-items:stretch;margin-bottom:2px}
+.mem-addr{width:110px;min-width:110px;font-size:10px;color:var(--t3);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-family:var(--mono)}
+.mem-seg{flex:1;padding:7px 12px;text-align:center}
+.mem-seg-name{font-family:var(--sans);font-size:12px;font-weight:600}
+.mem-seg-desc{font-size:10px;color:var(--t3);margin-top:2px}
+.ms-kernel{background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3)}
+.ms-stack {background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.3)}
+.ms-heap  {background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.3)}
+.ms-data  {background:rgba(157,78,221,.08);border:1px solid rgba(157,78,221,.3)}
+.ms-text  {background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.3)}
+.ms-null  {background:rgba(255,59,59,.06);border:1px solid rgba(255,59,59,.3)}
+.ms-gap   {background:rgba(255,255,255,.02);border:1px dashed var(--b2)}
+/* scheduler viz */
+.sched-track{background:var(--bg);border:1px solid var(--b2);padding:14px}
+.sched-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sched-label{width:80px;min-width:80px;font-size:11px;color:var(--t3);font-family:var(--sans);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.sched-bar-wrap{flex:1;background:rgba(255,255,255,.04);height:26px;display:flex;overflow:hidden}
+.sched-slot{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--sans);font-weight:700;letter-spacing:.5px;transition:all .3s}
+/* boot steps */
+.boot-step{display:flex;gap:14px;align-items:flex-start;position:relative;margin-bottom:0}
+.boot-line{position:absolute;left:15px;top:32px;bottom:-10px;width:1px;background:linear-gradient(to bottom,var(--g),transparent)}
+.boot-dot{width:32px;min-width:32px;height:32px;border-radius:50%;border:2px solid var(--g);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--g);background:rgba(0,255,136,.08);flex-shrink:0;font-family:var(--sans)}
+.boot-body{flex:1;background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;margin-bottom:10px}
+.boot-title{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--g);margin-bottom:3px}
+.boot-desc{font-size:11.5px;color:var(--t2)}
+.boot-cmd{margin-top:6px;background:var(--bg);padding:4px 10px;font-size:11px;color:var(--c);border-left:2px solid var(--c)}
+/* syscall table */
+.stbl{width:100%;border-collapse:collapse;font-size:12px}
+.stbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.stbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top}
+.stbl td:first-child{color:var(--g);font-size:11px}
+.stbl td:nth-child(2){color:var(--c)}
+.stbl tr:hover td{background:rgba(255,255,255,.02)}
+/* checklist */
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans);margin-left:auto;flex-shrink:0}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+/* divider */
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:12px 0}
+/* ipc grid */
+.ipc-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.ipc-icon{font-size:20px;margin-bottom:6px}
+.ipc-name{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--t);margin-bottom:4px}
+.ipc-desc{font-size:11px;color:var(--t3);line-height:1.5;margin-bottom:6px}
+.ipc-cmd{font-size:10px;color:var(--c);background:var(--bg);padding:3px 8px;border-left:2px solid var(--c)}
+/* hl */
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+/* summary */
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+.next{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,212,255,.05));border:1px solid rgba(0,255,136,.3);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.ns-t{font-family:var(--sans);font-weight:600;font-size:14px;color:var(--g)}
+.ns-s{font-size:11px;color:var(--t3);margin-top:2px}
+.ns-b{background:var(--bg);border:1px solid var(--b);padding:6px 16px;font-size:12px;color:var(--g);cursor:pointer;font-family:var(--mono);transition:all .2s}
+.ns-b:hover{background:rgba(0,255,136,.1);border-color:var(--g)}
+/* interactive sched */
+.proc-state{display:inline-block;padding:2px 8px;font-size:10px;font-family:var(--sans);font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px}
+.ps-run{background:rgba(0,255,136,.15);color:var(--g);border:1px solid rgba(0,255,136,.4)}
+.ps-wait{background:rgba(255,215,0,.12);color:var(--y);border:1px solid rgba(255,215,0,.4)}
+.ps-sleep{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.4)}
+.ps-zombie{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.4)}
+.ps-stop{background:rgba(157,78,221,.1);color:var(--p);border:1px solid rgba(157,78,221,.4)}
+.proc-row{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid var(--b2);font-size:12px}
+.proc-pid{width:50px;color:var(--t3);font-size:11px}
+.proc-name{width:120px;color:var(--t)}
+.proc-ppid{width:60px;color:var(--t3);font-size:11px}
+.proc-desc{flex:1;color:var(--t2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══ HEADER ═══ -->
+<div class="hdr">
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 02 / MODULE 1 ● ACTIVE</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">
+        Linux <span style="color:var(--g)">Architecture</span> — Deep Dive
+      </h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Intermediate</span>
+        <span class="tag tc">⊞ Kernel Internals</span>
+        <span class="tag ty">⊛ Process Management</span>
+        <span class="tag tp">⬡ Memory Management</span>
+        <span class="tag to">⊕ Boot + systemd</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">kernel-arch-02</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">12</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓░░ KERNEL LOADED</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 01 — KERNEL ARCHITECTURE ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">⚙</span><span class="pt">Kernel Architecture — Monolithic Deep Structure</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="grid2">
+      <div class="cb g">
+        <div class="cbt">Monolithic Kernel — What It Really Means</div>
+        <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+          <span class="hl">All kernel subsystems run in a single address space</span> (Ring 0 / kernel space) as one large binary. Device drivers, filesystem code, network stack, memory manager, scheduler — all compiled together.<br><br>
+          Benefit: <span class="hl">zero context-switch overhead</span> between subsystems. A VFS call to ext4 that triggers a block device driver that needs a DMA interrupt — all in kernel space, no IPC, no boundary crossings.<br><br>
+          Risk: a bug in any driver can <span class="hr">kernel panic</span> the entire system. This is why driver quality matters critically on Linux.
+        </div>
+      </div>
+      <div class="cb y">
+        <div class="cbt">Kernel Space vs User Space</div>
+        <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+          <span class="hy">Kernel space</span> = Ring 0. Full CPU privilege. Direct hardware access. Unlimited memory access. One crash = system down.<br><br>
+          <span class="hl">User space</span> = Ring 3. Restricted. Cannot access hardware directly. Cannot access other processes' memory. One crash = only that process dies.<br><br>
+          The boundary is enforced by the <span class="hc">CPU's privilege rings</span>. Crossing it requires a <strong>system call</strong> — a controlled trap into the kernel.
+        </div>
+      </div>
+      <div class="cb">
+        <div class="cbt">CPU Privilege Rings</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          x86 defines 4 rings (0–3). Linux uses only 2:<br>
+          <span class="hy">Ring 0</span> — Kernel. Can execute ANY instruction, access ANY memory.<br>
+          <span class="hl">Ring 3</span> — User processes. Hardware-enforced sandbox.<br><br>
+          Rings 1 &amp; 2 exist but are unused in Linux. Some hypervisors exploit them for virtualisation boundaries.
+        </div>
+      </div>
+      <div class="cb p">
+        <div class="cbt">Kernel Modules (LKM)</div>
+        <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+          Linux supports <span class="hp">Loadable Kernel Modules</span> — code that can be dynamically inserted into the running kernel without rebooting.<br><br>
+          <span class="hc">lsmod</span> — list loaded modules<br>
+          <span class="hc">modprobe</span> — load a module with dependencies<br>
+          <span class="hc">rmmod</span> — remove a module<br><br>
+          Device drivers (wifi, GPU, USB) are typically modules. This extends monolithic design without requiring recompilation.
+        </div>
+      </div>
+    </div>
+
+    <!-- Architecture visual -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-top:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">Kernel Internal Subsystem Map</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px">
+        <div style="background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">⚙</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--y)">Scheduler (CFS)</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">CPU time distribution</div>
+        </div>
+        <div style="background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">◫</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--c)">Memory Mgr</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">Virtual memory · paging · swap</div>
+        </div>
+        <div style="background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">📂</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--g)">VFS Layer</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">Unified file abstraction</div>
+        </div>
+        <div style="background:rgba(255,140,0,.07);border:1px solid rgba(255,140,0,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">🌐</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--o)">Network Stack</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">TCP/IP · sockets · netfilter</div>
+        </div>
+        <div style="background:rgba(157,78,221,.08);border:1px solid rgba(157,78,221,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">🔒</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--p)">LSM Security</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">SELinux · AppArmor · capabilities</div>
+        </div>
+        <div style="background:rgba(41,121,255,.07);border:1px solid rgba(41,121,255,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">🔌</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:#5599ff">Device Drivers</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">LKMs · block · char · net</div>
+        </div>
+        <div style="background:rgba(255,59,59,.06);border:1px solid rgba(255,59,59,.25);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">⚡</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--r)">IPC</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">pipes · sockets · signals · SHM</div>
+        </div>
+        <div style="background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.15);padding:10px;text-align:center">
+          <div style="font-size:16px;margin-bottom:4px">📞</div>
+          <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--g2)">Syscall Interface</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">User ↔ Kernel gateway</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 02 — SYSTEM CALLS ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">📞</span><span class="pt">System Calls — The User↔Kernel Gateway</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="info"><span class="ic">ℹ</span><span>A <strong style="color:var(--c)">system call (syscall)</strong> is the ONLY legitimate way for user-space code to request kernel services. The CPU executes a <code>syscall</code> instruction (x86-64), switches to Ring 0, jumps to the kernel's syscall dispatch table, executes the handler, then returns to Ring 3.</span></div>
+
+    <table class="stbl" style="margin-bottom:14px">
+      <thead><tr><th>Syscall</th><th>Number</th><th>Description</th><th>C Signature</th></tr></thead>
+      <tbody>
+        <tr><td>read</td><td>0</td><td>Read bytes from file descriptor into buffer</td><td style="color:var(--t2);font-size:11px">ssize_t read(int fd, void *buf, size_t count)</td></tr>
+        <tr><td>write</td><td>1</td><td>Write bytes from buffer to file descriptor</td><td style="color:var(--t2);font-size:11px">ssize_t write(int fd, const void *buf, size_t count)</td></tr>
+        <tr><td>open</td><td>2</td><td>Open a file, return file descriptor</td><td style="color:var(--t2);font-size:11px">int open(const char *path, int flags, mode_t mode)</td></tr>
+        <tr><td>fork</td><td>57</td><td>Duplicate current process (copy-on-write)</td><td style="color:var(--t2);font-size:11px">pid_t fork(void)</td></tr>
+        <tr><td>execve</td><td>59</td><td>Replace process image with new program</td><td style="color:var(--t2);font-size:11px">int execve(const char *path, char *argv[], char *envp[])</td></tr>
+        <tr><td>mmap</td><td>9</td><td>Map file or memory into process address space</td><td style="color:var(--t2);font-size:11px">void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off)</td></tr>
+        <tr><td>clone</td><td>56</td><td>Create thread (shared address space)</td><td style="color:var(--t2);font-size:11px">int clone(int (*fn)(void*), void *stack, int flags, void *arg)</td></tr>
+        <tr><td>kill</td><td>62</td><td>Send signal to a process</td><td style="color:var(--t2);font-size:11px">int kill(pid_t pid, int sig)</td></tr>
+        <tr><td>ioctl</td><td>16</td><td>Device-specific control operations</td><td style="color:var(--t2);font-size:11px">int ioctl(int fd, unsigned long request, ...)</td></tr>
+        <tr><td>exit</td><td>60</td><td>Terminate the calling process</td><td style="color:var(--t2);font-size:11px">void exit(int status)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="term">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div>
+        <div class="td" style="background:#febc2e"></div>
+        <div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">strace — trace system calls of a running process</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── TRACE SYSCALLS OF A PROCESS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">strace -e trace=open,read,write curl https://example.com 2>&1 | head -14</span></span>
+        <span class="ocn">openat(AT_FDCWD, "/etc/ssl/certs/ca-certificates.crt", O_RDONLY) = 3</span>
+        <span class="out">read(3, "-----BEGIN CERTIFICATE-----\n...", 4096) = 4096</span>
+        <span class="ocn">openat(AT_FDCWD, "/etc/resolv.conf", O_RDONLY|O_CLOEXEC) = 4</span>
+        <span class="out">read(4, "nameserver 8.8.8.8\n", 4096) = 19</span>
+        <span class="oyn">write(1, "&lt;!doctype html&gt;...", 1256) = 1256</span>
+        <span class="sec">──── COUNT SYSCALLS SUMMARY ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">strace -c ls / 2>&1 | tail -8</span></span>
+        <span class="out">% time     seconds  usecs/call     calls    syscall</span>
+        <span class="out">──────── ──────────────────────────────────────────</span>
+        <span class="oyn"> 64.21    0.000301          12        24  getdents64</span>
+        <span class="oyn"> 14.89    0.000070           5        12  openat</span>
+        <span class="ocn">  9.40    0.000044           3        13  fstat</span>
+        <span class="ogn">  5.11    0.000024           2         8  mmap</span>
+        <span class="sec">──── SYSCALL EXECUTION PATH ────</span>
+        <span class="out">User: write(1, "hello\n", 6)</span>
+        <span class="out">  → CPU executes 'syscall' instruction → Ring 3 → Ring 0</span>
+        <span class="out">  → kernel/sys_ni.c: dispatch table entry [1] → ksys_write()</span>
+        <span class="out">  → vfs_write() → file_operations.write() → returns to user</span>
+        <span class="out">  → Ring 0 → Ring 3 (rax = bytes written or -errno)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 03 — PROCESS MANAGEMENT ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">⚡</span><span class="pt">Process Management — Lifecycle, States &amp; Signals</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+
+    <!-- Process states -->
+    <div style="margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Process State Machine</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center">
+        <span class="proc-state ps-run">R — Running</span>
+        <span style="color:var(--t3)">→</span>
+        <span class="proc-state ps-wait">D — Uninterruptible Sleep</span>
+        <span style="color:var(--t3)">→</span>
+        <span class="proc-state ps-sleep">S — Interruptible Sleep</span>
+        <span style="color:var(--t3)">→</span>
+        <span class="proc-state ps-zombie">Z — Zombie</span>
+        <span style="color:var(--t3)">→</span>
+        <span class="proc-state ps-stop">T — Stopped</span>
+      </div>
+      <div class="info"><span class="ic">ℹ</span><span><span class="hl">D state (uninterruptible)</span> = process waiting for I/O that cannot be interrupted — e.g., NFS hang, disk I/O. High D-state process count = I/O bottleneck or storage issue. Cannot be killed with SIGKILL while in D state.</span></div>
+    </div>
+
+    <!-- process tree visual -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Live Process Hierarchy</div>
+    <div class="ptree">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span class="proc-state ps-run" style="font-size:9px">R</span>
+        <span style="color:var(--y);font-family:var(--sans);font-weight:700;font-size:13px">systemd [1]</span>
+        <span style="color:var(--t3);font-size:11px">— PID 1, all processes are descendants</span>
+      </div>
+      <div style="padding-left:20px;border-left:1px solid var(--b2);margin-left:6px">
+        <div style="color:var(--t3);margin:-2px 0">│</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--t3)">├──</span><span class="proc-state ps-sleep" style="font-size:9px">S</span><span style="color:var(--c)">sshd [1102]</span><span style="color:var(--t3);font-size:11px">— SSH daemon, listens :22</span></div>
+        <div style="padding-left:28px"><div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span style="color:var(--t3)">└──</span><span class="proc-state ps-run" style="font-size:9px">R</span><span style="color:var(--g)">sshd [2341] → bash [2342] → ps [3891]</span><span style="color:var(--t3);font-size:11px">— your session</span></div></div>
+        <div style="color:var(--t3);margin:2px 0">│</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--t3)">├──</span><span class="proc-state ps-sleep" style="font-size:9px">S</span><span style="color:var(--c)">nginx [1500]</span><span style="color:var(--t3);font-size:11px">— web server master process</span></div>
+        <div style="padding-left:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span style="color:var(--t3)">├──</span><span class="proc-state ps-sleep" style="font-size:9px">S</span><span style="color:var(--t2)">nginx worker [1501]</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span style="color:var(--t3)">└──</span><span class="proc-state ps-sleep" style="font-size:9px">S</span><span style="color:var(--t2)">nginx worker [1502]</span></div>
+        </div>
+        <div style="color:var(--t3);margin:2px 0">│</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--t3)">├──</span><span class="proc-state ps-sleep" style="font-size:9px">S</span><span style="color:var(--c)">dockerd [1890]</span><span style="color:var(--t3);font-size:11px">— Docker daemon</span></div>
+        <div style="color:var(--t3);margin:2px 0">│</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--t3)">└──</span><span class="proc-state ps-zombie" style="font-size:9px">Z</span><span style="color:var(--r)">defunct [3200]</span><span style="color:var(--t3);font-size:11px">— zombie: exited but parent hasn't called wait()</span></div>
+      </div>
+    </div>
+
+    <!-- Signals table -->
+    <div style="margin-top:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Critical Signals</div>
+      <table class="stbl">
+        <thead><tr><th>Signal</th><th>Number</th><th>Default Action</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td>SIGHUP</td><td>1</td><td style="color:var(--y)">Terminate / Reload</td><td style="color:var(--t2)">Reload config without restart (nginx, sshd)</td></tr>
+          <tr><td>SIGINT</td><td>2</td><td style="color:var(--y)">Terminate</td><td style="color:var(--t2)">Ctrl+C from terminal</td></tr>
+          <tr><td>SIGKILL</td><td>9</td><td style="color:var(--r)">Terminate (uncatchable)</td><td style="color:var(--t2)">Force kill — cannot be ignored or handled</td></tr>
+          <tr><td>SIGSEGV</td><td>11</td><td style="color:var(--r)">Core dump</td><td style="color:var(--t2)">Segmentation fault — invalid memory access</td></tr>
+          <tr><td>SIGTERM</td><td>15</td><td style="color:var(--y)">Terminate (catchable)</td><td style="color:var(--t2)">Graceful shutdown — allows cleanup</td></tr>
+          <tr><td>SIGSTOP</td><td>19</td><td style="color:var(--p)">Stop (uncatchable)</td><td style="color:var(--t2)">Pause process — Ctrl+Z</td></tr>
+          <tr><td>SIGCHLD</td><td>17</td><td style="color:var(--g)">Ignore</td><td style="color:var(--t2)">Child process changed state — reap zombies</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Terminal -->
+    <div class="term" style="margin-top:14px">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Process management commands</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── FORK + EXEC (PROCESS CREATION) ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">bash -c 'echo "Parent PID: $$"; sleep 5 &amp; echo "Child PID: $!"'</span></span>
+        <span class="out">Parent PID: 4210</span>
+        <span class="ogn">Child PID: 4211</span>
+        <span class="sec">──── PROCESS SNAPSHOT ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">ps aux --sort=-%cpu | head -6</span></span>
+        <span class="out">USER       PID  %CPU %MEM  VSZ    RSS  STAT COMMAND</span>
+        <span class="ocn">root      1234  12.3  2.1  876432  85420  Ssl  /usr/bin/python3 app.py</span>
+        <span class="out">www-data  1500   3.1  0.4  325604  16920  S    nginx: worker</span>
+        <span class="out">root      1890   1.2  1.8  1242880 74096  Ssl  /usr/bin/dockerd</span>
+        <span class="sec">──── ZOMBIE PROCESS DETECTION ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">ps aux | grep -w Z</span></span>
+        <span class="orn">root      3200   0.0  0.0      0     0  Z    [myapp] &lt;defunct&gt;</span>
+        <span class="sec">──── SEND SIGNALS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">kill -SIGHUP 1500     # reload nginx config</span></span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">kill -9 3200         # force kill zombie's parent</span></span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">kill -SIGSTOP 1234   # pause python process</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 04 — CFS SCHEDULER ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">📊</span><span class="pt">CFS Scheduler — Completely Fair Scheduling</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="grid2">
+      <div class="cb y">
+        <div class="cbt">How CFS Works</div>
+        <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+          CFS uses a <span class="hy">red-black tree</span> (ordered by <code>vruntime</code>) to track all runnable processes. The process with the <span class="hl">smallest vruntime</span> runs next — guaranteeing fairness over time.<br><br>
+          <code>vruntime</code> increases while a process runs, weighted by <span class="hc">nice value</span> (priority). Low-priority tasks accumulate vruntime faster → get less CPU time.
+        </div>
+      </div>
+      <div class="cb">
+        <div class="cbt">Scheduling Classes (Priority Order)</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span style="color:var(--r)">1. SCHED_DEADLINE</span> — real-time, CBS algorithm<br>
+          <span style="color:var(--o)">2. SCHED_FIFO</span> — real-time FIFO, runs until yields<br>
+          <span style="color:var(--y)">3. SCHED_RR</span> — real-time round-robin with timeslice<br>
+          <span style="color:var(--g)">4. SCHED_NORMAL (CFS)</span> — standard processes<br>
+          <span style="color:var(--t3)">5. SCHED_IDLE</span> — runs only when CPU is idle
+        </div>
+      </div>
+    </div>
+
+    <!-- Scheduler visualisation -->
+    <div style="margin-top:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">CPU Timeslice Allocation (4-core system, 100ms window)</div>
+      <div class="sched-track">
+        <div class="sched-row">
+          <div class="sched-label">CPU 0</div>
+          <div class="sched-bar-wrap">
+            <div class="sched-slot" style="width:35%;background:rgba(0,255,136,.2);color:var(--g)">nginx [35%]</div>
+            <div class="sched-slot" style="width:20%;background:rgba(0,212,255,.18);color:var(--c)">sshd [20%]</div>
+            <div class="sched-slot" style="width:30%;background:rgba(255,215,0,.18);color:var(--y)">python [30%]</div>
+            <div class="sched-slot" style="width:15%;background:rgba(255,255,255,.06);color:var(--t3)">idle</div>
+          </div>
+        </div>
+        <div class="sched-row">
+          <div class="sched-label">CPU 1</div>
+          <div class="sched-bar-wrap">
+            <div class="sched-slot" style="width:50%;background:rgba(157,78,221,.2);color:var(--p)">dockerd [50%]</div>
+            <div class="sched-slot" style="width:25%;background:rgba(255,140,0,.18);color:var(--o)">mysqld [25%]</div>
+            <div class="sched-slot" style="width:25%;background:rgba(255,255,255,.06);color:var(--t3)">idle</div>
+          </div>
+        </div>
+        <div class="sched-row">
+          <div class="sched-label">CPU 2</div>
+          <div class="sched-bar-wrap">
+            <div class="sched-slot" style="width:80%;background:rgba(255,59,59,.18);color:var(--r)">compile [80%]</div>
+            <div class="sched-slot" style="width:20%;background:rgba(255,255,255,.06);color:var(--t3)">idle</div>
+          </div>
+        </div>
+        <div class="sched-row" style="margin-bottom:0">
+          <div class="sched-label">CPU 3</div>
+          <div class="sched-bar-wrap">
+            <div class="sched-slot" style="width:100%;background:rgba(255,255,255,.04);color:var(--t3)">idle — load balancer may migrate tasks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Scheduler inspection</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── VIEW SCHEDULING POLICY OF A PROCESS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">chrt -p 1234</span></span>
+        <span class="out">pid 1234's current scheduling policy: SCHED_OTHER</span>
+        <span class="out">pid 1234's current scheduling priority: 0</span>
+        <span class="sec">──── SET REAL-TIME PRIORITY ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">chrt -f -p 50 1234   # SCHED_FIFO priority 50</span></span>
+        <span class="sec">──── NICE VALUE (USER-SPACE PRIORITY) ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">nice -n 19 tar czf backup.tar.gz /data  # lowest priority</span></span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">renice -n -5 -p 1234                    # raise existing proc priority</span></span>
+        <span class="sec">──── CGROUPS CPU QUOTA ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemctl set-property nginx.service CPUQuota=25%</span></span>
+        <span class="ocn"># nginx now cannot use more than 25% of total CPU</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 05 — MEMORY MANAGEMENT ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">◫</span><span class="pt">Memory Management — Virtual Memory &amp; Address Space</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="cb">
+        <div class="cbt">Virtual Memory — Why It Exists</div>
+        <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+          Every process believes it has the <span class="hl">entire address space</span> (0x0000 → 0xFFFF…) to itself. The kernel + MMU (Memory Management Unit) transparently map virtual pages → physical page frames.<br><br>
+          This enables: <span class="hc">process isolation</span> (each has own space), <span class="hc">swap</span> (page to disk when RAM full), <span class="hc">memory-mapped files</span> (mmap), and <span class="hc">ASLR</span> (randomise base addresses).
+        </div>
+      </div>
+      <div class="cb g">
+        <div class="cbt">Page Fault Handling</div>
+        <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+          When a process accesses a virtual address with <span class="hl">no physical mapping</span>, the CPU raises a <strong>page fault</strong> interrupt.<br><br>
+          Kernel decides: is this a <span class="hc">valid access</span> (page just not loaded)? → allocate physical frame, update page table, resume. Or an <span class="hr">invalid access</span> (SIGSEGV)? → kill the process.
+        </div>
+      </div>
+    </div>
+
+    <!-- Process virtual address space map -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">x86-64 Process Virtual Address Space Layout</div>
+    <div class="mem-map">
+      <div class="mem-row">
+        <div class="mem-addr">0xFFFF…FFFF</div>
+        <div class="mem-seg ms-kernel">
+          <div class="mem-seg-name" style="color:var(--y)">Kernel Space (Ring 0)</div>
+          <div class="mem-seg-desc">kernel code, data, page tables — user cannot access — mapped in every process</div>
+        </div>
+      </div>
+      <div class="mem-row">
+        <div class="mem-addr" style="font-size:9px">↑ grows down</div>
+        <div class="mem-seg ms-stack">
+          <div class="mem-seg-name" style="color:var(--o)">Stack</div>
+          <div class="mem-seg-desc">local variables, function call frames, return addresses — grows toward lower addresses</div>
+        </div>
+      </div>
+      <div class="mem-row">
+        <div class="mem-addr"></div>
+        <div class="mem-seg ms-gap">
+          <div class="mem-seg-name" style="color:var(--t3);font-size:11px">unmapped (guard region + ASLR randomisation)</div>
+        </div>
+      </div>
+      <div class="mem-row">
+        <div class="mem-addr" style="font-size:9px">↑ grows up</div>
+        <div class="mem-seg ms-heap">
+          <div class="mem-seg-name" style="color:var(--c)">Heap</div>
+          <div class="mem-seg-desc">dynamic allocations (malloc/new) — grows upward — managed by brk()/mmap()</div>
+        </div>
+      </div>
+      <div class="mem-row">
+        <div class="mem-addr"></div>
+        <div class="mem-seg ms-data">
+          <div class="mem-seg-name" style="color:var(--p)">BSS + Data Segment</div>
+          <div class="mem-seg-desc">uninitialised globals (BSS), initialised globals and static variables (data)</div>
+        </div>
+      </div>
+      <div class="mem-row">
+        <div class="mem-addr">low address</div>
+        <div class="mem-seg ms-text">
+          <div class="mem-seg-name" style="color:var(--g)">Text Segment (Code)</div>
+          <div class="mem-seg-desc">executable instructions — read-only, shared between processes running same binary</div>
+        </div>
+      </div>
+      <div class="mem-row">
+        <div class="mem-addr">0x0000…0000</div>
+        <div class="mem-seg ms-null">
+          <div class="mem-seg-name" style="color:var(--r)">NULL page (unmapped)</div>
+          <div class="mem-seg-desc">accessing address 0 = SIGSEGV — null pointer dereference protection</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Memory inspection tools</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── VIEW PROCESS MEMORY MAP ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">cat /proc/1234/maps | head -10</span></span>
+        <span class="ocn">55a4b2e00000-55a4b2e3b000 r--p 00000000 08:01 263744  /usr/bin/python3</span>
+        <span class="ogn">55a4b4027000-55a4b4075000 rw-p 00000000 00:00 0       [heap]</span>
+        <span class="orn">7ffd8e200000-7ffd8e221000 rw-p 00000000 00:00 0       [stack]</span>
+        <span class="ocn">ffffffffff600000-ffffffffff601000 --xp                [vsyscall]</span>
+        <span class="sec">──── MEMORY USAGE OVERVIEW ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">free -h</span></span>
+        <span class="out">              total   used   free  shared  buff/cache  available</span>
+        <span class="out">Mem:           15Gi   4.2Gi  8.1Gi  512Mi     2.9Gi      10.2Gi</span>
+        <span class="out">Swap:           4Gi   124Mi  3.9Gi</span>
+        <span class="sec">──── PAGE FAULT STATS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">ps -o pid,comm,minflt,majflt -p 1234</span></span>
+        <span class="out">  PID COMMAND     MINFLT  MAJFLT</span>
+        <span class="ocn"> 1234 python3      48291      12   ← majflt=disk reads (slow)</span>
+        <span class="sec">──── OOM KILLER LOG ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">dmesg | grep -i "killed process"</span></span>
+        <span class="orn">[14521.44] Out of memory: Killed process 3841 (java) total-vm:2097152kB</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 06 — VFS ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">📂</span><span class="pt">VFS — Virtual File System Layer</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="cb g" style="margin-bottom:14px">
+      <div class="cbt">What is VFS?</div>
+      <div style="color:var(--t);font-size:12.5px;line-height:1.7">
+        VFS is an <span class="hl">abstraction layer</span> inside the kernel that presents a uniform file API (<code>open</code>, <code>read</code>, <code>write</code>, <code>stat</code>) regardless of the underlying storage format. Whether you read from ext4, XFS, tmpfs, NFS, procfs, sysfs, or even a character device — you always call the same syscalls. VFS dispatches internally to the correct filesystem driver.
+      </div>
+    </div>
+
+    <!-- VFS call chain -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">VFS Call Chain — open("/etc/passwd")</div>
+      <div style="display:flex;flex-direction:column;gap:0;max-width:600px">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:200px;min-width:200px;background:rgba(41,121,255,.1);border:1px solid rgba(41,121,255,.3);padding:8px 12px;text-align:center">
+            <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:#5599ff">User Process</div>
+            <div style="font-size:10px;color:var(--t3)">glibc open("/etc/passwd", O_RDONLY)</div>
+          </div>
+        </div>
+        <div style="padding-left:100px;color:var(--t3);font-size:12px;padding:4px 0 4px 100px">↓ syscall (openat #257)</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:200px;min-width:200px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);padding:8px 12px;text-align:center">
+            <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--g)">VFS Layer</div>
+            <div style="font-size:10px;color:var(--t3)">do_sys_openat2() → vfs_open()</div>
+          </div>
+          <div style="font-size:11px;color:var(--t3)">path resolution, dentry cache lookup, inode lookup</div>
+        </div>
+        <div style="padding-left:100px;color:var(--t3);font-size:12px;padding:4px 0 4px 100px">↓ file_operations dispatch</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:200px;min-width:200px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);padding:8px 12px;text-align:center">
+            <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--y)">ext4 Driver</div>
+            <div style="font-size:10px;color:var(--t3)">ext4_file_open() → reads inode from disk</div>
+          </div>
+          <div style="font-size:11px;color:var(--t3)">fetches block group, inode table entry for /etc/passwd</div>
+        </div>
+        <div style="padding-left:100px;color:var(--t3);font-size:12px;padding:4px 0 4px 100px">↓ block layer → disk I/O</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:200px;min-width:200px;background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.3);padding:8px 12px;text-align:center">
+            <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--o)">Block Device</div>
+            <div style="font-size:10px;color:var(--t3)">NVMe driver → physical read → page cache</div>
+          </div>
+        </div>
+        <div style="padding-left:100px;color:var(--t3);font-size:12px;padding:4px 0 4px 100px">↓ returns fd to user</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:200px;min-width:200px;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.3);padding:8px 12px;text-align:center">
+            <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--c)">File Descriptor</div>
+            <div style="font-size:10px;color:var(--t3)">fd=3 returned to process — index into fd table</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">VFS exploration</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── MOUNTED FILESYSTEMS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">cat /proc/mounts | column -t | head -12</span></span>
+        <span class="ocn">sysfs      /sys           sysfs    rw,nosuid,nodev,noexec  0 0</span>
+        <span class="ocn">proc       /proc          proc     rw,nosuid,nodev,noexec  0 0</span>
+        <span class="oyn">devtmpfs   /dev           devtmpfs rw,nosuid               0 0</span>
+        <span class="ogn">/dev/nvme0n1p2  /      ext4     rw,relatime             0 0</span>
+        <span class="out">tmpfs      /run           tmpfs    rw,nosuid,nodev         0 0</span>
+        <span class="sec">──── INODE INFO ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">stat /etc/passwd</span></span>
+        <span class="out">  File: /etc/passwd</span>
+        <span class="ocn">  Size: 1872     Blocks: 8    IO Block: 4096   regular file</span>
+        <span class="out">Device: 8,2  Inode: 924673  Links: 1</span>
+        <span class="oyn">Access: (0644/-rw-r--r--)  Uid: (0/root)  Gid: (0/root)</span>
+        <span class="sec">──── OPEN FILES PER PROCESS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">lsof -p 1234 | head -8</span></span>
+        <span class="out">COMMAND  PID  USER   FD  TYPE  DEVICE SIZE/OFF  NODE  NAME</span>
+        <span class="ocn">python3 1234  root  cwd   DIR   8,2   4096    262147  /opt/app</span>
+        <span class="out">python3 1234  root    0u  CHR   136,0  0t0         3  /dev/pts/0</span>
+        <span class="out">python3 1234  root    3r  REG   8,2   1872   924673  /etc/passwd</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 07 — IPC ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">⇄</span><span class="pt">IPC — Inter-Process Communication</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="grid3">
+      <div class="ipc-card">
+        <div class="ipc-icon">▶</div>
+        <div class="ipc-name">Pipes (Anonymous)</div>
+        <div class="ipc-desc">Unidirectional byte stream between parent and child. Created by pipe() syscall. No filesystem path.</div>
+        <div class="ipc-cmd">ls | grep .conf | wc -l</div>
+      </div>
+      <div class="ipc-card">
+        <div class="ipc-icon">⇌</div>
+        <div class="ipc-name">Named Pipes (FIFO)</div>
+        <div class="ipc-desc">Pipe with a filesystem path. Unrelated processes can communicate. Persists until deleted.</div>
+        <div class="ipc-cmd">mkfifo /tmp/mypipe</div>
+      </div>
+      <div class="ipc-card">
+        <div class="ipc-icon">⚡</div>
+        <div class="ipc-name">Signals</div>
+        <div class="ipc-desc">Async notification to a process. Limited data (signal number only). Used for control (stop, kill, reload).</div>
+        <div class="ipc-cmd">kill -SIGUSR1 &lt;pid&gt;</div>
+      </div>
+      <div class="ipc-card">
+        <div class="ipc-icon">📬</div>
+        <div class="ipc-name">Message Queues</div>
+        <div class="ipc-desc">Kernel-managed message buffer. Typed messages, persistent until removed. POSIX mq or System V.</div>
+        <div class="ipc-cmd">mq_open("/myqueue", ...)</div>
+      </div>
+      <div class="ipc-card">
+        <div class="ipc-icon">◫</div>
+        <div class="ipc-name">Shared Memory</div>
+        <div class="ipc-desc">Fastest IPC — maps same physical pages into multiple process address spaces. Requires explicit synchronization.</div>
+        <div class="ipc-cmd">shm_open() / mmap()</div>
+      </div>
+      <div class="ipc-card">
+        <div class="ipc-icon">🔌</div>
+        <div class="ipc-name">Unix Domain Sockets</div>
+        <div class="ipc-desc">Socket API over a filesystem path. Full-duplex. Used by Docker, systemd, Xorg, DBus, PostgreSQL locally.</div>
+        <div class="ipc-cmd">/var/run/docker.sock</div>
+      </div>
+    </div>
+
+    <div class="warn" style="margin-top:12px">
+      <span class="wc">⚠</span>
+      <span><strong style="color:var(--y)">Security note:</strong> Unix domain sockets inherit filesystem permissions. <code>/var/run/docker.sock</code> writable by a user = root-equivalent container escape. Always audit socket permissions: <code>ls -la /var/run/*.sock</code></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 08 — BOOT PROCESS ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">🔄</span><span class="pt">Linux Boot Process — BIOS → GRUB → Kernel → systemd</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <div style="display:flex;flex-direction:column">
+      <div class="boot-step">
+        <div class="boot-line"></div>
+        <div class="boot-dot">1</div>
+        <div class="boot-body">
+          <div class="boot-title">BIOS / UEFI — Power-On Self Test</div>
+          <div class="boot-desc">CPU starts at reset vector (0xFFFFFFF0). BIOS/UEFI runs POST: checks RAM, detects hardware, enumerates PCIe devices. UEFI reads GPT partition table and finds EFI System Partition (ESP).</div>
+          <div class="boot-cmd">EFI: /boot/efi/EFI/ubuntu/grubx64.efi → hands control to GRUB</div>
+        </div>
+      </div>
+      <div class="boot-step">
+        <div class="boot-line"></div>
+        <div class="boot-dot">2</div>
+        <div class="boot-body">
+          <div class="boot-title">GRUB2 — GRand Unified Bootloader</div>
+          <div class="boot-desc">GRUB reads <code>/boot/grub/grub.cfg</code>, displays boot menu. Loads compressed kernel image (<code>vmlinuz</code>) and initial RAM disk (<code>initramfs</code>) into memory. Passes kernel parameters.</div>
+          <div class="boot-cmd">linux /boot/vmlinuz-6.8.0 root=/dev/nvme0n1p2 ro quiet splash</div>
+        </div>
+      </div>
+      <div class="boot-step">
+        <div class="boot-line"></div>
+        <div class="boot-dot">3</div>
+        <div class="boot-body">
+          <div class="boot-title">Kernel Decompression + Early Init</div>
+          <div class="boot-desc">Kernel decompresses itself. Sets up memory management, CPU features (CPUID), GDT/IDT, enables paging. Mounts initramfs (tmpfs) as temporary root. Loads essential drivers from initramfs modules.</div>
+          <div class="boot-cmd">dmesg | head -20  → see early kernel messages</div>
+        </div>
+      </div>
+      <div class="boot-step">
+        <div class="boot-line"></div>
+        <div class="boot-dot">4</div>
+        <div class="boot-body">
+          <div class="boot-title">initramfs → Real Root Mount</div>
+          <div class="boot-desc">initramfs runs <code>/init</code> script: loads disk drivers (NVMe, LVM, mdraid), decrypts LUKS if needed, mounts real root filesystem (<code>/dev/nvme0n1p2</code>), pivots root (<code>switch_root</code>).</div>
+          <div class="boot-cmd">lsinitramfs /boot/initrd.img-6.8.0 | head -20</div>
+        </div>
+      </div>
+      <div class="boot-step">
+        <div class="boot-line"></div>
+        <div class="boot-dot">5</div>
+        <div class="boot-body">
+          <div class="boot-title">PID 1 — systemd starts</div>
+          <div class="boot-desc">Kernel executes <code>/sbin/init</code> → symlink → <code>systemd</code> as PID 1. systemd reads unit files. Activates default target (<code>multi-user.target</code> or <code>graphical.target</code>) by resolving dependencies.</div>
+          <div class="boot-cmd">systemctl get-default  →  graphical.target</div>
+        </div>
+      </div>
+      <div class="boot-step">
+        <div class="boot-dot">6</div>
+        <div class="boot-body">
+          <div class="boot-title">systemd Targets — Service Activation</div>
+          <div class="boot-desc">systemd activates units in parallel: mounts filesystems, starts network, launches daemons (sshd, nginx, cron, docker). Login prompt appears. Total boot time measured by <code>systemd-analyze</code>.</div>
+          <div class="boot-cmd">systemd-analyze blame | head -10  → slowest services</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Boot analysis &amp; systemd</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── BOOT TIMING ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemd-analyze</span></span>
+        <span class="out">Startup finished in 1.423s (firmware) + 2.891s (loader) + 1.204s (kernel)</span>
+        <span class="ogn">                 + 4.312s (userspace) = 9.831s graphical.target</span>
+        <span class="sec">──── SLOWEST SERVICES ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemd-analyze blame | head -6</span></span>
+        <span class="orn">  4.201s apt-daily-upgrade.service</span>
+        <span class="out">  1.840s snapd.service</span>
+        <span class="out">  1.330s NetworkManager-wait-online.service</span>
+        <span class="sec">──── BOOT DEPENDENCY TREE ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemctl list-dependencies multi-user.target | head -10</span></span>
+        <span class="ocn">multi-user.target</span>
+        <span class="out">● ├─cron.service</span>
+        <span class="out">● ├─dbus.service</span>
+        <span class="out">● ├─networking.service</span>
+        <span class="out">● └─ssh.service</span>
+        <span class="sec">──── KERNEL BOOT MESSAGES ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">dmesg | grep -E "Freeing|Mounted|NET|EXT4" | head -8</span></span>
+        <span class="ocn">[    0.000000] Freeing SMP alternatives memory: 44K</span>
+        <span class="ocn">[    1.822103] EXT4-fs (nvme0n1p2): mounted filesystem</span>
+        <span class="ocn">[    2.101344] NET: Registered PF_INET6 protocol family</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 09 — SYSTEMD ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">⚙</span><span class="pt">systemd — Modern Init System &amp; Service Manager</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="cb g">
+        <div class="cbt">systemd Unit Types</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span class="hl">.service</span> — daemon processes (nginx.service, sshd.service)<br>
+          <span class="hl">.socket</span> — socket activation (starts service on connection)<br>
+          <span class="hl">.timer</span> — scheduled tasks (replaces cron)<br>
+          <span class="hl">.mount</span> — filesystem mount points<br>
+          <span class="hl">.target</span> — group of units (like runlevels)<br>
+          <span class="hl">.path</span> — triggers on filesystem path change<br>
+          <span class="hl">.slice</span> — cgroup resource boundary
+        </div>
+      </div>
+      <div class="cb y">
+        <div class="cbt">Targets ↔ SysV Runlevels</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span class="hy">poweroff.target</span> → runlevel 0 (halt)<br>
+          <span class="hy">rescue.target</span> → runlevel 1 (single user)<br>
+          <span class="hy">multi-user.target</span> → runlevel 3 (no GUI)<br>
+          <span class="hy">graphical.target</span> → runlevel 5 (with GUI)<br>
+          <span class="hy">reboot.target</span> → runlevel 6 (reboot)<br>
+          <span class="hy">emergency.target</span> → minimal shell, root only
+        </div>
+      </div>
+    </div>
+
+    <!-- sample unit file -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Sample systemd Service Unit File</div>
+    <div class="term">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">/etc/systemd/system/myapp.service</span>
+      </div>
+      <div class="tbody">
+        <span class="oyn">[Unit]</span>
+        <span class="out">Description=My Python Web Application</span>
+        <span class="out">After=network.target postgresql.service</span>
+        <span class="out">Requires=postgresql.service</span>
+        <span class="oyn" style="margin-top:6px;display:block">[Service]</span>
+        <span class="out">Type=notify</span>
+        <span class="out">User=myapp</span>
+        <span class="out">WorkingDirectory=/opt/myapp</span>
+        <span class="out">ExecStart=/opt/myapp/venv/bin/gunicorn app:app -b 0.0.0.0:8000</span>
+        <span class="out">ExecReload=/bin/kill -HUP $MAINPID</span>
+        <span class="ogn">Restart=on-failure          # auto-restart if crashed</span>
+        <span class="ogn">RestartSec=5s</span>
+        <span class="out">StandardOutput=journal      # logs go to journald</span>
+        <span class="out">StandardError=journal</span>
+        <span class="ocn">PrivateTmp=true             # isolated /tmp</span>
+        <span class="ocn">NoNewPrivileges=true        # cannot gain new privs</span>
+        <span class="ocn">ProtectSystem=strict        # read-only system dirs</span>
+        <span class="ocn">CapabilityBoundingSet=CAP_NET_BIND_SERVICE</span>
+        <span class="oyn" style="margin-top:6px;display:block">[Install]</span>
+        <span class="out">WantedBy=multi-user.target</span>
+        <span class="sec">──── MANAGE THE SERVICE ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemctl daemon-reload</span></span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemctl enable --now myapp.service</span></span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">systemctl status myapp.service</span></span>
+        <span class="ogn">● myapp.service - My Python Web Application</span>
+        <span class="out">     Loaded: loaded (/etc/systemd/system/myapp.service; enabled)</span>
+        <span class="ogn">     Active: active (running) since Sun 2026-05-03 10:14:22 UTC; 2h 14m ago</span>
+        <span class="out">   Main PID: 4821 (gunicorn)</span>
+        <span class="out">     CGroup: /system.slice/myapp.service</span>
+        <span class="out">             ├─4821 gunicorn master</span>
+        <span class="out">             ├─4822 gunicorn worker[0]</span>
+        <span class="out">             └─4823 gunicorn worker[1]</span>
+        <span class="sec">──── VIEW LOGS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">journalctl -u myapp.service -f --since "1 hour ago"</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 10 — SECURITY ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">🔒</span><span class="pt">Security Perspective — Kernel Attack Surface</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <div class="grid2">
+      <div class="cb r">
+        <div class="cbt">Red Team — Kernel &amp; Process Attacks</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r)">›</span>Kernel exploits: dirty COW, ptrace abuse, eBPF escapes</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r)">›</span>Race conditions in syscall handlers → privilege escalation</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r)">›</span>SUID/SGID binaries → run as root without sudo</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r)">›</span>IPC socket abuse → /var/run/docker.sock escape</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r)">›</span>Memory corruption: heap spray, buffer overflow in kernel modules</li>
+          <li style="padding:4px 0;display:flex;gap:8px"><span style="color:var(--r)">›</span>systemd unit misconfiguration → persistent backdoor</li>
+        </ul>
+      </div>
+      <div class="cb g">
+        <div class="cbt">Blue Team — Kernel Hardening</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g)">›</span>sysctl hardening: ASLR=2, dmesg_restrict=1, kptr_restrict=2</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g)">›</span>seccomp profiles: whitelist only needed syscalls (Docker default)</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g)">›</span>Capabilities: drop all, grant only required (CAP_NET_BIND_SERVICE)</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g)">›</span>systemd service sandboxing: PrivateTmp, NoNewPrivileges, ProtectSystem</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g)">›</span>LSM: SELinux or AppArmor mandatory access control policies</li>
+          <li style="padding:4px 0;display:flex;gap:8px"><span style="color:var(--g)">›</span>Kernel patches: apply CVE patches, lockdown mode (Secure Boot)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="term" style="margin-top:12px">
+      <div class="tbar">
+        <div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Kernel hardening audit commands</span>
+      </div>
+      <div class="tbody">
+        <span class="sec">──── SYSCTL SECURITY SETTINGS ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">sysctl -a | grep -E "aslr|dmesg|kptr|ptrace" 2>/dev/null</span></span>
+        <span class="ogn">kernel.randomize_va_space = 2    # ASLR full (2=best)</span>
+        <span class="orn">kernel.dmesg_restrict = 0        # BAD: anyone can read dmesg</span>
+        <span class="orn">kernel.kptr_restrict = 0         # BAD: kernel pointers exposed</span>
+        <span class="orn">kernel.yama.ptrace_scope = 0     # BAD: any proc can ptrace any proc</span>
+        <span class="sec">──── HARDENING FIX ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">cat >> /etc/sysctl.d/99-hardening.conf << EOF</span></span>
+        <span class="ocn">kernel.dmesg_restrict = 1</span>
+        <span class="ocn">kernel.kptr_restrict = 2</span>
+        <span class="ocn">kernel.yama.ptrace_scope = 1</span>
+        <span class="ocn">kernel.unprivileged_bpf_disabled = 1</span>
+        <span class="out">EOF</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">sysctl --system</span></span>
+        <span class="sec">──── FIND SUID BINARIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span class="cmd">find / -perm -4000 -type f 2>/dev/null</span></span>
+        <span class="out">/usr/bin/sudo</span><span class="out">/usr/bin/passwd</span>
+        <span class="orn">/tmp/rootkit_suid    ← unknown SUID binary — investigate!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 11 — CHECKLIST ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">✔</span><span class="pt">Auditor / Security Checklist — Step 2 Verification</span><span class="pn">PANEL 11</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you explain what a system call is and trace syscalls with strace?<span class="tag tc">SYSCALL</span></li>
+      <li><div class="chk">✓</div>Can you explain all 5 process states (R, D, S, Z, T) and what causes each?<span class="tag ty">PROCESS</span></li>
+      <li><div class="chk">✓</div>Do you understand the 7 process address space segments and what lives in each?<span class="tag tp">MEMORY</span></li>
+      <li><div class="chk">✓</div>Can you explain how the CFS scheduler allocates CPU time using vruntime?<span class="tag tg">SCHED</span></li>
+      <li><div class="chk">✓</div>Do you understand what VFS is and why it exists (uniform file API over multiple FS types)?<span class="tag tc">VFS</span></li>
+      <li><div class="chk">✓</div>Can you list 6 IPC mechanisms and explain the security implication of Unix sockets?<span class="tag to">IPC</span></li>
+      <li><div class="chk">✓</div>Can you trace the boot sequence from UEFI → GRUB → kernel → initramfs → systemd?<span class="tag tg">BOOT</span></li>
+      <li><div class="chk">✓</div>Can you write a hardened systemd service unit with PrivateTmp, NoNewPrivileges, ProtectSystem?<span class="tag ty">SYSTEMD</span></li>
+      <li><div class="chk">✓</div>Can you identify insecure sysctl values (dmesg_restrict=0, kptr_restrict=0) and fix them?<span class="tag tp">HARDEN</span></li>
+      <li><div class="chk">✓</div>Can you find all SUID binaries on a system and assess which are anomalous?<span class="tag to">AUDIT</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══ PANEL 12 — SUMMARY ═══ -->
+<div class="panel">
+  <div class="ph"><span class="pi">◉</span><span class="pt">Summary — Step 2 Complete</span><span class="pn">PANEL 12</span></div>
+  <div class="pb">
+    <div class="grid3" style="margin-bottom:14px">
+      <div class="sum-card">
+        <div class="sc-l">Kernel Architecture</div>
+        <div class="sc-v">Monolithic design: all subsystems in Ring 0 as one binary. LKMs extend without reboot. CPU rings enforce the user/kernel boundary. Syscalls are the only crossing point.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Process + Memory</div>
+        <div class="sc-v">CFS scheduler gives each process fair CPU via vruntime red-black tree. Virtual memory isolates processes, enables swap and ASLR. Page faults trigger kernel frame allocation.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Boot + systemd</div>
+        <div class="sc-v">UEFI → GRUB → vmlinuz → initramfs → PID 1 (systemd). systemd resolves unit dependencies, activates targets in parallel. Service sandboxing is built into unit files.</div>
+      </div>
+    </div>
+    <div class="next">
+      <div>
+        <div class="ns-t">▶ Next: Step 3 — Linux File System Architecture</div>
+        <div class="ns-s">FHS hierarchy · inodes · hard/soft links · permissions · chmod · ACLs · LVM · mounting · ext4 internals</div>
+      </div>
+      <button class="ns-b" onclick="window.sendPrompt && window.sendPrompt('Start Step 3')">$ Start Step 3 →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

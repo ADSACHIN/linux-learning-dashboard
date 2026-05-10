@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg3:#111820;--panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--c:#00d4ff;--y:#ffd700;--o:#ff8c00;--r:#ff3b3b;--p:#9d4edd;--bl:#2979ff;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;--sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.orn{display:block;color:var(--o)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}.opu{display:block;color:var(--p)}
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.good{display:flex;gap:8px;padding:8px 12px;background:rgba(0,255,136,.06);border-left:3px solid var(--g);margin:10px 0;font-size:12px;color:var(--t2)}
+.danger{display:flex;gap:8px;padding:8px 12px;background:rgba(255,59,59,.07);border-left:3px solid var(--r);margin:10px 0;font-size:12px;color:var(--t2)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top;font-size:12px}
+.tbl td:first-child{color:var(--g);font-family:var(--mono)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px;flex-shrink:0}
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:10px 0}
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+.nxt{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,212,255,.05));border:1px solid rgba(0,255,136,.3);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}
+.nb{background:var(--bg);border:1px solid var(--b);padding:6px 16px;font-size:12px;color:var(--g);cursor:pointer;font-family:var(--mono)}
+.nb:hover{background:rgba(0,255,136,.1);border-color:var(--g)}
+/* package-specific */
+.pkg-flow{display:flex;align-items:center;flex-wrap:wrap;gap:0}
+.pkg-box{background:var(--bg3);border:1px solid var(--b2);padding:9px 14px;text-align:center;flex:1;min-width:100px}
+.pkg-title{font-family:var(--sans);font-size:11px;font-weight:700;margin-bottom:3px}
+.pkg-sub{font-size:10px;color:var(--t3);line-height:1.4}
+.pkg-arrow{padding:0 4px;color:var(--t3);font-size:16px;flex-shrink:0}
+/* pm card */
+.pm-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.pm-icon{font-size:24px;margin-bottom:6px}
+.pm-name{font-family:var(--sans);font-weight:700;font-size:14px;margin-bottom:2px}
+.pm-distro{font-size:10px;color:var(--t3);margin-bottom:8px;font-family:var(--sans);letter-spacing:1px;text-transform:uppercase}
+.pm-body{font-size:11.5px;color:var(--t2);line-height:1.7}
+/* gpg chain */
+.gpg-step{background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;flex:1;min-width:120px;text-align:center}
+.gpg-icon{font-size:18px;margin-bottom:4px}
+.gpg-title{font-family:var(--sans);font-size:11px;font-weight:700;margin-bottom:3px}
+.gpg-sub{font-size:10px;color:var(--t3)}
+/* dep tree */
+.dep-node{background:var(--bg3);border:1px solid var(--b2);padding:8px 12px;display:inline-block;text-align:center;min-width:120px;margin:3px}
+.dep-name{font-family:var(--sans);font-size:11px;font-weight:700}
+.dep-ver{font-size:10px;color:var(--t3)}
+/* format compare */
+.fmt-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.fmt-name{font-family:var(--sans);font-size:13px;font-weight:700;margin-bottom:6px}
+.fmt-row{display:flex;gap:6px;margin:3px 0;font-size:11px}
+.fmt-lbl{width:80px;min-width:80px;color:var(--t3);font-family:var(--sans);font-size:10px;font-weight:600;text-transform:uppercase}
+.fmt-val{color:var(--t2)}
+/* build steps */
+.bld-step{display:flex;gap:12px;align-items:flex-start;position:relative}
+.bld-line{position:absolute;left:15px;top:32px;bottom:-10px;width:1px;background:linear-gradient(to bottom,var(--o),transparent)}
+.bld-dot{width:32px;min-width:32px;height:32px;border-radius:50%;border:2px solid var(--o);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--o);background:rgba(255,140,0,.08);flex-shrink:0;font-family:var(--sans)}
+.bld-body{flex:1;background:var(--bg3);border:1px solid var(--b2);padding:9px 14px;margin-bottom:10px}
+.bld-title{font-family:var(--sans);font-weight:600;font-size:12px;color:var(--o);margin-bottom:3px}
+.bld-desc{font-size:11.5px;color:var(--t2)}
+.bld-cmd{margin-top:5px;background:var(--bg);padding:3px 10px;font-size:11px;color:var(--c);border-left:2px solid var(--c)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 09 / MODULE 1 ● ACTIVE</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">Package Management &amp; <span style="color:var(--g)">Software Installation</span></h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Intermediate</span>
+        <span class="tag tc">⊞ apt / dnf / pacman</span>
+        <span class="tag ty">⊛ Repositories & GPG</span>
+        <span class="tag tp">⬡ snap / flatpak</span>
+        <span class="tag to">⊕ Build from Source</span>
+        <span class="tag tr2">⊘ Supply Chain Security</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">pkg-mgmt-09</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">13</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01–08 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ PACKAGES READY</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 01 — HOW PACKAGE MANAGEMENT WORKS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📦</span><span class="pt">How Package Management Works — Architecture Overview</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>A Linux package manager is a <strong style="color:var(--c)">dependency resolver + installer + updater</strong> in one. It knows about every installed package, resolves dependency graphs, verifies cryptographic signatures, and manages upgrades atomically. This is fundamentally more powerful than Windows software installation.</span></div>
+
+    <!-- Package flow diagram -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Package Installation Flow</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px;overflow-x:auto">
+      <div class="pkg-flow" style="min-width:600px">
+        <div class="pkg-box" style="border-left:3px solid var(--p)"><div class="pkg-title" style="color:var(--p)">User Command</div><div class="pkg-sub">apt install nginx<br>dnf install nginx</div></div>
+        <div class="pkg-arrow">→</div>
+        <div class="pkg-box" style="border-left:3px solid var(--c)"><div class="pkg-title" style="color:var(--c)">Metadata Cache</div><div class="pkg-sub">Fetch repo index<br>Parse Package.gz<br>Build dep graph</div></div>
+        <div class="pkg-arrow">→</div>
+        <div class="pkg-box" style="border-left:3px solid var(--y)"><div class="pkg-title" style="color:var(--y)">Dep Resolution</div><div class="pkg-sub">Find all required<br>packages recursively<br>Detect conflicts</div></div>
+        <div class="pkg-arrow">→</div>
+        <div class="pkg-box" style="border-left:3px solid var(--o)"><div class="pkg-title" style="color:var(--o)">Download</div><div class="pkg-sub">Fetch .deb/.rpm<br>from mirror CDN<br>Verify checksum</div></div>
+        <div class="pkg-arrow">→</div>
+        <div class="pkg-box" style="border-left:3px solid var(--r)"><div class="pkg-title" style="color:var(--r)">GPG Verify</div><div class="pkg-sub">Check package<br>signature against<br>trusted keyring</div></div>
+        <div class="pkg-arrow">→</div>
+        <div class="pkg-box" style="border-left:3px solid var(--g)"><div class="pkg-title" style="color:var(--g)">Install</div><div class="pkg-sub">Extract files<br>Run pre/postinst<br>Update DB</div></div>
+      </div>
+    </div>
+
+    <!-- Package anatomy -->
+    <div class="g2">
+      <div class="cb cby">
+        <div class="cbt">.deb Package Anatomy (Debian/Ubuntu)</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          A <span class="hy">.deb</span> is an <code>ar</code> archive containing 3 members:<br>
+          <span class="hl">debian-binary</span> — format version (always "2.0")<br>
+          <span class="hl">control.tar.gz</span> — metadata: package name, version, depends, conflicts, maintainer scripts (preinst, postinst, prerm, postrm)<br>
+          <span class="hl">data.tar.xz</span> — actual files to install, paths relative to /<br><br>
+          <code style="color:var(--c)">dpkg -x package.deb /tmp/extract</code> — extract files<br>
+          <code style="color:var(--c)">dpkg -e package.deb /tmp/ctrl</code> — extract control
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">.rpm Package Anatomy (RHEL/Fedora)</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          A <span class="hl">.rpm</span> is a custom binary format with header + CPIO payload:<br>
+          <span class="hl">Lead</span> — magic number, format version<br>
+          <span class="hl">Signature section</span> — GPG signature, MD5/SHA256 of header+payload<br>
+          <span class="hl">Header</span> — name, version, release, arch, requires, conflicts, scripts<br>
+          <span class="hl">Payload</span> — CPIO archive (files to install)<br><br>
+          <code style="color:var(--c)">rpm -qpl package.rpm</code> — list files<br>
+          <code style="color:var(--c)">rpm -qpi package.rpm</code> — show info
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 02 — APT (DEBIAN/UBUNTU) -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🐧</span><span class="pt">apt — Advanced Package Tool (Debian / Ubuntu)</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">apt vs apt-get vs dpkg</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hl">dpkg</span> — low level: installs/removes individual .deb files. No dependency resolution. No repository access.<br>
+          <span class="hc">apt-get</span> — classic CLI with dependency resolution. Stable API for scripts.<br>
+          <span class="hl">apt</span> — modern frontend: prettier output, progress bars, combines apt-get + apt-cache + apt-config. <strong>Use apt for interactive use.</strong><br>
+          <span class="hy">aptitude</span> — ncurses UI + smarter conflict resolution.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Repository Configuration</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hl">/etc/apt/sources.list</span> — main repo list<br>
+          <span class="hc">/etc/apt/sources.list.d/*.list</span> — per-repo files<br>
+          <span class="hc">/etc/apt/sources.list.d/*.sources</span> — DEB822 format (modern)<br><br>
+          Format: <code>deb [arch=amd64 signed-by=/key.gpg] https://repo.example.com focal main</code><br><br>
+          Components: <span class="hy">main</span> (free+supported), <span class="hy">restricted</span> (proprietary drivers), <span class="hy">universe</span> (community), <span class="hy">multiverse</span> (non-free)
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">apt — complete command reference</span></div>
+      <div class="tb">
+        <span class="sec">──── UPDATE & UPGRADE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt update                      # refresh package index from repos</span></span>
+        <span class="ocn">Hit:1 https://archive.ubuntu.com/ubuntu noble InRelease</span>
+        <span class="ocn">Get:2 https://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]</span>
+        <span class="ogn">Building dependency tree... done</span>
+        <span class="ogn">12 packages can be upgraded.</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt upgrade -y                  # upgrade all upgradable packages</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt full-upgrade                # upgrade + remove obsolete packages</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt dist-upgrade                # handle changed deps (kernel upgrades)</span></span>
+        <span class="sec">──── INSTALL / REMOVE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt install nginx postgresql-16 ufw</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt install -y --no-install-recommends nginx  # minimal install</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt remove nginx                # remove but keep config files</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt purge nginx                 # remove + delete config files</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt autoremove                 # remove orphaned dependencies</span></span>
+        <span class="sec">──── SEARCH & INSPECT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt search "web server"         # search package descriptions</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt show nginx                  # package metadata</span></span>
+        <span class="out">Package: nginx</span>
+        <span class="out">Version: 1.24.0-1ubuntu1</span>
+        <span class="ocn">Depends: nginx-core (&gt;=1.24.0) | nginx-full (&gt;=1.24.0)</span>
+        <span class="out">Homepage: https://nginx.net</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt list --installed | grep nginx</span></span>
+        <span class="ogn">nginx/noble,now 1.24.0-1ubuntu1 amd64 [installed]</span>
+        <span class="sec">──── DPKG OPERATIONS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg -l | grep nginx            # list installed matching nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg -L nginx                   # list files installed by nginx</span></span>
+        <span class="out">/etc/nginx/nginx.conf</span>
+        <span class="out">/usr/sbin/nginx</span>
+        <span class="out">/lib/systemd/system/nginx.service</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg -S /usr/sbin/nginx         # which package owns this file?</span></span>
+        <span class="ogn">nginx-core: /usr/sbin/nginx</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg --get-selections           # all installed packages</span></span>
+        <span class="sec">──── ADD THIRD-PARTY REPO (SECURE METHOD) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">curl -fsSL https://packages.example.com/gpg | gpg --dearmor -o /etc/apt/keyrings/example.gpg</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/example.gpg] https://packages.example.com stable main" > /etc/apt/sources.list.d/example.list</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt update && apt install example-package</span></span>
+        <span class="sec">──── HOLD A PACKAGE (prevent upgrade) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-mark hold nginx             # never upgrade this</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-mark unhold nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-mark showhold               # list all held packages</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03 — DNF / YUM (RHEL/FEDORA) -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🎩</span><span class="pt">dnf / yum — Red Hat Package Management</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbr">
+        <div class="cbt">dnf vs yum vs rpm</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hr">yum</span> — legacy (RHEL 6-7, CentOS 7). Python 2. Slow. Still works on RHEL 7.<br>
+          <span class="hl">dnf</span> — modern replacement (RHEL 8+, Fedora). Python 3. Faster, libsolv resolver, modular repos.<br>
+          <span class="hc">rpm</span> — low-level tool. Install individual .rpm files. Query package database.<br><br>
+          <code style="color:var(--c)">dnf</code> is a superset of <code>yum</code> commands — switching from yum to dnf is almost drop-in.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">DNF Repositories</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hl">/etc/yum.repos.d/*.repo</span> — repo config files<br><br>
+          Key repos:<br>
+          <span class="hc">BaseOS</span> — core OS packages<br>
+          <span class="hc">AppStream</span> — applications + modules<br>
+          <span class="hc">EPEL</span> — Extra Packages for Enterprise Linux (community)<br>
+          <span class="hc">RHEL CodeReady</span> — dev tools<br>
+          <span class="hy">RPM Fusion</span> — multimedia, proprietary<br><br>
+          <strong>EPEL</strong> is the community-equivalent of Ubuntu's universe repo.
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">dnf / rpm — complete command reference</span></div>
+      <div class="tb">
+        <span class="sec">──── UPDATE & INSTALL ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf check-update               # list available updates</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf update -y                  # upgrade all packages</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf update --security -y       # security patches only</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf install nginx postgresql</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf install --downloadonly nginx -y --downloaddir=/tmp/pkgs  # download only</span></span>
+        <span class="sec">──── REMOVE & CLEAN ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf remove nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf autoremove                 # remove unused deps</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf clean all                  # clear all cached data</span></span>
+        <span class="sec">──── SEARCH & QUERY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf search nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf info nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf provides /usr/sbin/nginx   # which package provides this file?</span></span>
+        <span class="ogn">nginx-1:1.20.1-14.el9.x86_64 : A high performance web server</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf list installed | wc -l     # count installed packages</span></span>
+        <span class="sec">──── RPM DIRECT INSTALL ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -ivh package.rpm            # install verbose with progress</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -Uvh package.rpm            # upgrade</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -qa                        # query all installed packages</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -ql nginx                   # list files from package</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -qf /usr/sbin/nginx         # which package owns file?</span></span>
+        <span class="ogn">nginx-1:1.20.1-14.el9.x86_64</span>
+        <span class="sec">──── ENABLE EPEL (RHEL/Rocky/AlmaLinux) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf install epel-release -y</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf install htop fail2ban certbot -y  # now available via EPEL</span></span>
+        <span class="sec">──── DNF MODULES (AppStream) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf module list postgresql       # see available module streams</span></span>
+        <span class="out">Name         Stream   Profiles    Summary</span>
+        <span class="ocn">postgresql   15       client,server   PostgreSQL 15</span>
+        <span class="ocn">postgresql   16 [e]  client,server   PostgreSQL 16 (enabled)</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf module enable postgresql:16  # switch stream</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 04 — PACMAN & OTHER PMs -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🏹</span><span class="pt">pacman, zypper &amp; Other Package Managers</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="g4" style="margin-bottom:14px">
+      <div class="pm-card">
+        <div class="pm-icon">🏹</div>
+        <div class="pm-name" style="color:var(--c)">pacman</div>
+        <div class="pm-distro">Arch Linux / Manjaro</div>
+        <div class="pm-body">
+          Rolling release — always latest packages. Single sync command. Very fast. AUR (Arch User Repository) has 90,000+ community packages.
+        </div>
+      </div>
+      <div class="pm-card">
+        <div class="pm-icon">🦎</div>
+        <div class="pm-name" style="color:var(--g)">zypper</div>
+        <div class="pm-distro">SUSE / openSUSE</div>
+        <div class="pm-body">
+          Enterprise-grade SAT solver for dependency resolution. Supports multiple repos, patches, patterns (groups), products. Used in SUSE Enterprise Linux.
+        </div>
+      </div>
+      <div class="pm-card">
+        <div class="pm-icon">🐣</div>
+        <div class="pm-name" style="color:var(--y)">emerge</div>
+        <div class="pm-distro">Gentoo</div>
+        <div class="pm-body">
+          Source-based — compiles everything from source with custom USE flags. Total control over features. Very slow but highly optimised binaries.
+        </div>
+      </div>
+      <div class="pm-card">
+        <div class="pm-icon">🐦</div>
+        <div class="pm-name" style="color:var(--o)">apk</div>
+        <div class="pm-distro">Alpine Linux</div>
+        <div class="pm-body">
+          Minimal, fast. Used in Docker containers — Alpine is the base for most container images due to its 5MB size. apk is extremely fast.
+        </div>
+      </div>
+    </div>
+
+    <!-- Pacman cheatsheet -->
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">pacman · zypper · apk — quick reference</span></div>
+      <div class="tb">
+        <span class="sec">──── PACMAN (ARCH) ────</span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Syu                    # sync + upgrade all (rolling release)</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -S nginx                 # install</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Rs nginx                # remove + deps</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Ss "web server"         # search</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Qi nginx                # info about installed pkg</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Ql nginx                # list files</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Qo /usr/bin/nginx       # who owns this file?</span></span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">pacman -Sc                     # clean package cache</span></span>
+        <span class="ocn"># AUR (Arch User Repository) — community packages</span>
+        <span><span class="pr">root@arch:~# </span><span style="color:#fff">yay -S google-chrome            # AUR helper (yay)</span></span>
+        <span class="sec">──── ZYPPER (openSUSE/SLES) ────</span>
+        <span><span class="pr">root@suse:~# </span><span style="color:#fff">zypper refresh                  # update repo metadata</span></span>
+        <span><span class="pr">root@suse:~# </span><span style="color:#fff">zypper update                   # upgrade packages</span></span>
+        <span><span class="pr">root@suse:~# </span><span style="color:#fff">zypper install nginx</span></span>
+        <span><span class="pr">root@suse:~# </span><span style="color:#fff">zypper remove nginx</span></span>
+        <span><span class="pr">root@suse:~# </span><span style="color:#fff">zypper search nginx</span></span>
+        <span><span class="pr">root@suse:~# </span><span style="color:#fff">zypper patch                    # apply official SUSE patches</span></span>
+        <span class="sec">──── APK (ALPINE / CONTAINERS) ────</span>
+        <span><span class="pr">root@alpine:~# </span><span style="color:#fff">apk update                     # update index</span></span>
+        <span><span class="pr">root@alpine:~# </span><span style="color:#fff">apk upgrade                    # upgrade all</span></span>
+        <span><span class="pr">root@alpine:~# </span><span style="color:#fff">apk add nginx curl python3</span></span>
+        <span><span class="pr">root@alpine:~# </span><span style="color:#fff">apk del nginx</span></span>
+        <span><span class="pr">root@alpine:~# </span><span style="color:#fff">apk search nginx</span></span>
+        <span><span class="pr">root@alpine:~# </span><span style="color:#fff">apk info -L nginx               # list installed files</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 05 — GPG SIGNATURES & REPO SECURITY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔏</span><span class="pt">GPG Signatures &amp; Repository Security</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Every legitimate Linux repository uses <strong style="color:var(--c)">GPG (GNU Privacy Guard)</strong> to sign packages and repository metadata. Your package manager verifies these signatures before installation. A compromised or unsigned package = potential supply chain attack.</span></div>
+
+    <!-- GPG verification chain -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">GPG Package Verification Chain</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;align-items:flex-start">
+      <div class="gpg-step" style="border-top:2px solid var(--r)">
+        <div class="gpg-icon">🏢</div>
+        <div class="gpg-title" style="color:var(--r)">Distro/Maintainer</div>
+        <div class="gpg-sub">Signs package with private key. Signs repo InRelease/Release.gpg metadata.</div>
+      </div>
+      <div style="padding:20px 4px;color:var(--t3);font-size:16px;align-self:center">→</div>
+      <div class="gpg-step" style="border-top:2px solid var(--o)">
+        <div class="gpg-icon">☁️</div>
+        <div class="gpg-title" style="color:var(--o)">Mirror CDN</div>
+        <div class="gpg-sub">Distributes signed packages worldwide. Mirror cannot tamper — signature would break.</div>
+      </div>
+      <div style="padding:20px 4px;color:var(--t3);font-size:16px;align-self:center">→</div>
+      <div class="gpg-step" style="border-top:2px solid var(--y)">
+        <div class="gpg-icon">📥</div>
+        <div class="gpg-title" style="color:var(--y)">apt/dnf Download</div>
+        <div class="gpg-sub">Downloads package + detached signature (.sig or embedded in Release file).</div>
+      </div>
+      <div style="padding:20px 4px;color:var(--t3);font-size:16px;align-self:center">→</div>
+      <div class="gpg-step" style="border-top:2px solid var(--g)">
+        <div class="gpg-icon">🔑</div>
+        <div class="gpg-title" style="color:var(--g)">Local Keyring Verify</div>
+        <div class="gpg-sub">apt-key / /etc/apt/keyrings/ holds trusted public keys. Signature verified cryptographically before install.</div>
+      </div>
+      <div style="padding:20px 4px;color:var(--t3);font-size:16px;align-self:center">→</div>
+      <div class="gpg-step" style="border-top:2px solid var(--g)">
+        <div class="gpg-icon">✅</div>
+        <div class="gpg-title" style="color:var(--g)">Install Proceeds</div>
+        <div class="gpg-sub">Only if ALL signatures valid. Any mismatch = hard error, installation aborted.</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">GPG key management & repo security</span></div>
+      <div class="tb">
+        <span class="sec">──── LIST TRUSTED APT KEYS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls /etc/apt/keyrings/</span></span>
+        <span class="out">docker.gpg  kubernetes.gpg  nginx.gpg  ubuntu-keyring.gpg</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">gpg --no-default-keyring --keyring /etc/apt/keyrings/docker.gpg --list-keys</span></span>
+        <span class="out">pub   rsa4096 2021-10-25 [SC]</span>
+        <span class="ocn">      9DC858229FC7DD38854AE2D88D81803C0EBFCD88</span>
+        <span class="out">uid   Docker Release (CE deb)</span>
+        <span class="sec">──── VERIFY PACKAGE SIGNATURE MANUALLY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg-sig --verify nginx_1.24.0_amd64.deb</span></span>
+        <span class="ogn">GOODSIG _gpgbuilder Ubuntu Signing Key</span>
+        <span class="sec">──── RPM SIGNATURE VERIFICATION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm --checksig nginx-1.24.0.x86_64.rpm</span></span>
+        <span class="ogn">nginx-1.24.0.x86_64.rpm: digests signatures OK</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -qi --qf "%{SIGPGP:pgpsig}\n" nginx  # show signing key</span></span>
+        <span class="sec">──── SECURITY AUDIT: UNSIGNED REPOS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grep -r "trusted=yes\|allow-insecure=yes" /etc/apt/sources.list.d/</span></span>
+        <span class="ored">/etc/apt/sources.list.d/internal.list: deb [trusted=yes] http://internal.repo/ubuntu focal main</span>
+        <span class="ored"># WARNING: trusted=yes bypasses signature verification!</span>
+        <span class="sec">──── DETECT PACKAGE TAMPERING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg --verify nginx   # verify installed files match package</span></span>
+        <span class="ored">??5??????   /usr/sbin/nginx   ← file modified after installation!</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -Va --nomtime 2>/dev/null | grep "^S\|^5"  # RHEL equivalent</span></span>
+        <span class="ored">S.5....T.  /usr/bin/ls   ← size and hash changed — possible binary replacement</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 06 — DEPENDENCY RESOLUTION -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🕸</span><span class="pt">Dependency Resolution — How It Works</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cby">
+        <div class="cbt">Dependency Graph Resolution</div>
+        <div class="ct">
+          When you install package A, the resolver builds a <span class="hy">directed acyclic graph (DAG)</span> of all dependencies. It uses SAT solving (apt uses EDSP, dnf uses libsolv) to find a consistent set of packages satisfying all version constraints.<br><br>
+          <span class="hr">Dependency hell</span> = when two packages require incompatible versions of the same library. Solutions: virtual packages, alternatives, parallel library versions (lib32, lib64).
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Dependency Types</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hl">Depends</span> — must be installed. Hard requirement.<br>
+          <span class="hc">Recommends</span> — installed by default but can skip with --no-install-recommends<br>
+          <span class="hy">Suggests</span> — optional enhancement, not installed by default<br>
+          <span class="ho">Conflicts</span> — cannot be installed alongside<br>
+          <span class="hp">Breaks</span> — installing this breaks another<br>
+          <span class="hl">Replaces</span> — supersedes another package<br>
+          <span class="hc">Provides</span> — virtual package: satisfies another's dependency
+        </div>
+      </div>
+    </div>
+
+    <!-- Dep tree example -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">Dependency Tree — apt install nginx</div>
+      <div style="text-align:center;margin-bottom:8px">
+        <div class="dep-node" style="border-top:2px solid var(--g);display:inline-block"><div class="dep-name" style="color:var(--g)">nginx</div><div class="dep-ver">1.24.0</div></div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <div>
+          <div style="text-align:center;color:var(--t3);font-size:10px">depends</div>
+          <div class="dep-node" style="border-top:2px solid var(--c)"><div class="dep-name" style="color:var(--c)">nginx-core</div><div class="dep-ver">≥1.24.0</div></div>
+        </div>
+        <div>
+          <div style="text-align:center;color:var(--t3);font-size:10px">recommends</div>
+          <div class="dep-node" style="border-top:2px solid var(--y)"><div class="dep-name" style="color:var(--y)">nginx-doc</div><div class="dep-ver">any</div></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap">
+        <div>
+          <div style="text-align:center;color:var(--t3);font-size:10px">nginx-core depends</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">
+            <div class="dep-node" style="border-top:2px solid var(--p)"><div class="dep-name" style="color:var(--p)">libssl3</div><div class="dep-ver">≥3.0.0</div></div>
+            <div class="dep-node" style="border-top:2px solid var(--p)"><div class="dep-name" style="color:var(--p)">libpcre2-8-0</div><div class="dep-ver">≥10.22</div></div>
+            <div class="dep-node" style="border-top:2px solid var(--p)"><div class="dep-name" style="color:var(--p)">zlib1g</div><div class="dep-ver">≥1.2.1</div></div>
+            <div class="dep-node" style="border-top:2px solid var(--p)"><div class="dep-name" style="color:var(--p)">libc6</div><div class="dep-ver">≥2.35</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Dependency inspection & troubleshooting</span></div>
+      <div class="tb">
+        <span class="sec">──── VIEW FULL DEPENDENCY TREE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-cache depends nginx</span></span>
+        <span class="out">nginx</span>
+        <span class="ocn">  Depends: nginx-core (&gt;= 1.24.0) | nginx-full (&gt;= 1.24.0)</span>
+        <span class="oyn">  Recommends: nginx-doc</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-cache rdepends nginx        # who depends ON nginx?</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-rdepends nginx | head -20   # full recursive tree</span></span>
+        <span class="sec">──── WHY IS A PACKAGE INSTALLED? ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-mark showmanual | grep nginx  # manually installed</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-mark showauto | grep pcre    # automatically as dep</span></span>
+        <span class="sec">──── SIMULATE INSTALL (DRY RUN) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt install --dry-run nginx</span></span>
+        <span class="out">The following NEW packages will be installed:</span>
+        <span class="ocn">  nginx nginx-common nginx-core libpcre2-8-0</span>
+        <span class="out">0 upgraded, 4 newly installed, 0 to remove</span>
+        <span class="sec">──── FIX BROKEN DEPENDENCIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt --fix-broken install</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg --configure -a              # reconfigure partially installed</span></span>
+        <span class="sec">──── DNF EQUIVALENT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf deplist nginx                # show dependencies</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf repoquery --requires nginx   # list required packages</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dnf repoquery --whatrequires nginx  # reverse: who needs nginx?</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 07 — SNAP & FLATPAK -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📦</span><span class="pt">snap &amp; flatpak — Universal Package Formats</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <!-- Snap -->
+      <div class="fmt-card" style="border-top:2px solid var(--o)">
+        <div class="fmt-name" style="color:var(--o)">🔴 snap (Canonical)</div>
+        <div class="fmt-row"><span class="fmt-lbl">Store</span><span class="fmt-val">Snapcraft Store (centralised)</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Sandbox</span><span class="fmt-val">AppArmor + seccomp + squashfs</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Updates</span><span class="fmt-val">Automatic background (4 checks/day)</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Size</span><span class="fmt-val">Larger — bundles all deps in SquashFS</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Startup</span><span class="fmt-val">Slower — mounts squashfs at launch</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Best for</span><span class="fmt-val">Server daemons, CLI tools, IoT</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Distros</span><span class="fmt-val">Ubuntu default, others optional</span></div>
+        <div class="fmt-row" style="margin-top:8px"><span class="fmt-lbl" style="color:var(--r)">Security ⚠</span><span class="fmt-val" style="color:var(--r)">Centralised — must trust Canonical store</span></div>
+      </div>
+      <!-- Flatpak -->
+      <div class="fmt-card" style="border-top:2px solid var(--bl)">
+        <div class="fmt-name" style="color:var(--bl)">🔵 flatpak (freedesktop)</div>
+        <div class="fmt-row"><span class="fmt-lbl">Store</span><span class="fmt-val">Flathub (default) + self-hosted</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Sandbox</span><span class="fmt-val">Bubblewrap + portals + seccomp</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Updates</span><span class="fmt-val">Manual or GNOME Software automatic</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Size</span><span class="fmt-val">Shared runtimes (GNOME, KDE) — efficient</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Startup</span><span class="fmt-val">Fast — no SquashFS mount overhead</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Best for</span><span class="fmt-val">Desktop GUI apps, cross-distro</span></div>
+        <div class="fmt-row"><span class="fmt-lbl">Distros</span><span class="fmt-val">Available on all major distros</span></div>
+        <div class="fmt-row" style="margin-top:8px"><span class="fmt-lbl" style="color:var(--g)">Open ✓</span><span class="fmt-val" style="color:var(--g)">Decentralised — can add any Flatpak repo</span></div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">snap · flatpak management</span></div>
+      <div class="tb">
+        <span class="sec">──── SNAP OPERATIONS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap install code --classic     # VS Code (--classic = relaxed sandbox)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap install kubectl --channel=1.29/stable</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap list                       # installed snaps</span></span>
+        <span class="out">Name     Version   Rev  Tracking  Publisher</span>
+        <span class="ocn">code     1.88.0    160  latest/stable  vscode</span>
+        <span class="ocn">kubectl  1.29.3    2863 1.29/stable  canonical</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap refresh code               # update specific snap</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap remove code --purge        # remove + all data</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap connections code           # see snap interface permissions</span></span>
+        <span class="sec">──── FLATPAK OPERATIONS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">flatpak install flathub org.gimp.GIMP</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">flatpak run org.gimp.GIMP</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">flatpak list</span></span>
+        <span class="out">Name    Application ID         Version  Branch  Installation</span>
+        <span class="ocn">GIMP    org.gimp.GIMP          2.10.36  stable  system</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">flatpak update              # update all flatpaks</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">flatpak uninstall org.gimp.GIMP --delete-data</span></span>
+        <span class="sec">──── SNAP SECURITY AUDIT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">snap connections code | grep -v "^Interface"</span></span>
+        <span class="oyn">home           code:home     :home     -</span>
+        <span class="ored">system-files   code:system  :system   -  ← broad filesystem access (--classic)</span>
+        <span class="ocn"># Classic confinement = no sandbox = treat like regular package</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 08 — BUILD FROM SOURCE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔨</span><span class="pt">Building from Source — Compilation &amp; Installation</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Building from source gives complete control: custom compile flags, optimisations, features, and the ability to patch before building. Required for: bleeding-edge software, custom modules, security patches not yet in repos, or software not packaged for your distro.</span></div>
+
+    <div style="display:flex;flex-direction:column;margin-bottom:14px">
+      <div class="bld-step" style="position:relative"><div class="bld-line"></div>
+        <div class="bld-dot">1</div>
+        <div class="bld-body"><div class="bld-title">Install Build Dependencies</div>
+        <div class="bld-desc">Compilers (gcc/clang), make, autoconf, pkg-config, and all library dev headers (-dev/-devel packages).</div>
+        <div class="bld-cmd">apt install build-essential gcc make autoconf pkg-config libssl-dev libpcre2-dev zlib1g-dev</div></div>
+      </div>
+      <div class="bld-step" style="position:relative"><div class="bld-line"></div>
+        <div class="bld-dot">2</div>
+        <div class="bld-body"><div class="bld-title">Get Source Code</div>
+        <div class="bld-desc">Download tarball or clone repository. Verify tarball GPG signature before use.</div>
+        <div class="bld-cmd">wget https://nginx.org/download/nginx-1.25.4.tar.gz<br>wget https://nginx.org/download/nginx-1.25.4.tar.gz.asc<br>gpg --verify nginx-1.25.4.tar.gz.asc nginx-1.25.4.tar.gz</div></div>
+      </div>
+      <div class="bld-step" style="position:relative"><div class="bld-line"></div>
+        <div class="bld-dot">3</div>
+        <div class="bld-body"><div class="bld-title">Extract & Configure</div>
+        <div class="bld-desc">Run ./configure to detect system capabilities, set install paths, enable/disable features. Generates Makefile.</div>
+        <div class="bld-cmd">tar xzf nginx-1.25.4.tar.gz && cd nginx-1.25.4<br>./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_v2_module --with-pcre</div></div>
+      </div>
+      <div class="bld-step" style="position:relative"><div class="bld-line"></div>
+        <div class="bld-dot">4</div>
+        <div class="bld-body"><div class="bld-title">Compile</div>
+        <div class="bld-desc">make invokes gcc/clang for each source file, links object files into final binary.</div>
+        <div class="bld-cmd">make -j$(nproc)  # parallel build using all CPU cores</div></div>
+      </div>
+      <div class="bld-step" style="position:relative"><div class="bld-line"></div>
+        <div class="bld-dot">5</div>
+        <div class="bld-body"><div class="bld-title">Test (Optional but recommended)</div>
+        <div class="bld-desc">Run included test suite before installing. Catches issues before they affect the system.</div>
+        <div class="bld-cmd">make test  # or: make check</div></div>
+      </div>
+      <div class="bld-step">
+        <div class="bld-dot">6</div>
+        <div class="bld-body"><div class="bld-title">Install</div>
+        <div class="bld-desc">make install copies files to --prefix location. Consider checkinstall to create .deb/.rpm for proper package management.</div>
+        <div class="bld-cmd">make install  # OR: checkinstall --pkgname=nginx-custom --pkgversion=1.25.4</div></div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Real build examples — nginx + Python from source</span></div>
+      <div class="tb">
+        <span class="sec">──── PYTHON FROM SOURCE (CUSTOM BUILD) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
+  libreadline-dev libsqlite3-dev libffi-dev liblzma-dev</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">wget https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tar.xz</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">tar xf Python-3.12.3.tar.xz && cd Python-3.12.3</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">./configure --enable-optimizations --prefix=/usr/local --with-ssl</span></span>
+        <span class="out">checking build system type... x86_64-pc-linux-gnu</span>
+        <span class="out">checking for --enable-optimizations... yes (PGO)</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">make -j$(nproc) && make altinstall   # altinstall: don't overwrite system python</span></span>
+        <span class="sec">──── CMake-BASED BUILD (modern projects) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">git clone https://github.com/example/project && cd project</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">mkdir build && cd build</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cmake --build . -j$(nproc)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cmake --install .</span></span>
+        <span class="sec">──── CHECKINSTALL (create .deb from source install) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt install checkinstall</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">checkinstall --pkgname=nginx-custom --pkgversion=1.25.4 --pkgrelease=1 make install</span></span>
+        <span class="ogn">A new package will be created.   nginx-custom_1.25.4-1_amd64.deb</span>
+        <span class="ogn">Done. The new package has been installed and saved to:</span>
+        <span class="ogn">/root/nginx-custom_1.25.4-1_amd64.deb</span>
+        <span class="ocn"># Now tracked by dpkg — can be removed cleanly with apt remove nginx-custom</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 09 — SUPPLY CHAIN SECURITY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔒</span><span class="pt">Supply Chain Security — Attack Vectors &amp; Defences</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div class="cb cbr">
+        <div class="cbt">Supply Chain Attack Vectors</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Typosquatting:</strong> Attacker uploads <code>ngynx</code> or <code>ngnix</code> to PyPI/npm. User typos → installs malicious package with legitimate-looking name.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Dependency confusion:</strong> Internal package named "mycompany-utils" — attacker uploads public package with same name at higher version → npm/pip prefers public version.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Compromised maintainer:</strong> Attacker steals PyPI/npm credentials → pushes malicious update to legitimate popular package (XZ Utils CVE-2024-3094).</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Unsigned packages:</strong> Installing packages without GPG verification → any MITM on the download can inject malicious code.</div></li>
+          <li style="padding:5px 0;display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Malicious PPA/repo:</strong> User adds untrusted PPA → all packages in that repo can be pushed to the system.</div></li>
+        </ul>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Supply Chain Defences</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Always use distro repositories first — they have package review processes. Third-party repos require additional trust.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Verify GPG signatures on tarballs before building from source. Check fingerprint against multiple sources.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Pin package versions in production: <code>apt-mark hold</code> or version-pinned in requirements.txt. Prevent unexpected updates.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Use <code>dpkg --verify</code> / <code>rpm -Va</code> regularly to detect tampered installed files.</div></li>
+          <li style="padding:5px 0;display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>SBOM (Software Bill of Materials) — document every package and version. Use syft, grype for container image scanning.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Package security audit commands</span></div>
+      <div class="tb">
+        <span class="sec">──── AUDIT ALL INSTALLED PACKAGES FOR KNOWN CVEs ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grype dir:/ --scope AllLayers 2>/dev/null | head -20</span></span>
+        <span class="ored">NAME           INSTALLED  FIXED-IN  TYPE  VULNERABILITY   SEVERITY</span>
+        <span class="ored">openssl        3.0.2      3.0.2-15  deb   CVE-2023-0286   Critical</span>
+        <span class="oyn">libpcre2       10.39      10.42     deb   CVE-2022-41409  Medium</span>
+        <span class="sec">──── GENERATE SBOM (Software Bill of Materials) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">syft / -o spdx-json=sbom.json 2>/dev/null | head -5</span></span>
+        <span class="ocn">{"spdxVersion":"SPDX-2.3","packages":[{"name":"nginx","versionInfo":"1.24.0-1ubuntu1"}...]}</span>
+        <span class="sec">──── CHECK REPO TRUST ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt-key list 2>/dev/null | grep -A1 "pub"</span></span>
+        <span class="oyn">pub   rsa4096 2021-10-25 [SC]</span>
+        <span class="oyn">      9DC858229FC7DD38854AE2D88D81803C0EBFCD88</span>
+        <span class="out">uid   Docker Release (CE deb)</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /etc/apt/sources.list.d/*.list | grep -v "^#"</span></span>
+        <span class="ored">deb [trusted=yes] http://192.168.1.100/repo focal main  ← UNSIGNED REPO! Investigate</span>
+        <span class="sec">──── DETECT MODIFIED SYSTEM BINARIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg --verify 2>/dev/null | grep -v "^$"</span></span>
+        <span class="ored">??5??????   /usr/bin/ls      ← checksum mismatch — possible rootkit!</span>
+        <span class="ored">??5??????   /usr/bin/ps      ← ps replaced — hiding processes!</span>
+        <span class="ored">??5??????   /usr/bin/netstat ← netstat replaced — hiding connections!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 10 — LINUX VS WINDOWS SOFTWARE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⇄</span><span class="pt">Linux vs Windows — Software Installation Comparison</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <table class="tbl">
+      <thead><tr><th>Dimension</th><th>🐧 Linux</th><th>🪟 Windows</th></tr></thead>
+      <tbody>
+        <tr><td>Central repository</td><td style="color:var(--g)">✓ Distro repo — curated, reviewed, signed. Single source of truth.</td><td style="color:var(--r)">✗ No central repo (winget partially). Each vendor hosts own installer.</td></tr>
+        <tr><td>Package format</td><td style="color:var(--t2)">.deb (Debian) · .rpm (RHEL) · .pkg.tar.zst (Arch)</td><td style="color:var(--t2)">.msi, .exe, .msix, .appx — no universal format</td></tr>
+        <tr><td>Dependency resolution</td><td style="color:var(--g)">Automatic — apt/dnf resolve and install all deps</td><td style="color:var(--r)">Manual — each installer bundles or downloads own deps independently</td></tr>
+        <tr><td>Signature verification</td><td style="color:var(--g)">GPG signatures on every package — automatic, blocking</td><td style="color:var(--y)">Authenticode (code signing) — optional, not enforced universally</td></tr>
+        <tr><td>Updates</td><td style="color:var(--g)">Single command updates ALL software: apt upgrade</td><td style="color:var(--r)">Every app updates independently — fragmented, uncoordinated</td></tr>
+        <tr><td>Uninstall</td><td style="color:var(--g)">apt remove — cleans all registered files, optional purge of config</td><td style="color:var(--r)">Left-behind DLLs, registry entries, temp files are common</td></tr>
+        <tr><td>Silent install (automation)</td><td style="color:var(--g)">Fully scriptable, DEBIAN_FRONTEND=noninteractive</td><td style="color:var(--y)">msiexec /quiet — works but vendor-specific switches</td></tr>
+        <tr><td>Enterprise deployment</td><td style="color:var(--g)">Ansible/Chef/Puppet use apt/dnf — infrastructure as code</td><td style="color:var(--t2)">SCCM/Intune — GUI-heavy, AD-integrated</td></tr>
+        <tr><td>File ownership tracking</td><td style="color:var(--g)">dpkg/rpm know every file — dpkg -S to find owner</td><td style="color:var(--r)">No system-wide file ownership DB — hard to audit</td></tr>
+        <tr><td>Build from source</td><td style="color:var(--g)">Native workflow — gcc/make/cmake, common and well-documented</td><td style="color:var(--y)">Possible but complex — Visual Studio, vcpkg, MSYS2</td></tr>
+        <tr><td>Security patching</td><td style="color:var(--g)">Unattended-upgrades — automatic security patches, configurable</td><td style="color:var(--t2)">Windows Update — mostly automatic but more disruptive reboots</td></tr>
+        <tr><td>Licensing</td><td style="color:var(--g)">Open source packages — inspectable, auditable</td><td style="color:var(--y)">Mix of proprietary and open source — harder to audit</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 11 — ENTERPRISE SCENARIOS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🏢</span><span class="pt">Enterprise Package Management — Mirrors, Proxies &amp; Automation</span><span class="pn">PANEL 11</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbg">
+        <div class="cbt">Private Mirror / Repository</div>
+        <div class="ct">
+          In enterprise environments, expose servers directly to internet repos = risk. Solution: <span class="hl">internal mirror</span>.<br><br>
+          Tools: <span class="hc">apt-mirror</span> / <span class="hc">Nexus Repository</span> / <span class="hc">Artifactory</span> / <span class="hc">Pulp</span>.<br><br>
+          Benefits: <span class="hl">airgapped installs</span> (no internet), <span class="hl">bandwidth savings</span> (one download for all servers), <span class="hl">version control</span> (choose which packages reach production), <span class="hl">security scanning</span> before promotion to prod.
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">Automated Patching Strategy</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hy">DEV</span> → apply all patches immediately, test<br>
+          <span class="hy">STAGING</span> → apply after 48h, regression test<br>
+          <span class="hy">PRODUCTION</span> → apply after 1 week validation<br><br>
+          Tools: <span class="hl">Ansible</span> (<code>apt</code> module), <span class="hl">Puppet</span>, <span class="hl">Chef</span>.<br>
+          Automation: <span class="hc">unattended-upgrades</span> for security patches. Manual for kernel (requires reboot window).<br><br>
+          Rollback: <span class="hl">apt-mark hold</span> + snapshot LVM/Btrfs before upgrade.
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Enterprise package automation — Ansible + internal mirror</span></div>
+      <div class="tb">
+        <span class="sec">──── ANSIBLE PLAYBOOK — PATCH ALL SERVERS ────</span>
+        <span class="oyn">---</span>
+        <span class="oyn">- name: Security patch all Linux servers</span>
+        <span class="oyn">  hosts: all</span>
+        <span class="oyn">  become: true</span>
+        <span class="oyn">  tasks:</span>
+        <span class="out">    - name: Update package cache</span>
+        <span class="out">      apt: update_cache=yes cache_valid_time=3600</span>
+        <span class="out">      when: ansible_os_family == "Debian"</span>
+        <span class="out">    - name: Apply security upgrades only</span>
+        <span class="ocn">      apt: upgrade=safe only_upgrade=yes</span>
+        <span class="out">      register: apt_result</span>
+        <span class="out">    - name: Check if reboot needed</span>
+        <span class="oyn">      stat: path=/var/run/reboot-required</span>
+        <span class="oyn">      register: reboot_required</span>
+        <span class="out">    - name: Notify if reboot needed</span>
+        <span class="out">      debug: msg="REBOOT REQUIRED on {{ inventory_hostname }}"</span>
+        <span class="out">      when: reboot_required.stat.exists</span>
+        <span class="sec">──── SETUP APT PROXY/MIRROR ────</span>
+        <span class="oyn"># /etc/apt/apt.conf.d/01proxy</span>
+        <span class="oyn">Acquire::http::Proxy "http://apt-proxy.internal:3142/";</span>
+        <span class="oyn">Acquire::https::Proxy "DIRECT";  # HTTPS direct (can't MITM signed repos)</span>
+        <span class="sec">──── POINT TO INTERNAL MIRROR ────</span>
+        <span class="oyn"># /etc/apt/sources.list</span>
+        <span class="oyn">deb http://mirror.internal.company.com/ubuntu noble main restricted universe</span>
+        <span class="oyn">deb http://mirror.internal.company.com/ubuntu noble-security main restricted</span>
+        <span class="sec">──── INVENTORY: LIST ALL INSTALLED SOFTWARE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dpkg-query -W -f='${Package}\t${Version}\t${Status}\n' | grep installed > /tmp/pkg-inventory.txt</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rpm -qa --queryformat "%{NAME}\t%{VERSION}-%{RELEASE}\n" > /tmp/pkg-inventory.txt</span></span>
+        <span class="sec">──── FIND PACKAGES WITH CVEs (using trivy) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">trivy rootfs --severity HIGH,CRITICAL /</span></span>
+        <span class="ored">openssl  3.0.2   CVE-2023-0286  CRITICAL  Fixed: 3.0.2-0ubuntu1.15</span>
+        <span class="ored">libcurl4 7.81.0  CVE-2023-27538 HIGH      Fixed: 7.81.0-1ubuntu1.12</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 12 — CHECKLIST -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✔</span><span class="pt">Auditor / Security Checklist — Step 9 Verification</span><span class="pn">PANEL 12</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you explain the 6-step package installation flow from user command to installed files?<span class="tag tg" style="margin-left:auto">FLOW</span></li>
+      <li><div class="chk">✓</div>Can you install, remove, search, hold, and audit packages with apt and dpkg?<span class="tag tc" style="margin-left:auto">APT</span></li>
+      <li><div class="chk">✓</div>Can you do the same with dnf and rpm on a RHEL/Fedora system?<span class="tag ty" style="margin-left:auto">DNF</span></li>
+      <li><div class="chk">✓</div>Can you add a third-party repository securely with GPG key pinning (signed-by=)?<span class="tag tr2" style="margin-left:auto">REPO SEC</span></li>
+      <li><div class="chk">✓</div>Can you verify GPG signatures on downloaded tarballs and package files?<span class="tag tp" style="margin-left:auto">GPG</span></li>
+      <li><div class="chk">✓</div>Can you identify which package owns a given file using dpkg -S or rpm -qf?<span class="tag tg" style="margin-left:auto">OWNERSHIP</span></li>
+      <li><div class="chk">✓</div>Can you explain dependency types (Depends/Recommends/Conflicts/Provides) and resolve broken deps?<span class="tag tc" style="margin-left:auto">DEPS</span></li>
+      <li><div class="chk">✓</div>Can you install and manage packages with snap and flatpak and audit their permissions?<span class="tag ty" style="margin-left:auto">UNIVERSAL</span></li>
+      <li><div class="chk">✓</div>Can you build software from source using the configure/make/make install workflow?<span class="tag to" style="margin-left:auto">BUILD</span></li>
+      <li><div class="chk">✓</div>Can you detect modified system binaries using dpkg --verify or rpm -Va?<span class="tag tr2" style="margin-left:auto">INTEGRITY</span></li>
+      <li><div class="chk">✓</div>Can you describe 5 supply chain attack vectors and their corresponding defences?<span class="tag tr2" style="margin-left:auto">SUPPLY CHAIN</span></li>
+      <li><div class="chk">✓</div>Can you write an Ansible playbook to patch all servers and report reboot requirements?<span class="tag tp" style="margin-left:auto">AUTOMATION</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PANEL 13 — SUMMARY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">◉</span><span class="pt">Summary — Step 9 Complete</span><span class="pn">PANEL 13</span></div>
+  <div class="pb">
+    <div class="g3" style="margin-bottom:0">
+      <div class="sum-card">
+        <div class="sc-l">Package Managers</div>
+        <div class="sc-v">apt (Debian/Ubuntu), dnf (RHEL/Fedora), pacman (Arch), apk (Alpine). Each has a low-level tool (dpkg/rpm) and high-level frontend. GPG signatures are non-negotiable — always verify. Use distro repos first, third-party with caution.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Dependency & Formats</div>
+        <div class="sc-v">Package managers automatically resolve dependency DAGs. Snap/flatpak provide cross-distro sandboxed packages — flatpak better for desktop, snap for server daemons. Build from source: configure → make -j$(nproc) → checkinstall for tracking.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Security & Enterprise</div>
+        <div class="sc-v">Supply chain risks: typosquatting, dependency confusion, compromised maintainer (XZ Utils). Defences: GPG verify, dpkg --verify, pin versions, internal mirrors, SBOM, trivy/grype scanning. Ansible automates patching at scale.</div>
+      </div>
+    </div>
+    <div class="nxt">
+      <div>
+        <div style="font-family:var(--sans);font-weight:600;font-size:14px;color:var(--g)">▶ Next: Step 10 — Logging, Monitoring &amp; Troubleshooting</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">journalctl · syslog · log rotation · monitoring tools · performance analysis · top · htop · vmstat · iostat · strace · lsof · enterprise scenarios</div>
+      </div>
+      <button class="nb" onclick="window.sendPrompt && window.sendPrompt('Start Step 10')">$ Start Step 10 →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

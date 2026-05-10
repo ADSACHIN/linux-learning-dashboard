@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg3:#111820;--panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--c:#00d4ff;--y:#ffd700;--o:#ff8c00;--r:#ff3b3b;--p:#9d4edd;--bl:#2979ff;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;--sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.orn{display:block;color:var(--o)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}.opu{display:block;color:var(--p)}
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.good{display:flex;gap:8px;padding:8px 12px;background:rgba(0,255,136,.06);border-left:3px solid var(--g);margin:10px 0;font-size:12px;color:var(--t2)}
+.danger{display:flex;gap:8px;padding:8px 12px;background:rgba(255,59,59,.07);border-left:3px solid var(--r);margin:10px 0;font-size:12px;color:var(--t2)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top;font-size:12px}
+.tbl td:first-child{color:var(--g);font-family:var(--mono)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px;flex-shrink:0}
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:10px 0}
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+.nxt{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,212,255,.05));border:1px solid rgba(0,255,136,.3);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}
+.nb{background:var(--bg);border:1px solid var(--b);padding:6px 16px;font-size:12px;color:var(--g);cursor:pointer;font-family:var(--mono)}
+.nb:hover{background:rgba(0,255,136,.1);border-color:var(--g)}
+/* boot specific */
+.boot-stage{display:flex;gap:14px;align-items:flex-start;position:relative;margin-bottom:0}
+.boot-line{position:absolute;left:20px;top:42px;bottom:-10px;width:2px;background:linear-gradient(to bottom,var(--g),transparent)}
+.boot-circle{width:42px;min-width:42px;height:42px;border-radius:50%;border:2px solid var(--g);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--g);background:rgba(0,255,136,.08);flex-shrink:0;font-family:var(--sans)}
+.boot-body{flex:1;background:var(--bg3);border:1px solid var(--b2);padding:12px 16px;margin-bottom:12px}
+.boot-title{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--g);margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.boot-time{font-size:10px;color:var(--t3);font-family:var(--mono);padding:1px 6px;background:rgba(255,255,255,.05);border:1px solid var(--b2)}
+.boot-desc{font-size:12px;color:var(--t2);line-height:1.7}
+.boot-detail{margin-top:8px;background:var(--bg);padding:8px 12px;font-size:11px;color:var(--t2);border-left:2px solid var(--b)}
+.boot-cmd{margin-top:6px;background:var(--bg);padding:3px 10px;font-size:11px;color:var(--c);border-left:2px solid var(--c)}
+/* memory map */
+.mem-region{display:flex;align-items:stretch;margin-bottom:2px}
+.mem-addr{width:130px;min-width:130px;font-size:10px;color:var(--t3);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font-family:var(--mono)}
+.mem-seg{flex:1;padding:7px 12px;border:1px solid}
+.mem-name{font-family:var(--sans);font-size:11px;font-weight:700}
+.mem-sub{font-size:10px;color:var(--t3);margin-top:2px}
+/* grub config visual */
+.grub-line{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--b2);font-size:12px}
+.grub-key{width:220px;min-width:220px;color:var(--c);font-family:var(--mono)}
+.grub-val{color:var(--y)}
+.grub-why{flex:1;color:var(--t3);font-size:11px}
+/* target dependency */
+.target-box{background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;text-align:center;flex:1;min-width:120px}
+.target-name{font-family:var(--sans);font-size:11px;font-weight:700;margin-bottom:3px}
+.target-sub{font-size:10px;color:var(--t3);line-height:1.4}
+/* secure boot chain */
+.sb-box{border:1px solid;padding:10px 14px;text-align:center;flex:1;margin-bottom:3px}
+.sb-title{font-family:var(--sans);font-size:12px;font-weight:700;margin-bottom:3px}
+.sb-sub{font-size:10px;color:var(--t3)}
+/* partition table */
+.part-row{display:flex;font-size:11.5px;padding:5px 0;border-bottom:1px solid var(--b2);font-family:var(--mono);align-items:center}
+/* dmesg simulator */
+.dmesg-line{display:block;font-size:11px;padding:1px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+.dm-time{color:var(--t3)}
+.dm-kern{color:var(--y)}
+.dm-ok{color:var(--g)}
+.dm-err{color:var(--r)}
+.dm-info{color:var(--c)}
+/* troubleshoot cards */
+.trouble-card{background:var(--bg3);border:1px solid var(--b2);padding:14px;border-top:2px solid var(--r)}
+.tc-title{font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.tc-body{font-size:12px;color:var(--t2);line-height:1.7}
+.tc-fix{margin-top:8px;background:var(--bg);padding:6px 10px;font-size:11px;color:var(--g);border-left:2px solid var(--g)}
+/* vs table col colors */
+.vs-lx{color:var(--t2)}.vs-win{color:var(--t2)}.vs-good{color:var(--g)}.vs-bad{color:var(--r)}.vs-warn{color:var(--y)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 08 / MODULE 1 ● ACTIVE</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">Linux <span style="color:var(--g)">Boot Process</span> — Deep Understanding</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Intermediate</span>
+        <span class="tag tc">⊞ BIOS/UEFI</span>
+        <span class="tag ty">⊛ GRUB Internals</span>
+        <span class="tag tp">⬡ Kernel Loading</span>
+        <span class="tag to">⊕ initramfs & systemd</span>
+        <span class="tag tr2">⊘ Secure Boot Chain</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">boot-proc-08</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">13</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01–07 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ BOOT COMPLETE</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 01 — FULL BOOT SEQUENCE OVERVIEW -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔄</span><span class="pt">Complete Linux Boot Sequence — Power → Login Prompt</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Linux boot is a <strong style="color:var(--c)">7-stage pipeline</strong>. Each stage hands control to the next. A failure at any stage produces a specific error message that points to the root cause. Understanding each stage is essential for both administration and forensic analysis.</span></div>
+
+    <div style="display:flex;flex-direction:column;margin-top:4px">
+
+      <!-- Stage 1: Power -->
+      <div class="boot-stage" style="position:relative">
+        <div class="boot-line"></div>
+        <div class="boot-circle" style="border-color:var(--o);color:var(--o);background:rgba(255,140,0,.08);font-size:11px">PWR</div>
+        <div class="boot-body" style="border-left:2px solid var(--o)">
+          <div class="boot-title">① Power On — CPU Reset Vector <span class="boot-time">T+0ms</span></div>
+          <div class="boot-desc">CPU starts at hardwired <span class="hl">reset vector</span> address <code>0xFFFFFFF0</code> (x86). First instruction executes in <strong>real mode</strong> (16-bit). Jumps to firmware entry point in flash ROM.</div>
+          <div class="boot-detail">• All CPU registers reset to known state<br>• Memory controller not yet initialized — only CPU cache as RAM<br>• No operating system, no drivers — pure hardware state</div>
+        </div>
+      </div>
+
+      <!-- Stage 2: BIOS/UEFI -->
+      <div class="boot-stage" style="position:relative">
+        <div class="boot-line"></div>
+        <div class="boot-circle" style="border-color:var(--y);color:var(--y);background:rgba(255,215,0,.08)">FW</div>
+        <div class="boot-body" style="border-left:2px solid var(--y)">
+          <div class="boot-title">② BIOS / UEFI Firmware <span class="boot-time">T+10–2000ms</span></div>
+          <div class="boot-desc">
+            <strong style="color:var(--y)">Legacy BIOS:</strong> POST (Power-On Self Test) → detect RAM/CPU/PCI → scan disks for MBR at LBA 0 → load 512-byte bootstrap code → jump to it.<br><br>
+            <strong style="color:var(--c)">UEFI (modern):</strong> Full 32/64-bit firmware. Reads GPT partition table → finds EFI System Partition (ESP, FAT32) → loads <code>.efi</code> application (GRUB or Linux EFI stub). Supports Secure Boot signature verification.
+          </div>
+          <div class="boot-detail">UEFI advantages: GPT (no 4-partition/2TB limit), Secure Boot, network boot (PXE), fast boot, driver model, shell environment</div>
+          <div class="boot-cmd">efibootmgr -v   # show UEFI boot entries and order</div>
+        </div>
+      </div>
+
+      <!-- Stage 3: GRUB -->
+      <div class="boot-stage" style="position:relative">
+        <div class="boot-line"></div>
+        <div class="boot-circle" style="border-color:var(--c);color:var(--c);background:rgba(0,212,255,.08)">GRB</div>
+        <div class="boot-body" style="border-left:2px solid var(--c)">
+          <div class="boot-title">③ GRUB2 Bootloader <span class="boot-time">T+2–4s</span></div>
+          <div class="boot-desc">
+            GRUB (GRand Unified Bootloader) is a full mini-OS. Loads its own modules from <code>/boot/grub/</code>. Presents boot menu. Reads <code>grub.cfg</code> for menu entries. Loads selected kernel (<code>vmlinuz</code>) and initial RAM disk (<code>initramfs</code>) into memory. Passes kernel command line parameters.
+          </div>
+          <div class="boot-detail">GRUB stages: <br>• Stage 1: tiny code in MBR/EFI — just enough to load Stage 2<br>• Stage 2: /boot/grub/core.img — full filesystem drivers, config parser, module loader<br>• Supports: ext4, xfs, btrfs, LVM, RAID, LUKS, network boot</div>
+          <div class="boot-cmd">cat /boot/grub/grub.cfg | grep -A5 "menuentry"</div>
+        </div>
+      </div>
+
+      <!-- Stage 4: Kernel -->
+      <div class="boot-stage" style="position:relative">
+        <div class="boot-line"></div>
+        <div class="boot-circle" style="border-color:var(--g);color:var(--g);background:rgba(0,255,136,.08)">KRN</div>
+        <div class="boot-body" style="border-left:2px solid var(--g)">
+          <div class="boot-title">④ Kernel Loading &amp; Early Init <span class="boot-time">T+4–5s</span></div>
+          <div class="boot-desc">
+            GRUB decompresses <code>vmlinuz</code> (bzImage = compressed kernel) into RAM. Kernel <span class="hl">head.S</span> sets up GDT/IDT, enables protected mode, then long mode (64-bit). Initialises: CPUID detection, memory maps (from BIOS/UEFI), early page tables, console.
+          </div>
+          <div class="boot-detail">• start_kernel() called — C code begins<br>• Set up per-CPU data, NUMA, SMP<br>• Initialise subsystems: memory manager, VFS, scheduler, network<br>• Mount initramfs as temporary root<br>• Kernel parameters processed (from GRUB command line)</div>
+          <div class="boot-cmd">cat /proc/cmdline   # see what kernel parameters were passed</div>
+        </div>
+      </div>
+
+      <!-- Stage 5: initramfs -->
+      <div class="boot-stage" style="position:relative">
+        <div class="boot-line"></div>
+        <div class="boot-circle" style="border-color:var(--p);color:var(--p);background:rgba(157,78,221,.08)">RAM</div>
+        <div class="boot-body" style="border-left:2px solid var(--p)">
+          <div class="boot-title">⑤ initramfs — Initial RAM Filesystem <span class="boot-time">T+5–6s</span></div>
+          <div class="boot-desc">
+            initramfs is a <span class="hp">compressed CPIO archive</span> embedded alongside the kernel. Kernel extracts it into a tmpfs (RAM-based) filesystem and mounts it as root (<code>/</code>). The <code>/init</code> script (or <code>systemd</code>) runs as PID 1 in this environment.
+          </div>
+          <div class="boot-detail">initramfs responsibilities:<br>• Load disk drivers (nvme, virtio, scsi)<br>• Assemble software RAID (mdadm)<br>• Open LVM volume groups<br>• Decrypt LUKS-encrypted partitions (prompts for passphrase)<br>• Mount real root filesystem<br>• pivot_root / switch_root to real root</div>
+          <div class="boot-cmd">lsinitramfs /boot/initrd.img-$(uname -r) | head -20   # list initramfs contents</div>
+        </div>
+      </div>
+
+      <!-- Stage 6: Real root + systemd -->
+      <div class="boot-stage" style="position:relative">
+        <div class="boot-line"></div>
+        <div class="boot-circle" style="border-color:var(--g);color:var(--g);background:rgba(0,255,136,.08)">SYS</div>
+        <div class="boot-body" style="border-left:2px solid var(--g)">
+          <div class="boot-title">⑥ Real Root Mount → systemd PID 1 <span class="boot-time">T+6–8s</span></div>
+          <div class="boot-desc">
+            After switch_root, kernel executes <code>/sbin/init</code> (symlink to <code>systemd</code>) as PID 1. systemd reads unit files, builds dependency graph, activates default target in parallel. Socket activation means services are ready before they're fully started.
+          </div>
+          <div class="boot-detail">PID 1 responsibilities (systemd):<br>• Mount /proc, /sys, /dev (devtmpfs)<br>• Read /etc/fstab → mount all configured filesystems<br>• Start networking, udev (hotplug), hostname setup<br>• Activate target units: sysinit → basic → multi-user / graphical</div>
+          <div class="boot-cmd">systemctl get-default   # which target is default?</div>
+        </div>
+      </div>
+
+      <!-- Stage 7: Login -->
+      <div class="boot-stage">
+        <div class="boot-circle" style="border-color:var(--g);color:var(--g);background:rgba(0,255,136,.1)">✓</div>
+        <div class="boot-body" style="border-left:2px solid var(--g);background:rgba(0,255,136,.04)">
+          <div class="boot-title">⑦ Login Prompt / Desktop <span class="boot-time">T+8–15s</span></div>
+          <div class="boot-desc">
+            <code>getty</code> spawns on TTYs → <code>login</code> prompts for credentials → PAM authenticates → shell spawns with user environment. For graphical: display manager (GDM/LightDM) starts → desktop session. System fully operational.
+          </div>
+          <div class="boot-cmd">systemd-analyze time   # total boot time breakdown</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 02 — BIOS vs UEFI -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">💾</span><span class="pt">BIOS vs UEFI — Architecture Deep Comparison</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cby">
+        <div class="cbt">Legacy BIOS (Basic Input/Output System)</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          Written in 1975 for IBM PC. Runs in <span class="hy">16-bit real mode</span>. Disk layout: <span class="hy">MBR</span> (Master Boot Record) at LBA 0.<br><br>
+          <span class="hr">MBR limitations:</span><br>
+          • Only 512 bytes for bootstrap code<br>
+          • Max 4 primary partitions<br>
+          • Max disk size: 2TB (32-bit LBA)<br>
+          • No signature verification<br>
+          • No network boot without option ROM<br>
+          • Slow (serial device initialisation)
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">UEFI (Unified Extensible Firmware Interface)</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          Intel-designed successor. Runs in <span class="hl">32/64-bit protected mode</span>. Disk layout: <span class="hl">GPT</span> (GUID Partition Table).<br><br>
+          <span class="hl">UEFI advantages:</span><br>
+          • GPT: up to 128 partitions, 9.4ZB disk<br>
+          • EFI applications (.efi): full OS-like environment<br>
+          • <span class="hc">Secure Boot</span>: signature chain verification<br>
+          • Network stack built-in (PXE without ROM)<br>
+          • Human-readable boot manager<br>
+          • Parallel device initialisation (faster)
+        </div>
+      </div>
+    </div>
+
+    <!-- BIOS vs UEFI memory layout -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Disk Partition Table Comparison</div>
+    <div class="g2" style="margin-bottom:14px">
+      <!-- MBR -->
+      <div style="background:var(--bg);border:1px solid var(--b2);padding:14px">
+        <div style="font-family:var(--sans);font-size:11px;font-weight:700;color:var(--y);margin-bottom:10px;text-align:center">MBR Disk Layout (Legacy BIOS)</div>
+        <div style="display:flex;flex-direction:column;gap:2px;font-size:11px">
+          <div style="background:rgba(255,59,59,.1);border:1px solid rgba(255,59,59,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--r)">LBA 0 — MBR (512 bytes)</div>
+            <div style="color:var(--t3);font-size:10px">446B bootstrap code + 64B partition table (4 entries) + 2B signature (0x55AA)</div>
+          </div>
+          <div style="background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--c)">Primary Partition 1 — /boot (ext4)</div>
+          </div>
+          <div style="background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--g)">Primary Partition 2 — / (ext4)</div>
+          </div>
+          <div style="background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--y)">Extended Partition → Logical Partitions</div>
+            <div style="color:var(--t3);font-size:10px">Workaround for 4-partition limit</div>
+          </div>
+          <div style="background:rgba(255,140,0,.07);border:1px solid rgba(255,140,0,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--o)">swap</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:var(--r)">⚠ Max 4 primary partitions. Max 2TB. No signature verification.</div>
+      </div>
+      <!-- GPT -->
+      <div style="background:var(--bg);border:1px solid var(--b2);padding:14px">
+        <div style="font-family:var(--sans);font-size:11px;font-weight:700;color:var(--g);margin-bottom:10px;text-align:center">GPT Disk Layout (UEFI)</div>
+        <div style="display:flex;flex-direction:column;gap:2px;font-size:11px">
+          <div style="background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--o)">LBA 0 — Protective MBR (legacy compat)</div>
+          </div>
+          <div style="background:rgba(255,59,59,.1);border:1px solid rgba(255,59,59,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--r)">LBA 1 — GPT Header (GUID, CRC32)</div>
+          </div>
+          <div style="background:rgba(157,78,221,.1);border:1px solid rgba(157,78,221,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--p)">LBA 2–33 — Partition Table (128 entries)</div>
+          </div>
+          <div style="background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.4);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--y)">EFI System Partition (ESP) — FAT32</div>
+            <div style="color:var(--t3);font-size:10px">/boot/efi — contains .efi bootloaders, shim, kernels</div>
+          </div>
+          <div style="background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--c)">/boot (ext4) — kernel, initramfs, grub</div>
+          </div>
+          <div style="background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.3);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--g)">/ (ext4/xfs) — root filesystem</div>
+          </div>
+          <div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--c)">swap / home / data partitions…</div>
+          </div>
+          <div style="background:rgba(255,59,59,.07);border:1px solid rgba(255,59,59,.2);padding:7px 10px">
+            <div style="font-family:var(--sans);font-weight:700;color:var(--r)">LBA -33 to -1 — Backup GPT Header</div>
+            <div style="color:var(--t3);font-size:10px">GPT is duplicated at end of disk for recovery</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:var(--g)">✓ Up to 128 partitions. 9.4ZB max. CRC32 integrity. Backup copy. GUID per partition.</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">UEFI & partition inspection</span></div>
+      <div class="tb">
+        <span class="sec">──── UEFI BOOT ENTRIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">efibootmgr -v</span></span>
+        <span class="out">BootCurrent: 0001</span>
+        <span class="out">Timeout: 1 seconds</span>
+        <span class="out">BootOrder: 0001,0000,0002</span>
+        <span class="ogn">Boot0000* ubuntu  HD(1,GPT,a1b2c3d4,0x800,0x100000)/File(\EFI\ubuntu\grubx64.efi)</span>
+        <span class="ocn">Boot0001* Linux   HD(1,GPT,a1b2c3d4,0x800,0x100000)/File(\EFI\BOOT\BOOTX64.EFI)</span>
+        <span class="out">Boot0002* UEFI: Samsung SSD</span>
+        <span class="sec">──── PARTITION TABLE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">fdisk -l /dev/nvme0n1</span></span>
+        <span class="out">Disk /dev/nvme0n1: 512 GiB, 549755813888 bytes</span>
+        <span class="out">Disklabel type: gpt</span>
+        <span class="out">Device           Start       End   Size  Type</span>
+        <span class="oyn">/dev/nvme0n1p1    2048    206847   100M  EFI System</span>
+        <span class="ocn">/dev/nvme0n1p2  206848   2254847     1G  Linux filesystem  (/boot)</span>
+        <span class="ogn">/dev/nvme0n1p3 2254848 975773695 464.9G Linux filesystem  (/)</span>
+        <span class="sec">──── ESP CONTENTS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -la /boot/efi/EFI/</span></span>
+        <span class="out">BOOT/      ubuntu/    Microsoft/</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls /boot/efi/EFI/ubuntu/</span></span>
+        <span class="oyn">grubx64.efi  shimx64.efi  mmx64.efi  grub.cfg</span>
+        <span class="ocn"># shimx64.efi: Microsoft-signed shim that loads GRUB — Secure Boot chain</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03 — GRUB DEEP DIVE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🥾</span><span class="pt">GRUB2 — Bootloader Internals &amp; Configuration</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">GRUB2 Architecture</div>
+        <div class="ct">
+          GRUB2 is a full-featured bootloader with its own <span class="hl">module system</span>, filesystem drivers (ext4, xfs, btrfs, LVM, LUKS), scripting language, and network stack. It can boot Linux, Windows, other GRUB instances, and directly chain EFI apps.<br><br>
+          Key files:<br>
+          <span class="hc">/boot/grub/grub.cfg</span> — generated config (never edit directly)<br>
+          <span class="hc">/etc/default/grub</span> — user settings<br>
+          <span class="hc">/etc/grub.d/</span> — scripts that generate grub.cfg<br>
+          <span class="hy">update-grub</span> / <span class="hy">grub-mkconfig</span> — regenerate grub.cfg
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Kernel Command Line Parameters</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hl">root=UUID=…</span> — which device is root FS<br>
+          <span class="hc">ro</span> — mount root read-only initially<br>
+          <span class="hc">quiet splash</span> — suppress boot messages (hide from user)<br>
+          <span class="hy">init=/bin/bash</span> — bypass systemd, drop to bash shell<br>
+          <span class="hy">single</span> — boot to single-user/rescue mode<br>
+          <span class="hl">nomodeset</span> — disable KMS (fix GPU boot issues)<br>
+          <span class="hl">console=ttyS0,115200</span> — serial console (server/VM)<br>
+          <span class="hp">systemd.unit=rescue.target</span> — specific target
+        </div>
+      </div>
+    </div>
+
+    <!-- /etc/default/grub annotated -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">/etc/default/grub — Annotated Production Config</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px">
+      <div style="display:flex;font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);padding:4px 0;border-bottom:2px solid var(--b)">
+        <span style="width:220px">VARIABLE</span><span style="width:200px">VALUE</span><span>EXPLANATION</span>
+      </div>
+      <div class="grub-line"><span class="grub-key">GRUB_DEFAULT</span><span class="grub-val">0</span><span class="grub-why">Boot first menu entry automatically. "saved" = remember last choice.</span></div>
+      <div class="grub-line"><span class="grub-key">GRUB_TIMEOUT</span><span class="grub-val">5</span><span class="grub-why">5s to select menu entry. Set 0 for headless servers (no delay). Set -1 to wait forever.</span></div>
+      <div class="grub-line"><span class="grub-key">GRUB_TIMEOUT_STYLE</span><span class="grub-val">hidden</span><span class="grub-why">hidden = skip menu unless key pressed during timeout. menu = always show.</span></div>
+      <div class="grub-line"><span class="grub-key">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="grub-val">"quiet splash"</span><span class="grub-why">Default kernel params. Remove "quiet" to see boot messages. Add "ro" for safety.</span></div>
+      <div class="grub-line"><span class="grub-key">GRUB_CMDLINE_LINUX</span><span class="grub-val">""</span><span class="grub-why">Always-applied params (including recovery). Put console= here for serial.</span></div>
+      <div class="grub-line"><span class="grub-key">GRUB_DISABLE_RECOVERY</span><span class="grub-val">false</span><span class="grub-why">false = include recovery mode entries in menu. true = hide (cleaner look).</span></div>
+      <div class="grub-line"><span class="grub-key">GRUB_GFXMODE</span><span class="grub-val">1920x1080</span><span class="grub-why">Boot framebuffer resolution for splash screen.</span></div>
+      <div class="grub-line" style="border:none"><span class="grub-key">GRUB_TERMINAL</span><span class="grub-val">console</span><span class="grub-why">console = VGA text. serial = serial port. gfxterm = graphical mode.</span></div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">GRUB management commands</span></div>
+      <div class="tb">
+        <span class="sec">──── REGENERATE GRUB CONFIG ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">update-grub   # Debian/Ubuntu</span></span>
+        <span class="out">Sourcing file `/etc/default/grub'</span>
+        <span class="out">Found linux image: /boot/vmlinuz-6.8.0-52-generic</span>
+        <span class="out">Found initrd image: /boot/initrd.img-6.8.0-52-generic</span>
+        <span class="ogn">Found linux image: /boot/vmlinuz-6.8.0-49-generic</span>
+        <span class="out">done</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grub-mkconfig -o /boot/grub/grub.cfg   # explicit path</span></span>
+        <span class="sec">──── REINSTALL GRUB (after MBR corruption) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ubuntu</span></span>
+        <span class="ogn">Installing for x86_64-efi platform.</span>
+        <span class="ogn">Installation finished. No error reported.</span>
+        <span class="sec">──── VIEW CURRENT KERNEL CMDLINE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /proc/cmdline</span></span>
+        <span class="ocn">BOOT_IMAGE=/boot/vmlinuz-6.8.0-52-generic root=UUID=a1b2c3d4-... ro quiet splash</span>
+        <span class="sec">──── GRUB MENU ENTRY ANATOMY ────</span>
+        <span class="oyn">menuentry 'Ubuntu' --class ubuntu {</span>
+        <span class="out">  recordfail</span>
+        <span class="out">  load_video</span>
+        <span class="out">  gfxmode $linux_gfx_mode</span>
+        <span class="out">  insmod gzio; insmod part_gpt; insmod ext2</span>
+        <span class="ocn">  set root='hd0,gpt2'     # /boot partition</span>
+        <span class="ogn">  linux /vmlinuz-6.8.0-52 root=UUID=a1b... ro quiet splash</span>
+        <span class="ogn">  initrd /initrd.img-6.8.0-52-generic</span>
+        <span class="oyn">}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 04 — KERNEL LOADING -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚙</span><span class="pt">Kernel Loading — vmlinuz, Early Init &amp; Memory Layout</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cby">
+        <div class="cbt">vmlinuz — Compressed Kernel Image</div>
+        <div class="ct">
+          <span class="hy">vmlinuz</span> = "virtual memory Linux compressed". It's a <span class="hy">bzImage</span> (big zImage) — the kernel compressed with gzip/lzma/xz inside a self-extracting wrapper.<br><br>
+          Structure: boot sector + setup code + compressed kernel<br><br>
+          When GRUB loads it: the stub extractor runs first, decompresses the real kernel into RAM, then jumps to kernel entry point (<code>startup_64</code> for x86-64).
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Kernel Parameters — start_kernel()</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          After CPU setup, kernel calls <span class="hl">start_kernel()</span> — the main C entry point:<br>
+          <span class="hc">setup_arch()</span> — architecture init (x86 specifics)<br>
+          <span class="hc">mm_init()</span> — memory manager, page allocator<br>
+          <span class="hc">sched_init()</span> — process scheduler (CFS)<br>
+          <span class="hc">vfs_caches_init()</span> — VFS layer setup<br>
+          <span class="hc">rest_init()</span> → spawns kthreadd (PID 2) and calls <code>kernel_init()</code> (→ PID 1)
+        </div>
+      </div>
+    </div>
+
+    <!-- Kernel memory map -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Physical Memory Layout After Kernel Load (x86-64)</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px">
+      <div class="mem-region">
+        <div class="mem-addr">0xFFFF…</div>
+        <div class="mem-seg" style="border-color:rgba(255,59,59,.4);background:rgba(255,59,59,.07)">
+          <div class="mem-name" style="color:var(--r)">Kernel Virtual Address Space</div>
+          <div class="mem-sub">All kernel code, data, page tables mapped here (KASLR randomises base)</div>
+        </div>
+      </div>
+      <div class="mem-region">
+        <div class="mem-addr">High RAM</div>
+        <div class="mem-seg" style="border-color:rgba(157,78,221,.4);background:rgba(157,78,221,.07)">
+          <div class="mem-name" style="color:var(--p)">initramfs (tmpfs)</div>
+          <div class="mem-sub">Extracted CPIO archive — temporary root filesystem in RAM</div>
+        </div>
+      </div>
+      <div class="mem-region">
+        <div class="mem-addr">Varies</div>
+        <div class="mem-seg" style="border-color:rgba(0,255,136,.4);background:rgba(0,255,136,.07)">
+          <div class="mem-name" style="color:var(--g)">Kernel BSS + Data + Code</div>
+          <div class="mem-sub">Decompressed kernel image — 8–25 MB typical</div>
+        </div>
+      </div>
+      <div class="mem-region">
+        <div class="mem-addr">1MB–Low</div>
+        <div class="mem-seg" style="border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.07)">
+          <div class="mem-name" style="color:var(--c)">Kernel setup code + boot params</div>
+          <div class="mem-sub">Boot parameters structure passed from GRUB — command line, memory map, VESA info</div>
+        </div>
+      </div>
+      <div class="mem-region">
+        <div class="mem-addr">0x7C00</div>
+        <div class="mem-seg" style="border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.07)">
+          <div class="mem-name" style="color:var(--y)">MBR / Bootloader (Legacy only)</div>
+          <div class="mem-sub">BIOS loads MBR here — 512 bytes. History: IBM PC convention from 1981.</div>
+        </div>
+      </div>
+      <div class="mem-region">
+        <div class="mem-addr">0x0–0x500</div>
+        <div class="mem-seg" style="border-color:rgba(255,140,0,.4);background:rgba(255,140,0,.07)">
+          <div class="mem-name" style="color:var(--o)">BIOS Data Area / IVT (Legacy)</div>
+          <div class="mem-sub">Interrupt Vector Table — first 1KB reserved by BIOS</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Kernel boot messages — early dmesg</span></div>
+      <div class="tb">
+        <span class="sec">──── EARLY KERNEL BOOT MESSAGES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dmesg | head -40</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.000000] </span><span class="dm-kern">Linux version 6.8.0-52-generic (buildd@lcy) (gcc 13.2.0) #53-Ubuntu</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.000000] </span><span class="dm-info">Command line: BOOT_IMAGE=/vmlinuz-6.8.0-52 root=UUID=a1b2... ro quiet</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.000000] </span><span class="dm-kern">BIOS-provided physical RAM map:</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.000000] </span><span class="dm-info">BIOS-e820: [mem 0x0000000000000000-0x000000000009efff] usable</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.000000] </span><span class="dm-kern">ACPI: IRQ0 used by override.</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.012345] </span><span class="dm-ok">KASLR: Using ASLR with 24 bits of entropy</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.018920] </span><span class="dm-kern">Booting Linux on physical CPU 0x0</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.024100] </span><span class="dm-info">memory: 00000000 @ 00100000 (usable)</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.198400] </span><span class="dm-ok">Calibrating delay loop (skipped), value calculated using timer frequency..</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.312000] </span><span class="dm-kern">PID hash table entries: 4096 (order: 3, 32768 bytes)</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.445100] </span><span class="dm-ok">NET: Registered PF_INET protocol family</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    0.891200] </span><span class="dm-ok">EXT4-fs (nvme0n1p3): mounted filesystem</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    1.204300] </span><span class="dm-ok">Freeing unused kernel image (initmem) memory: 2456K</span></span>
+        <span class="dmesg-line"><span class="dm-time">[    1.205100] </span><span class="dm-kern">Run /init as init process</span></span>
+        <span class="sec">──── KERNEL VERSION INFO ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">uname -a</span></span>
+        <span class="ocn">Linux lab 6.8.0-52-generic #53-Ubuntu SMP PREEMPT_DYNAMIC Mon May 6 2026 x86_64 GNU/Linux</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -lh /boot/vmlinuz-$(uname -r)</span></span>
+        <span class="out">-rw-r--r-- 1 root root 14M /boot/vmlinuz-6.8.0-52-generic   ← compressed kernel</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -lh /boot/initrd.img-$(uname -r)</span></span>
+        <span class="out">-rw-r--r-- 1 root root 89M /boot/initrd.img-6.8.0-52-generic  ← initramfs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 05 — INITRAMFS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📦</span><span class="pt">initramfs — Initial RAM Filesystem Deep Dive</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbp">
+        <div class="cbt">Why initramfs Exists</div>
+        <div class="ct">
+          The kernel needs drivers to access the root filesystem, but those drivers might be modules (<code>.ko</code> files) ON the root filesystem — a chicken-and-egg problem.<br><br>
+          Solution: <span class="hp">initramfs</span> contains the minimum drivers needed to find and mount the real root. After mounting real root, it performs <span class="hl">switch_root</span> — pivots the filesystem tree and execs PID 1 from the real root.<br><br>
+          It also handles <span class="hc">LUKS decryption</span> (passphrase prompt before root mounts), <span class="hc">RAID assembly</span>, <span class="hc">LVM activation</span>, and <span class="hc">network boot</span>.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">initramfs Contents</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          <span class="hl">/init</span> — entry point (script or systemd binary)<br>
+          <span class="hc">/bin/</span> — busybox: sh, mount, ls, cryptsetup, lvm<br>
+          <span class="hc">/lib/modules/</span> — only needed kernel modules (.ko)<br>
+          <span class="hc">/etc/</span> — minimal: crypttab, mdadm.conf<br>
+          <span class="hy">/scripts/</span> — hook scripts for local/nfs/iscsi mount<br><br>
+          Built by: <span class="hl">update-initramfs</span> (Debian/Ubuntu) or <span class="hl">dracut</span> (RHEL/Fedora)
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">initramfs inspection & rebuild</span></div>
+      <div class="tb">
+        <span class="sec">──── LIST INITRAMFS CONTENTS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsinitramfs /boot/initrd.img-$(uname -r) | head -20</span></span>
+        <span class="out">.</span>
+        <span class="out">bin</span>
+        <span class="out">bin/busybox</span>
+        <span class="ocn">bin/cryptsetup</span>
+        <span class="ocn">bin/lvm</span>
+        <span class="out">etc/crypttab</span>
+        <span class="out">init</span>
+        <span class="oyn">lib/modules/6.8.0-52-generic/kernel/drivers/nvme/</span>
+        <span class="oyn">lib/modules/6.8.0-52-generic/kernel/drivers/virtio/</span>
+        <span class="sec">──── EXTRACT INITRAMFS FOR INSPECTION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">mkdir /tmp/initramfs && cd /tmp/initramfs</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">unmkinitramfs /boot/initrd.img-$(uname -r) .</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat init | head -30   # see the init script</span></span>
+        <span class="oyn">#!/bin/sh</span>
+        <span class="oyn">export PATH=/sbin:/bin:/usr/sbin:/usr/bin</span>
+        <span class="oyn">[ -d /dev ] || mkdir -m 0755 /dev</span>
+        <span class="oyn">mount -t devtmpfs devtmpfs /dev</span>
+        <span class="oyn">mount -t proc proc /proc</span>
+        <span class="oyn">mount -t sysfs sysfs /sys</span>
+        <span class="oyn">. /scripts/functions</span>
+        <span class="sec">──── REBUILD INITRAMFS (after adding driver/config) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">update-initramfs -u -k $(uname -r)   # update current</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">update-initramfs -u -k all           # update all installed kernels</span></span>
+        <span class="out">update-initramfs: Generating /boot/initrd.img-6.8.0-52-generic</span>
+        <span class="sec">──── DRACUT (RHEL/Fedora equivalent) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dracut --force /boot/initramfs-$(uname -r).img $(uname -r)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dracut --list-modules | grep crypt  # check LUKS support</span></span>
+        <span class="ogn">crypt  crypt-gpg  crypt-loop   ← LUKS modules present</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 06 — systemd TARGETS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🎯</span><span class="pt">systemd Targets — Boot Targets &amp; Dependency Graph</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>systemd targets replace SysV runlevels. A target is a group of units that must be active. Targets have <strong style="color:var(--c)">dependency chains</strong> — activating <code>graphical.target</code> pulls in <code>multi-user.target</code> → <code>basic.target</code> → <code>sysinit.target</code> → <code>local-fs.target</code>.</span></div>
+
+    <!-- Target dependency chain -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Target Activation Chain — graphical boot</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0;align-items:center;margin-bottom:14px;overflow-x:auto">
+      <div class="target-box" style="border-left:3px solid var(--o)"><div class="target-name" style="color:var(--o)">local-fs.target</div><div class="target-sub">All local filesystems mounted (/etc/fstab)</div></div>
+      <div style="color:var(--t3);font-size:18px;padding:0 4px">→</div>
+      <div class="target-box" style="border-left:3px solid var(--y)"><div class="target-name" style="color:var(--y)">sysinit.target</div><div class="target-sub">udev, cryptsetup, swap, kernel params</div></div>
+      <div style="color:var(--t3);font-size:18px;padding:0 4px">→</div>
+      <div class="target-box" style="border-left:3px solid var(--c)"><div class="target-name" style="color:var(--c)">basic.target</div><div class="target-sub">sockets, timers, paths, basic network</div></div>
+      <div style="color:var(--t3);font-size:18px;padding:0 4px">→</div>
+      <div class="target-box" style="border-left:3px solid var(--g)"><div class="target-name" style="color:var(--g)">multi-user.target</div><div class="target-sub">All services, login, SSH — no GUI</div></div>
+      <div style="color:var(--t3);font-size:18px;padding:0 4px">→</div>
+      <div class="target-box" style="border-left:3px solid var(--p)"><div class="target-name" style="color:var(--p)">graphical.target</div><div class="target-sub">Display manager + all of multi-user</div></div>
+    </div>
+
+    <!-- Target → SysV runlevel mapping -->
+    <table class="tbl" style="margin-bottom:14px">
+      <thead><tr><th>systemd Target</th><th>SysV Runlevel</th><th>Description</th><th>When to Use</th></tr></thead>
+      <tbody>
+        <tr><td>poweroff.target</td><td style="color:var(--t2)">0</td><td style="color:var(--t2)">Halt / power off system</td><td style="color:var(--t2)"><code>systemctl poweroff</code></td></tr>
+        <tr><td>rescue.target</td><td style="color:var(--t2)">1 (single)</td><td style="color:var(--t2)">Single user, root only, no network</td><td style="color:var(--r)">System recovery, password reset</td></tr>
+        <tr><td>emergency.target</td><td style="color:var(--t2)">—</td><td style="color:var(--t2)">Minimal shell, read-only root</td><td style="color:var(--r)">FS corruption, no /usr, recovery from dracut</td></tr>
+        <tr><td>multi-user.target</td><td style="color:var(--t2)">3</td><td style="color:var(--t2)">Full multi-user, all services, no GUI</td><td style="color:var(--g)">Servers, headless systems</td></tr>
+        <tr><td>graphical.target</td><td style="color:var(--t2)">5</td><td style="color:var(--t2)">Multi-user + display manager</td><td style="color:var(--g)">Desktops, workstations</td></tr>
+        <tr><td>reboot.target</td><td style="color:var(--t2)">6</td><td style="color:var(--t2)">Reboot system</td><td style="color:var(--t2)"><code>systemctl reboot</code></td></tr>
+        <tr><td>sleep.target</td><td style="color:var(--t2)">—</td><td style="color:var(--t2)">Suspend/hibernate</td><td style="color:var(--t2)"><code>systemctl suspend</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Boot target management</span></div>
+      <div class="tb">
+        <span class="sec">──── GET/SET DEFAULT TARGET ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl get-default</span></span>
+        <span class="ogn">graphical.target</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl set-default multi-user.target  # server: disable GUI</span></span>
+        <span class="sec">──── SWITCH TARGET AT RUNTIME (no reboot) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl isolate rescue.target   # go to rescue mode NOW</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl isolate multi-user.target # back to normal</span></span>
+        <span class="sec">──── BOOT TARGET DEPENDENCY TREE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl list-dependencies multi-user.target | head -20</span></span>
+        <span class="ocn">multi-user.target</span>
+        <span class="out">● ├─atd.service</span>
+        <span class="out">● ├─cron.service</span>
+        <span class="out">● ├─dbus.service</span>
+        <span class="out">● ├─networking.service</span>
+        <span class="ogn">● ├─ssh.service</span>
+        <span class="out">● └─basic.target</span>
+        <span class="out">●   ├─sockets.target</span>
+        <span class="out">●   └─sysinit.target</span>
+        <span class="sec">──── BOOT TIME ANALYSIS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze time</span></span>
+        <span class="out">Startup finished in 1.423s (firmware) + 2.891s (loader) + 1.204s (kernel) + 4.312s (userspace) = 9.831s</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze blame | head -8</span></span>
+        <span class="ored"> 4.201s apt-daily-upgrade.service</span>
+        <span class="oyn"> 1.840s snapd.service</span>
+        <span class="oyn"> 1.330s NetworkManager-wait-online.service</span>
+        <span class="out"> 0.421s ModemManager.service</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze critical-chain multi-user.target</span></span>
+        <span class="ocn">The time when unit became active or started is printed after the "@" character.</span>
+        <span class="ocn">multi-user.target @9.831s</span>
+        <span class="out">└─networking.service @8.102s +1.728s</span>
+        <span class="out">  └─network.target @8.099s</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 07 — SECURE BOOT -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔒</span><span class="pt">Secure Boot — Chain of Trust Architecture</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Secure Boot ensures every component in the boot chain is <strong style="color:var(--c)">cryptographically signed</strong> and verified before execution. A compromised bootloader or kernel cannot load without a valid signature — this prevents <strong>bootkits</strong> and <strong>UEFI rootkits</strong>.</span></div>
+
+    <!-- Secure Boot chain visual -->
+    <div style="display:flex;flex-direction:column;gap:3px;max-width:600px;margin:0 auto 16px">
+      <div class="sb-box" style="border-color:rgba(255,59,59,.5);background:rgba(255,59,59,.07)">
+        <div class="sb-title" style="color:var(--r)">UEFI Firmware</div>
+        <div class="sb-sub">Contains Platform Key (PK) + Key Enrollment Key (KEK) + DB (allowed) + DBX (revoked)</div>
+      </div>
+      <div style="text-align:center;color:var(--t3);font-size:11px">↓ verifies signature against DB</div>
+      <div class="sb-box" style="border-color:rgba(255,215,0,.5);background:rgba(255,215,0,.07)">
+        <div class="sb-title" style="color:var(--y)">shim.efi (Microsoft-signed)</div>
+        <div class="sb-sub">Pre-signed by Microsoft CA → trusted by all UEFI implementations. Contains distro's Machine Owner Key (MOK).</div>
+      </div>
+      <div style="text-align:center;color:var(--t3);font-size:11px">↓ verifies signature against MOK DB</div>
+      <div class="sb-box" style="border-color:rgba(0,212,255,.5);background:rgba(0,212,255,.07)">
+        <div class="sb-title" style="color:var(--c)">grubx64.efi (distro-signed)</div>
+        <div class="sb-sub">GRUB signed by distro's key (Ubuntu/RHEL CA). Shim verifies before executing.</div>
+      </div>
+      <div style="text-align:center;color:var(--t3);font-size:11px">↓ verifies kernel signature</div>
+      <div class="sb-box" style="border-color:rgba(0,255,136,.5);background:rgba(0,255,136,.07)">
+        <div class="sb-title" style="color:var(--g)">vmlinuz (distro-signed kernel)</div>
+        <div class="sb-sub">Kernel image signed with distro key. GRUB verifies before loading.</div>
+      </div>
+      <div style="text-align:center;color:var(--t3);font-size:11px">↓ kernel enforces (lockdown mode)</div>
+      <div class="sb-box" style="border-color:rgba(157,78,221,.5);background:rgba(157,78,221,.07)">
+        <div class="sb-title" style="color:var(--p)">Kernel Lockdown Mode</div>
+        <div class="sb-sub">Prevents unsigned module loading, /dev/mem access, kexec unsigned kernels, hibernation (could bypass LUKS).</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Secure Boot management</span></div>
+      <div class="tb">
+        <span class="sec">──── CHECK SECURE BOOT STATUS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">mokutil --sb-state</span></span>
+        <span class="ogn">SecureBoot enabled</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /sys/kernel/security/lockdown</span></span>
+        <span class="out">none [integrity] confidentiality</span>
+        <span class="ocn"># integrity = prevent unsigned modules, /dev/mem, kexec of unsigned kernels</span>
+        <span class="sec">──── ENROLL CUSTOM MOK (for custom kernel modules) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">openssl req -new -x509 -newkey rsa:2048 -keyout MOK.key -out MOK.crt -nodes -days 36500 -subj "/CN=Custom MOK/"</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">mokutil --import MOK.crt   # enroll key (reboot required to confirm)</span></span>
+        <span class="sec">──── SIGN KERNEL MODULE WITH MOK ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">/usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 MOK.key MOK.crt mydriver.ko</span></span>
+        <span class="sec">──── LIST MOK DATABASE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">mokutil --list-enrolled | grep "Subject:"</span></span>
+        <span class="out">Subject: CN=Ubuntu Secure Boot Signing 2023</span>
+        <span class="out">Subject: CN=Canonical Ltd. Secure Boot Signing (2017)</span>
+        <span class="out">Subject: CN=Custom MOK</span>
+        <span class="sec">──── SECURE BOOT SECURITY IMPLICATIONS ────</span>
+        <span class="ocn"># Secure Boot ON + kernel lockdown = cannot load unsigned modules</span>
+        <span class="ocn"># This breaks: custom drivers, DKMS modules, some VirtualBox kernel modules</span>
+        <span class="ocn"># Fix: sign with MOK or disable Secure Boot in UEFI (reduces security)</span>
+        <span class="ogn"># Enterprise: Secure Boot + lockdown + measured boot (TPM PCR) = strongest posture</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 08 — BOOT TROUBLESHOOTING -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔧</span><span class="pt">Boot Troubleshooting — Common Failures &amp; Recovery</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div class="trouble-card">
+        <div class="tc-title">① GRUB "error: no such partition" <span class="tag tr2" style="margin-left:auto">GRUB</span></div>
+        <div class="tc-body">
+          GRUB config references a partition UUID that no longer exists. Happens after: disk replacement, partition resize, disk letter change.<br><br>
+          <strong style="color:var(--y)">GRUB rescue shell appears:</strong>
+        </div>
+        <div class="tc-fix">
+          grub rescue&gt; set root=(hd0,gpt2)<br>
+          grub rescue&gt; set prefix=(hd0,gpt2)/boot/grub<br>
+          grub rescue&gt; insmod normal && normal<br>
+          # Then boot normally and run: update-grub
+        </div>
+      </div>
+
+      <div class="trouble-card">
+        <div class="tc-title">② "Kernel panic — not syncing: VFS: Unable to mount root" <span class="tag tr2" style="margin-left:auto">KERNEL</span></div>
+        <div class="tc-body">
+          Kernel cannot find/mount root filesystem. Causes: wrong root= in cmdline, missing driver in initramfs, corrupted filesystem, LUKS not opened.
+        </div>
+        <div class="tc-fix">
+          # Boot live USB → mount root partition:<br>
+          mount /dev/nvme0n1p3 /mnt<br>
+          chroot /mnt<br>
+          update-initramfs -u   # rebuild with correct drivers<br>
+          update-grub           # fix root= parameter
+        </div>
+      </div>
+
+      <div class="trouble-card">
+        <div class="tc-title">③ Boots to Emergency/Rescue Target <span class="tag ty" style="margin-left:auto">SYSTEMD</span></div>
+        <div class="tc-body">
+          systemd dropped to emergency target. Causes: FS in /etc/fstab that can't be mounted (wrong UUID after disk swap), FS errors.
+        </div>
+        <div class="tc-fix">
+          # Check which unit failed:<br>
+          systemctl status<br>
+          journalctl -xb    # boot logs<br>
+          # Common fix: edit /etc/fstab<br>
+          blkid             # get correct UUIDs<br>
+          # Remove/comment bad fstab entry<br>
+          systemctl daemon-reload && exit
+        </div>
+      </div>
+
+      <div class="trouble-card">
+        <div class="tc-title">④ Service Fails to Start After Boot <span class="tag tg" style="margin-left:auto">SERVICE</span></div>
+        <div class="tc-body">
+          A critical service (database, webserver) fails to start on boot. Can be dependency issue, config error, missing file, wrong permissions.
+        </div>
+        <div class="tc-fix">
+          systemctl status myservice.service<br>
+          journalctl -u myservice -b    # logs from this boot<br>
+          systemctl list-dependencies myservice<br>
+          # Fix: check ExecStart path, permissions,<br>
+          # ensure After= dependencies are correct
+        </div>
+      </div>
+
+      <div class="trouble-card">
+        <div class="tc-title">⑤ "fsck" — Filesystem Corruption <span class="tag tc" style="margin-left:auto">FS</span></div>
+        <div class="tc-body">
+          Filesystem errors detected during boot. ext4 journal may not fully recover after power loss. Boot may pause for manual fsck.
+        </div>
+        <div class="tc-fix">
+          # Unmount first (or use live USB)<br>
+          fsck -y /dev/nvme0n1p3   # -y = auto-fix<br>
+          # Force fsck on next boot:<br>
+          touch /forcefsck          # old method<br>
+          tune2fs -C 99 /dev/nvme0n1p3  # set mount count high
+        </div>
+      </div>
+
+      <div class="trouble-card">
+        <div class="tc-title">⑥ LUKS Passphrase Prompt Hangs / Missing <span class="tag tp" style="margin-left:auto">LUKS</span></div>
+        <div class="tc-body">
+          LUKS-encrypted root doesn't prompt for passphrase. Cause: cryptsetup missing from initramfs, wrong PARTUUID in crypttab, no console configured.
+        </div>
+        <div class="tc-fix">
+          # Rebuild initramfs with cryptsetup:<br>
+          echo "CRYPTSETUP=y" >> /etc/cryptsetup-initramfs/conf-hook<br>
+          update-initramfs -u<br>
+          # Verify crypttab entry:<br>
+          cat /etc/crypttab  # must match partition UUID
+        </div>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Boot recovery from live USB / chroot</span></div>
+      <div class="tb">
+        <span class="sec">──── FULL SYSTEM RECOVERY (chroot from live USB) ────</span>
+        <span><span class="pr">root@liveusb:~# </span><span style="color:#fff">lsblk   # identify partitions</span></span>
+        <span class="out">nvme0n1p1  100M   EFI System</span>
+        <span class="out">nvme0n1p2    1G   Linux filesystem (/boot)</span>
+        <span class="out">nvme0n1p3  465G   Linux filesystem (/)</span>
+        <span><span class="pr">root@liveusb:~# </span><span style="color:#fff">mount /dev/nvme0n1p3 /mnt</span></span>
+        <span><span class="pr">root@liveusb:~# </span><span style="color:#fff">mount /dev/nvme0n1p2 /mnt/boot</span></span>
+        <span><span class="pr">root@liveusb:~# </span><span style="color:#fff">mount /dev/nvme0n1p1 /mnt/boot/efi</span></span>
+        <span><span class="pr">root@liveusb:~# </span><span style="color:#fff">for d in proc sys dev dev/pts run; do mount --bind /$d /mnt/$d; done</span></span>
+        <span><span class="pr">root@liveusb:~# </span><span style="color:#fff">chroot /mnt /bin/bash</span></span>
+        <span class="ogn">root@chroot:/# </span>
+        <span class="ocn"># Now inside the broken system — fix whatever is needed:</span>
+        <span><span class="pr">root@chroot:/# </span><span style="color:#fff">update-grub</span></span>
+        <span><span class="pr">root@chroot:/# </span><span style="color:#fff">grub-install --target=x86_64-efi --efi-directory=/boot/efi</span></span>
+        <span><span class="pr">root@chroot:/# </span><span style="color:#fff">update-initramfs -u</span></span>
+        <span><span class="pr">root@chroot:/# </span><span style="color:#fff">passwd root   # reset forgotten root password</span></span>
+        <span><span class="pr">root@chroot:/# </span><span style="color:#fff">exit && reboot</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 09 — LINUX VS WINDOWS BOOT -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⇄</span><span class="pt">Linux vs Windows — Boot Process Comparison</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <table class="tbl">
+      <thead><tr><th>Stage / Dimension</th><th>🐧 Linux</th><th>🪟 Windows</th></tr></thead>
+      <tbody>
+        <tr><td>Firmware</td><td class="vs-lx">BIOS (legacy) or UEFI — both supported. Distros moving to UEFI-only.</td><td class="vs-win">UEFI required for Windows 11. BIOS supported for Windows 10.</td></tr>
+        <tr><td>Bootloader</td><td class="vs-good">GRUB2 — open source, scriptable, supports every FS and volume manager</td><td class="vs-win">Windows Boot Manager (bootmgr) — closed, limited to NTFS/FAT32</td></tr>
+        <tr><td>Boot config</td><td class="vs-good">/etc/default/grub (text file) + update-grub script</td><td class="vs-win">BCD (Boot Configuration Data) — binary, edit with bcdedit.exe</td></tr>
+        <tr><td>PID 1 / Init</td><td class="vs-good">systemd — parallel activation, full dependency graph, socket activation</td><td class="vs-win">smss.exe → wininit.exe → services.exe — sequential for core, parallel for services</td></tr>
+        <tr><td>Init RAM disk</td><td class="vs-good">initramfs — open CPIO, inspectable, customisable, LUKS/RAID/LVM</td><td class="vs-win">WinPE (Windows Preinstallation Environment) for recovery only</td></tr>
+        <tr><td>Secure Boot</td><td class="vs-lx">shim → GRUB → kernel — requires MOK enrollment for custom modules</td><td class="vs-good">Deep integration — BitLocker tied to TPM, measured boot (PCR values)</td></tr>
+        <tr><td>Boot time analysis</td><td class="vs-good">systemd-analyze time/blame — precise per-unit breakdown</td><td class="vs-win">Event Viewer boot perf logs — less granular</td></tr>
+        <tr><td>Multi-boot</td><td class="vs-good">GRUB detects all installed OS, adds menu entries automatically (os-prober)</td><td class="vs-win">Windows Boot Manager can chainload Linux but limited; GRUB recommended</td></tr>
+        <tr><td>Recovery mode</td><td class="vs-good">Rescue/emergency target — fully functional root shell, no GUI needed</td><td class="vs-win">WinRE (Windows Recovery Environment) — GUI based, more limited CLI</td></tr>
+        <tr><td>Boot from network</td><td class="vs-good">PXE + iPXE + GRUB netboot — full control over network boot chain</td><td class="vs-win">WDS (Windows Deployment Services) — proprietary, AD-integrated</td></tr>
+        <tr><td>Kernel parameters</td><td class="vs-good">Any parameter via GRUB cmdline — full control</td><td class="vs-win">Limited BCD switches — fewer exposed parameters</td></tr>
+        <tr><td>Disk encryption at boot</td><td class="vs-good">LUKS + cryptsetup in initramfs — passphrase/keyfile/TPM</td><td class="vs-good">BitLocker — TPM + PIN + recovery key — tight TPM integration</td></tr>
+        <tr><td>Hibernation</td><td class="vs-lx">swapfile/partition based, can conflict with Secure Boot lockdown</td><td class="vs-good">Tight integration with Fast Startup (partial hibernation)</td></tr>
+        <tr><td>Boot log access</td><td class="vs-good">dmesg, journalctl -b, /var/log/boot.log — complete, plain text</td><td class="vs-win">Event Viewer (System log) — GUI-focused, Event IDs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 10 — SECURITY PERSPECTIVE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔒</span><span class="pt">Security Perspective — Boot-Level Attacks &amp; Defences</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div class="cb cbr">
+        <div class="cbt">Boot-Level Attack Vectors</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Evil maid attack:</strong> Physical access → replace bootloader with malicious version → capture disk encryption passphrase. Secure Boot + TPM measured boot prevents this.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">UEFI rootkit:</strong> Malware persists in UEFI flash storage — survives OS reinstall and disk wipe. Extremely hard to detect. Seen in Lojax (APT28), CosmicStrand (APT41).</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Boot parameter manipulation:</strong> Append <code>init=/bin/bash</code> to kernel cmdline at GRUB → root shell without authentication. Physical access to reboot = root access.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">initramfs backdoor:</strong> Replace initramfs with malicious version → extract root encryption key → install persistent backdoor before OS starts.</div></li>
+          <li style="padding:5px 0;display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Live USB bypass:</strong> Boot from attacker-controlled USB → mount host disk → bypass all OS-level security. Mitigate: disable USB boot in UEFI + password-protect UEFI settings.</div></li>
+        </ul>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Boot-Level Defences</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Enable Secure Boot — prevents unsigned bootloader/kernel execution. Verify with <code>mokutil --sb-state</code>.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>LUKS full disk encryption — even if attacker boots from USB and copies disk, data is encrypted without passphrase/keyfile.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>GRUB password: <code>grub-mkpasswd-pbkdf2</code> → require password to edit GRUB entries or boot into rescue. Prevents cmdline manipulation.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>UEFI firmware password + disable boot from USB/CD in UEFI settings. Prevents live USB attacks.</div></li>
+          <li style="padding:5px 0;display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>TPM measured boot: boot components are measured (hashed) into TPM PCR registers. LUKS key sealed to TPM — unseals only if boot chain matches expected hash.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Boot security hardening</span></div>
+      <div class="tb">
+        <span class="sec">──── GRUB PASSWORD PROTECTION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grub-mkpasswd-pbkdf2</span></span>
+        <span class="out">Enter password: ••••••••</span>
+        <span class="out">Reenter password: ••••••••</span>
+        <span class="ogn">PBKDF2 hash of your password is grub.pbkdf2.sha512.10000.E3C...</span>
+        <span class="oyn"># /etc/grub.d/40_custom — add:</span>
+        <span class="oyn">set superusers="admin"</span>
+        <span class="oyn">password_pbkdf2 admin grub.pbkdf2.sha512.10000.E3C...</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">update-grub</span></span>
+        <span class="sec">──── TPM SEALED LUKS KEY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">apt install clevis-luks clevis-tpm2 clevis-initramfs</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">clevis luks bind -d /dev/nvme0n1p3 tpm2 '{"pcr_ids":"7"}'</span></span>
+        <span class="ogn"># PCR 7 = Secure Boot state. If boot chain changes → TPM refuses to unseal → disk stays encrypted</span>
+        <span class="sec">──── VERIFY BOOT INTEGRITY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sha256sum /boot/vmlinuz-$(uname -r) /boot/initrd.img-$(uname -r)</span></span>
+        <span class="out">a3f4c...  /boot/vmlinuz-6.8.0-52-generic</span>
+        <span class="out">b2e1d...  /boot/initrd.img-6.8.0-52-generic</span>
+        <span class="ocn"># Store these hashes externally — compare regularly with AIDE</span>
+        <span class="sec">──── CHECK UEFI SECURE VARIABLES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls /sys/firmware/efi/efivars/ | grep -E "PK|KEK|db"</span></span>
+        <span class="out">PK-8be4df61-...-db11aa48     ← Platform Key present</span>
+        <span class="out">KEK-8be4df61-...             ← Key Enrollment Key present</span>
+        <span class="out">db-d719b2cb-...              ← Signature database</span>
+        <span class="out">dbx-d719b2cb-...             ← Revocation database</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 11 — MONITORING & BOOT ANALYSIS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📊</span><span class="pt">Boot Analysis &amp; Performance Monitoring</span><span class="pn">PANEL 11</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">systemd-analyze · journalctl -b · dmesg · boot optimization</span></div>
+      <div class="tb">
+        <span class="sec">──── DETAILED BOOT TIME BREAKDOWN ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze time</span></span>
+        <span class="out">Startup finished in:</span>
+        <span class="oyn">  1.423s (firmware)    ← UEFI POST</span>
+        <span class="oyn">  2.891s (loader)      ← GRUB</span>
+        <span class="oyn">  1.204s (kernel)      ← kernel init</span>
+        <span class="oyn">  4.312s (userspace)   ← systemd units</span>
+        <span class="ogn">  = 9.831s total</span>
+        <span class="sec">──── SLOWEST SERVICES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze blame</span></span>
+        <span class="ored"> 4.201s apt-daily-upgrade.service      ← disable or delay</span>
+        <span class="ored"> 1.840s snapd.service                  ← remove if unused</span>
+        <span class="oyn"> 1.330s NetworkManager-wait-online.service</span>
+        <span class="out"> 0.921s dev-nvme0n1p3.device</span>
+        <span class="out"> 0.421s ModemManager.service</span>
+        <span class="sec">──── OPTIMIZE: FIX NetworkManager-wait-online ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl disable NetworkManager-wait-online.service</span></span>
+        <span class="ocn"># Or set timeout:</span>
+        <span class="ocn">systemctl edit NetworkManager-wait-online.service</span>
+        <span class="oyn">[Service]</span>
+        <span class="oyn">ExecStart=</span>
+        <span class="oyn">ExecStart=/usr/sbin/NetworkManager --timeout 5</span>
+        <span class="sec">──── CRITICAL PATH (what's blocking boot?) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze critical-chain</span></span>
+        <span class="ocn">graphical.target @9.831s</span>
+        <span class="out">└─multi-user.target @9.830s</span>
+        <span class="out">  └─ssh.service @8.102s +0.421s</span>
+        <span class="out">    └─network.target @8.100s</span>
+        <span class="out">      └─NetworkManager.service @4.231s +3.869s  ← slowest</span>
+        <span class="sec">──── VIEW PREVIOUS BOOT LOG ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -b -1 --no-pager | head -30  # previous boot</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -b 0 -p err                  # errors in current boot</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --list-boots                   # show all recorded boots</span></span>
+        <span class="out">IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY</span>
+        <span class="out"> -3 abc12... Mon 2026-04-30 08:00:00 Mon 2026-04-30 18:00:00</span>
+        <span class="out"> -2 def34... Tue 2026-05-01 09:00:00 Tue 2026-05-01 17:00:00</span>
+        <span class="out"> -1 ghi56... Wed 2026-05-05 08:00:00 Wed 2026-05-05 22:00:00</span>
+        <span class="ogn">  0 jkl78... Thu 2026-05-06 08:00:00 Thu 2026-05-06 10:15:00  ← current</span>
+        <span class="sec">──── VISUALIZE BOOT (SVG plot) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze plot > /tmp/boot.svg && xdg-open /tmp/boot.svg</span></span>
+        <span class="ocn"># Opens interactive SVG showing all unit start times and durations on a timeline</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 12 — CHECKLIST -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✔</span><span class="pt">Auditor / Security Checklist — Step 8 Verification</span><span class="pn">PANEL 12</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you describe all 7 boot stages from power-on to login prompt with timing and handoff points?<span class="tag tg" style="margin-left:auto">BOOT SEQ</span></li>
+      <li><div class="chk">✓</div>Can you explain MBR vs GPT and why UEFI + GPT is superior? Can you inspect partition tables with fdisk?<span class="tag ty" style="margin-left:auto">DISK</span></li>
+      <li><div class="chk">✓</div>Can you edit /etc/default/grub, add kernel parameters, and regenerate grub.cfg with update-grub?<span class="tag tc" style="margin-left:auto">GRUB</span></li>
+      <li><div class="chk">✓</div>Can you recover from a broken GRUB using the rescue shell and live USB chroot?<span class="tag tr2" style="margin-left:auto">RECOVERY</span></li>
+      <li><div class="chk">✓</div>Can you inspect initramfs contents with lsinitramfs and rebuild it with update-initramfs?<span class="tag tp" style="margin-left:auto">INITRAMFS</span></li>
+      <li><div class="chk">✓</div>Can you explain the Secure Boot chain: UEFI → shim → GRUB → kernel → lockdown?<span class="tag tr2" style="margin-left:auto">SECURE BOOT</span></li>
+      <li><div class="chk">✓</div>Can you enroll a custom MOK and sign a kernel module for use with Secure Boot enabled?<span class="tag tp" style="margin-left:auto">MOK</span></li>
+      <li><div class="chk">✓</div>Can you switch systemd targets, set the default target, and map targets to SysV runlevels?<span class="tag tg" style="margin-left:auto">TARGETS</span></li>
+      <li><div class="chk">✓</div>Can you use systemd-analyze to identify boot bottlenecks and optimise slow services?<span class="tag tc" style="margin-left:auto">PERF</span></li>
+      <li><div class="chk">✓</div>Can you diagnose and fix: bad fstab entry, kernel panic (missing root), fsck errors, LUKS prompt missing?<span class="tag tr2" style="margin-left:auto">TROUBLESHOOT</span></li>
+      <li><div class="chk">✓</div>Can you configure GRUB password protection and explain how it prevents boot parameter attacks?<span class="tag tg" style="margin-left:auto">SECURITY</span></li>
+      <li><div class="chk">✓</div>Can you recover root password using init=/bin/bash or rescue target, and explain the security implication?<span class="tag ty" style="margin-left:auto">ROOT RESET</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PANEL 13 — SUMMARY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">◉</span><span class="pt">Summary — Step 8 Complete</span><span class="pn">PANEL 13</span></div>
+  <div class="pb">
+    <div class="g3" style="margin-bottom:0">
+      <div class="sum-card">
+        <div class="sc-l">Boot Chain</div>
+        <div class="sc-v">7 stages: CPU reset → UEFI POST → GRUB → vmlinuz decompress → initramfs pivot → systemd PID 1 → services. Each stage hands control to the next. A failure at any stage has a specific diagnostic signature visible in dmesg or journalctl -b.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">GRUB + initramfs</div>
+        <div class="sc-v">GRUB reads grub.cfg, loads kernel + initramfs. initramfs solves the chicken-and-egg: contains drivers to find real root. Critical for LUKS/RAID/LVM. update-grub and update-initramfs are the two most important recovery commands.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Security & Recovery</div>
+        <div class="sc-v">Secure Boot: UEFI → shim → GRUB → kernel chain. GRUB password prevents cmdline attacks. LUKS + TPM = disk stays encrypted even with physical access. chroot from live USB = universal recovery method. systemd-analyze = boot performance audit.</div>
+      </div>
+    </div>
+    <div class="nxt">
+      <div>
+        <div style="font-family:var(--sans);font-weight:600;font-size:14px;color:var(--g)">▶ Next: Step 9 — Package Management &amp; Software Installation</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">apt · dnf · pacman · snap · flatpak · compilation from source · repositories · GPG signing · dependency resolution · enterprise software deployment</div>
+      </div>
+      <button class="nb" onclick="window.sendPrompt && window.sendPrompt('Start Step 9')">$ Start Step 9 →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

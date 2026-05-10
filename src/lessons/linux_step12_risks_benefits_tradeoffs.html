@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg3:#111820;--panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--c:#00d4ff;--y:#ffd700;--o:#ff8c00;--r:#ff3b3b;--p:#9d4edd;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;--sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top;font-size:12px}
+.tbl td:first-child{color:var(--g);font-family:var(--mono)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px;flex-shrink:0}
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+/* score bars */
+.srow{display:flex;align-items:center;gap:10px;margin:5px 0}
+.slbl{width:180px;min-width:180px;font-size:11px;color:var(--t2);font-family:var(--sans)}
+.sbg{flex:1;height:10px;background:rgba(255,255,255,.05);overflow:hidden}
+.sfill{height:100%}
+.sval{width:40px;text-align:right;font-size:11px;font-family:var(--sans);font-weight:700}
+/* risk cards */
+.risk-card{background:var(--bg3);border:1px solid rgba(255,59,59,.3);border-left:3px solid var(--r);padding:12px 14px;margin-bottom:8px}
+.risk-title{font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.risk-body{font-size:12px;color:var(--t2);line-height:1.7}
+.risk-fix{margin-top:7px;background:var(--bg);padding:4px 10px;font-size:11px;color:var(--g);border-left:2px solid var(--g)}
+/* benefit cards */
+.ben-card{background:var(--bg3);border:1px solid rgba(0,255,136,.25);border-left:3px solid var(--g);padding:12px 14px;margin-bottom:8px}
+.ben-title{font-family:var(--sans);font-weight:700;font-size:12px;color:var(--g);margin-bottom:5px}
+.ben-body{font-size:12px;color:var(--t2);line-height:1.7}
+/* severity badge */
+.sev{display:inline-block;padding:1px 7px;font-size:10px;font-family:var(--sans);font-weight:700;letter-spacing:1px;border-radius:2px}
+.sev-c{background:rgba(255,59,59,.2);color:var(--r);border:1px solid rgba(255,59,59,.5)}
+.sev-h{background:rgba(255,140,0,.18);color:var(--o);border:1px solid rgba(255,140,0,.5)}
+.sev-m{background:rgba(255,215,0,.15);color:var(--y);border:1px solid rgba(255,215,0,.4)}
+/* final banner */
+.final-banner{background:linear-gradient(135deg,rgba(0,255,136,.1),rgba(0,212,255,.06));border:2px solid rgba(0,255,136,.4);padding:20px 24px;text-align:center;margin-top:14px}
+.fb-title{font-family:var(--sans);font-size:24px;font-weight:700;color:var(--g);margin-bottom:8px}
+.fb-sub{font-size:13px;color:var(--t2);line-height:1.8;max-width:700px;margin:0 auto}
+.cert-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 12 / MODULE 1 ● FINAL STEP</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">Linux <span style="color:var(--g)">Risks, Benefits</span> &amp; Trade-offs</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Advanced</span>
+        <span class="tag tc">⊞ Security Benefits</span>
+        <span class="tag ty">⊛ Performance & Cost</span>
+        <span class="tag tp">⬡ Risk Vectors</span>
+        <span class="tag tr2">⊘ Linux vs Windows Risk</span>
+        <span class="tag to">⊕ Decision Framework</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">risk-assess-12</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L7 — Expert</span></div>
+      <div>PANELS: <span style="color:var(--c)">10</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01–11 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ CURRICULUM COMPLETE</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 01 — BENEFITS SCORECARD -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✅</span><span class="pt">Benefits of Linux — Quantified Scorecard</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">Linux vs Windows — Benefit Score (100 = Maximum)</div>
+    <div style="margin-bottom:14px">
+      <div class="srow"><span class="slbl">Security Posture</span><div class="sbg"><div class="sfill" style="width:90%;background:var(--g)"></div></div><span class="sval" style="color:var(--g)">90</span></div>
+      <div class="srow"><span class="slbl">Stability / Uptime</span><div class="sbg"><div class="sfill" style="width:95%;background:var(--g)"></div></div><span class="sval" style="color:var(--g)">95</span></div>
+      <div class="srow"><span class="slbl">Performance</span><div class="sbg"><div class="sfill" style="width:92%;background:var(--g)"></div></div><span class="sval" style="color:var(--g)">92</span></div>
+      <div class="srow"><span class="slbl">Automation / Scripting</span><div class="sbg"><div class="sfill" style="width:98%;background:var(--g)"></div></div><span class="sval" style="color:var(--g)">98</span></div>
+      <div class="srow"><span class="slbl">Licensing Cost</span><div class="sbg"><div class="sfill" style="width:96%;background:var(--c)"></div></div><span class="sval" style="color:var(--c)">96</span></div>
+      <div class="srow"><span class="slbl">Customisability</span><div class="sbg"><div class="sfill" style="width:100%;background:var(--c)"></div></div><span class="sval" style="color:var(--c)">100</span></div>
+      <div class="srow"><span class="slbl">Container / Cloud Native</span><div class="sbg"><div class="sfill" style="width:100%;background:var(--c)"></div></div><span class="sval" style="color:var(--c)">100</span></div>
+      <div class="srow"><span class="slbl">Transparency / Auditability</span><div class="sbg"><div class="sfill" style="width:95%;background:var(--y)"></div></div><span class="sval" style="color:var(--y)">95</span></div>
+      <div class="srow"><span class="slbl">Hardware Efficiency</span><div class="sbg"><div class="sfill" style="width:90%;background:var(--y)"></div></div><span class="sval" style="color:var(--y)">90</span></div>
+      <div class="srow"><span class="slbl">Desktop UX</span><div class="sbg"><div class="sfill" style="width:55%;background:var(--o)"></div></div><span class="sval" style="color:var(--o)">55</span></div>
+      <div class="srow"><span class="slbl">Enterprise Support (commercial)</span><div class="sbg"><div class="sfill" style="width:60%;background:var(--o)"></div></div><span class="sval" style="color:var(--o)">60</span></div>
+      <div class="srow"><span class="slbl">Vendor Software Availability</span><div class="sbg"><div class="sfill" style="width:50%;background:var(--r)"></div></div><span class="sval" style="color:var(--r)">50</span></div>
+    </div>
+
+    <div class="g2">
+      <div class="ben-card">
+        <div class="ben-title">🔒 Security — Fundamentally Smaller Attack Surface</div>
+        <div class="ben-body">
+          DAC + ACLs + capabilities + SELinux/AppArmor = 4 independent access control layers. Open source means every CVE is publicly auditable — no security through obscurity. Least privilege is the default design philosophy.<br><br>
+          <strong>Numbers:</strong> 90%+ of malware targets Windows. Linux servers experience fewer breaches per deployment than equivalent Windows servers in enterprise studies.
+        </div>
+      </div>
+      <div class="ben-card">
+        <div class="ben-title">⚡ Performance — Kernel-Level Efficiency</div>
+        <div class="ben-body">
+          Linux idle RAM: ~80-200MB. Windows: ~1.5-2.5GB. For a 64GB server, that's 24GB+ more RAM available for applications on Linux.<br><br>
+          CFS scheduler: fair CPU distribution at microsecond granularity. epoll: handles 100,000+ concurrent connections vs Windows IOCP overhead. All 500 top supercomputers run Linux.
+        </div>
+      </div>
+      <div class="ben-card">
+        <div class="ben-title">💰 Cost — Zero Licensing on Compute</div>
+        <div class="ben-body">
+          Ubuntu, Debian, RHEL (community), Arch = free. Even RHEL commercial support ($1,300/server/year) is less than Windows Server Datacenter ($6,000+/server).<br><br>
+          At 1,000-server scale: $5-6M Windows licensing savings annually. Freed budget → hardware, engineers, or cloud credits.
+        </div>
+      </div>
+      <div class="ben-card">
+        <div class="ben-title">🤖 Automation — Everything is a File/API</div>
+        <div class="ben-body">
+          Every config is plain text → version control with Git. Every service has CLI. Bash + Python + Ansible = automate anything in hours. No GUI required. This is why 100% of CI/CD pipelines run Linux.<br><br>
+          Cron, systemd timers, auditd rules, firewall rules — all config files. Reproducible, reviewable, testable.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 02 — RISKS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚠</span><span class="pt">Risks of Linux — Complete Risk Register</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="risk-card">
+      <div class="risk-title">① Misconfiguration Risk <span class="sev sev-c">CRITICAL</span></div>
+      <div class="risk-body">
+        Linux gives you <em>complete control</em> — which means complete responsibility. A single misconfigured sudo rule, world-writable cron job, or service binding 0.0.0.0 can compromise the entire host. Unlike Windows which has safer defaults for end users, Linux defaults assume a knowledgeable administrator.<br><br>
+        <strong>Real example:</strong> Default Redis config binds 0.0.0.0. Thousands of publicly exposed Redis instances have been compromised due to this alone.
+      </div>
+      <div class="risk-fix">✓ Mitigate: CIS Benchmark hardening + lynis audit + Ansible automated compliance checks. Never accept defaults without reviewing them.</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-title">② Kernel Exploits <span class="sev sev-c">CRITICAL</span></div>
+      <div class="risk-body">
+        A privilege escalation kernel bug affects <em>every user on every process</em> on the host. Dirty COW (2016), DirtyCred (2022), Netfilter bugs — these give any unprivileged user instant root. Average time from CVE disclosure to public exploit: 15 days.
+      </div>
+      <div class="risk-fix">✓ Mitigate: unattended-upgrades for kernel patches, kpatch/livepatch for zero-downtime patching, linux-exploit-suggester.sh for audit.</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-title">③ Privilege Misuse / Insider Threat <span class="sev sev-h">HIGH</span></div>
+      <div class="risk-body">
+        Linux's power is symmetric — it empowers admins AND attackers with the same tools. A malicious insider with sudo access can exfiltrate data, plant backdoors, and cover tracks completely. Shell scripts, cron, and systemd make persistence trivial for someone with root.
+      </div>
+      <div class="risk-fix">✓ Mitigate: Principle of least privilege, sudo per-command restrictions, auditd logging all root commands to remote SIEM, log integrity with chattr +a, MFA for sudo.</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-title">④ Dependency Vulnerabilities / Supply Chain <span class="sev sev-h">HIGH</span></div>
+      <div class="risk-body">
+        XZ Utils CVE-2024-3094 — a backdoor was hidden in a widely-used compression library, nearly compromising SSH on major distros. Open source transparency helps detection, but the volume of third-party dependencies creates risk. Any package in the chain can be compromised.
+      </div>
+      <div class="risk-fix">✓ Mitigate: SBOM generation (syft), CVE scanning (trivy/grype), verify GPG signatures on packages, internal mirrors with approval workflow.</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-title">⑤ Weak Default SSH / Password Configuration <span class="sev sev-h">HIGH</span></div>
+      <div class="risk-body">
+        Fresh Ubuntu/Debian installs allow password-based SSH. A new server exposed to the internet will receive brute force attempts within minutes. Weak or default passwords on exposed services (SSH, database, API) are the #1 initial access vector for attackers.
+      </div>
+      <div class="risk-fix">✓ Mitigate: disable password auth immediately (PasswordAuthentication no), key-only SSH, fail2ban, non-default port, AllowUsers whitelist.</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-title">⑥ Limited Vendor Software / Proprietary Ecosystem <span class="sev sev-m">MEDIUM</span></div>
+      <div class="risk-body">
+        Some commercial software only runs on Windows: Microsoft Office natively, Adobe Creative Suite, some ERP systems, certain CAD tools, specific industry-vertical software. In enterprise mixed environments, Linux servers coexist with Windows desktops — requiring AD integration, SMB compatibility, and cross-platform tooling.
+      </div>
+      <div class="risk-fix">✓ Mitigate: Wine/Proton for some apps, Citrix/RDP for Windows apps on Linux desktops, SSSD for AD integration on Linux servers.</div>
+    </div>
+
+    <div class="risk-card" style="margin-bottom:0">
+      <div class="risk-title">⑦ Skills Gap / Learning Curve <span class="sev sev-m">MEDIUM</span></div>
+      <div class="risk-body">
+        Linux expertise is not universal. Moving from Windows-centric operations to Linux requires significant training. A poorly trained admin is more dangerous than no admin — partial knowledge leads to misconfiguration and false confidence. The command line is not intuitive for users trained only on GUI administration.
+      </div>
+      <div class="risk-fix">✓ Mitigate: Structured training (like this curriculum), pair with experienced engineers, use IaC (Ansible) to codify knowledge, enforce peer review for production changes.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03 — LINUX vs WINDOWS RISK -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⇄</span><span class="pt">Linux vs Windows — Comparative Risk Analysis</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <table class="tbl">
+      <thead><tr><th>Risk Category</th><th>🐧 Linux Risk</th><th>🪟 Windows Risk</th><th>Winner</th></tr></thead>
+      <tbody>
+        <tr><td>Malware prevalence</td><td style="color:var(--g)">Lower — most malware targets Windows; permission model limits spread</td><td style="color:var(--r)">Higher — 90%+ of malware targets Windows; drive-by execution common</td><td><span class="tag tg">Linux</span></td></tr>
+        <tr><td>Misconfiguration blast radius</td><td style="color:var(--r)">High — complete flexibility = more ways to misconfigure badly</td><td style="color:var(--y)">Medium — safer GUI defaults; registry provides some guardrails</td><td><span class="tag ty">Windows</span></td></tr>
+        <tr><td>Kernel/OS exploit risk</td><td style="color:var(--y)">Medium — kernel bugs affect all; open source aids faster patching</td><td style="color:var(--y)">Medium — NT kernel bugs; slower patch cycle (Patch Tuesday)</td><td><span class="tag ty">Tie</span></td></tr>
+        <tr><td>Credential theft</td><td style="color:var(--g)">Lower — SHA-512 hashes; no pass-the-hash equivalent</td><td style="color:var(--r)">Higher — NTLM pass-the-hash, credential dumping (Mimikatz) pervasive</td><td><span class="tag tg">Linux</span></td></tr>
+        <tr><td>Supply chain</td><td style="color:var(--y)">Medium — centralized repos help; XZ Utils incident shows risk</td><td style="color:var(--y)">Medium — Authenticode; SolarWinds shows Windows supply chain risk too</td><td><span class="tag ty">Tie</span></td></tr>
+        <tr><td>Ransomware risk</td><td style="color:var(--g)">Lower — permission model limits encryption scope; less targeted</td><td style="color:var(--r)">Higher — primary ransomware target; one user = encrypt shared drives</td><td><span class="tag tg">Linux</span></td></tr>
+        <tr><td>Insider threat visibility</td><td style="color:var(--g)">Better — auditd captures every syscall; cannot be disabled by root without breaking system</td><td style="color:var(--y)">Good — Event Log; PowerShell logging; but easier to clear with admin rights</td><td><span class="tag tg">Linux</span></td></tr>
+        <tr><td>Remote exploit surface</td><td style="color:var(--g)">Lower default — minimal services installed; SSH key-based</td><td style="color:var(--r)">Higher — RDP, WinRM, SMB, NetBIOS enabled by default historically</td><td><span class="tag tg">Linux</span></td></tr>
+        <tr><td>Patch time-to-fix</td><td style="color:var(--g)">Faster — open source, community patches within hours; security repos same day</td><td style="color:var(--r)">Slower — Patch Tuesday cycle; 0-days may wait 30+ days for patch</td><td><span class="tag tg">Linux</span></td></tr>
+        <tr><td>Skills to secure properly</td><td style="color:var(--r)">High — requires deep knowledge; wrong config is silent failure</td><td style="color:var(--y)">Medium — GUI hardening tools; Group Policy enforces baseline</td><td><span class="tag ty">Windows</span></td></tr>
+        <tr><td>Physical access risk</td><td style="color:var(--r)">High — init=/bin/bash at GRUB gives root. Mitigate: GRUB password + LUKS</td><td style="color:var(--y)">Medium — BitLocker + PIN helps; WinRE still accessible</td><td><span class="tag ty">Windows</span></td></tr>
+        <tr><td>Overall server security</td><td style="color:var(--g);font-weight:600">Better — with proper hardening</td><td style="color:var(--t2)">Adequate — with proper hardening</td><td><span class="tag tg">Linux</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 04 — TRADE-OFFS & DECISION FRAMEWORK -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚖</span><span class="pt">Trade-offs &amp; Decision Framework — When to Use Linux</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbg">
+        <div class="cbt">Use Linux When...</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hl">✓</span> Running servers, APIs, microservices, databases<br>
+          <span class="hl">✓</span> Building containers or K8s workloads<br>
+          <span class="hl">✓</span> Deploying to cloud (AWS/GCP/Azure default)<br>
+          <span class="hl">✓</span> DevOps/CI-CD pipelines and build agents<br>
+          <span class="hl">✓</span> Network appliances, firewalls, routers<br>
+          <span class="hl">✓</span> Cybersecurity tooling, penetration testing<br>
+          <span class="hl">✓</span> Embedded systems, IoT, edge computing<br>
+          <span class="hl">✓</span> High-performance computing, ML training<br>
+          <span class="hl">✓</span> Cost-sensitive large-scale deployments<br>
+          <span class="hl">✓</span> Maximum control and customisation required
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">Consider Windows When...</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hy">→</span> Microsoft-specific stack: .NET, SQL Server, SharePoint, Active Directory domain controllers<br>
+          <span class="hy">→</span> End-user desktops with Office Suite requirements<br>
+          <span class="hy">→</span> Legacy enterprise apps compiled only for Windows<br>
+          <span class="hy">→</span> Team has exclusively Windows administration skills<br>
+          <span class="hy">→</span> Vendor mandates Windows for licence compliance<br>
+          <span class="hy">→</span> Group Policy required for desktop fleet management<br>
+          <span class="hy">→</span> Industry-specific software (CAD, ERP) Windows-only<br>
+          <span class="hy">→</span> Azure-native services with deep Windows integration
+        </div>
+      </div>
+    </div>
+
+    <!-- Trade-off matrix -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">Trade-off Matrix — Linux Strengths vs Weaknesses by Role</div>
+      <table class="tbl">
+        <thead><tr><th>Role / Context</th><th>Linux Advantage</th><th>Linux Challenge</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Web Server</td><td style="color:var(--g)">nginx event-driven, epoll, low RAM, free</td><td style="color:var(--t2)">Config complexity vs IIS GUI</td><td><span class="tag tg">Strong ✓</span></td></tr>
+          <tr><td>Database Server</td><td style="color:var(--g)">PostgreSQL/MySQL tuning, huge pages, no licensing</td><td style="color:var(--t2)">SQL Server specific features require Windows</td><td><span class="tag tg">Strong ✓</span></td></tr>
+          <tr><td>Container Host</td><td style="color:var(--g)">Native namespaces/cgroups — zero overhead</td><td style="color:var(--t2)">None — Windows containers are second-class</td><td><span class="tag tg">Dominant ✓</span></td></tr>
+          <tr><td>CI/CD Agent</td><td style="color:var(--g)">Full shell scripting, all tools native</td><td style="color:var(--t2)">Windows-specific build targets need mixed fleet</td><td><span class="tag tg">Strong ✓</span></td></tr>
+          <tr><td>Security Operations</td><td style="color:var(--g)">auditd, strace, tcpdump, all tools CLI</td><td style="color:var(--t2)">Windows forensics requires separate toolchain</td><td><span class="tag tg">Strong ✓</span></td></tr>
+          <tr><td>Developer Desktop</td><td style="color:var(--g)">Native bash, Docker, compilers, no VM overhead</td><td style="color:var(--r)">Office compatibility, gaming, some vendor tools</td><td><span class="tag ty">Situational</span></td></tr>
+          <tr><td>Enterprise Desktop Fleet</td><td style="color:var(--r)">Limited GPO equivalent, fewer MDM tools</td><td style="color:var(--t2)">Requires Ansible/Puppet for fleet management</td><td><span class="tag ty">Windows wins</span></td></tr>
+          <tr><td>Domain Controller</td><td style="color:var(--y)">Samba4 can act as DC but limited</td><td style="color:var(--r)">Active Directory native is Windows — Samba has edge cases</td><td><span class="tag ty">Windows wins</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Quantified real-world impact data</span></div>
+      <div class="tb">
+        <span class="sec">──── PERFORMANCE BENCHMARKS ────</span>
+        <span class="out">nginx on Linux vs IIS on Windows (same hardware, 10k concurrent connections):</span>
+        <span class="ogn">  Linux nginx: 142,000 req/s, 2.1ms avg latency, 180MB RAM</span>
+        <span class="oyn">  Windows IIS:  89,000 req/s, 4.8ms avg latency, 1.8GB RAM</span>
+        <span class="ocn">  Linux advantage: 60% more throughput, 10x less memory</span>
+        <span class="sec">──── BOOT TIME COMPARISON ────</span>
+        <span class="ogn">Linux headless server: 8-12 seconds to SSH-ready</span>
+        <span class="oyn">Windows Server 2022:  45-90 seconds to RDP-ready</span>
+        <span class="sec">──── TCO ANALYSIS (1000-server enterprise, 5 years) ────</span>
+        <span class="out">                    Linux (RHEL)      Windows Server Datacenter</span>
+        <span class="out">OS Licensing:       $6.5M             $30M+</span>
+        <span class="out">CAL Licensing:      $0                $8M+</span>
+        <span class="out">Hardware (less RAM): Savings ≈ $4M   Baseline</span>
+        <span class="ogn">Total 5yr TCO:      ~$10M savings with Linux</span>
+        <span class="sec">──── UPTIME RECORDS ────</span>
+        <span class="ogn">Linux server uptime records routinely exceed 5-10 years without reboot</span>
+        <span class="ogn">(kernel live patching enables security updates without downtime)</span>
+        <span class="oyn">Windows Server requires monthly reboots for Patch Tuesday updates</span>
+        <span class="sec">──── AUTOMATION ROI ────</span>
+        <span class="out">Ansible playbook to patch 1000 servers: ~15 minutes unattended</span>
+        <span class="out">Manual Windows patch cycle (SCCM): 2-4 hours with maintenance windows</span>
+        <span class="ogn">Linux automation saves ~200 engineer-hours per monthly patch cycle</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 05 — SECURITY HARDENING CHECKLIST (MASTER) -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🛡</span><span class="pt">Master Security Hardening Checklist — Production Deployment</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div>
+        <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Identity & Access</div>
+        <ul class="cl" style="margin-bottom:14px">
+          <li><div class="chk">✓</div>No UID-0 accounts except root. Verified with <code>awk -F: '$3==0' /etc/passwd</code><span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>SSH key-only auth. PasswordAuthentication no, PermitRootLogin no<span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>sudo restricted per-command. No NOPASSWD:ALL rules<span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>All service accounts have nologin shell<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>PAM: faillock configured (5 attempts → 15min lockout)<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>No users in docker/disk/shadow/lxd groups unnecessarily<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+        </ul>
+        <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Network</div>
+        <ul class="cl" style="margin-bottom:14px">
+          <li><div class="chk">✓</div>nftables default-deny INPUT. Only required ports open<span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>No services binding 0.0.0.0 unnecessarily (Redis, DB, etc.)<span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>fail2ban running with SSH + web jails<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>Kernel network hardening: syncookies, rp_filter, no redirects<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">File System & Kernel</div>
+        <ul class="cl" style="margin-bottom:14px">
+          <li><div class="chk">✓</div>LUKS disk encryption enabled (data at rest)<span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>No world-writable files outside /tmp (find / -perm -002)<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>SUID binaries audited. Unknown SUID files investigated<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>ASLR=2, kptr_restrict=2, dmesg_restrict=1<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>/tmp mounted noexec,nosuid,nodev<span class="tag tc" style="margin-left:auto">MEDIUM</span></li>
+          <li><div class="chk">✓</div>chattr +i on /etc/passwd, /etc/shadow, /etc/sudoers<span class="tag tc" style="margin-left:auto">MEDIUM</span></li>
+        </ul>
+        <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Monitoring & Compliance</div>
+        <ul class="cl">
+          <li><div class="chk">✓</div>auditd running with identity, sudo, execve, binary change rules<span class="tag tr2" style="margin-left:auto">CRITICAL</span></li>
+          <li><div class="chk">✓</div>Logs forwarded to remote SIEM (cannot be cleared by attacker)<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>AIDE file integrity baseline established and daily checks running<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>Security patches applied within 7 days of release<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+          <li><div class="chk">✓</div>lynis audit score >80. All CRITICAL suggestions resolved<span class="tag tc" style="margin-left:auto">MEDIUM</span></li>
+          <li><div class="chk">✓</div>SELinux/AppArmor enforcing — not disabled, not permissive<span class="tag ty" style="margin-left:auto">HIGH</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 06 — CURRICULUM SUMMARY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📚</span><span class="pt">Full Curriculum Summary — All 12 Steps</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <table class="tbl">
+      <thead><tr><th>Step</th><th>Topic</th><th>Key Mastery</th><th>Role Impact</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td style="color:var(--t2)">What Is Linux</td><td style="color:var(--t2)">Kernel, distros, GNU/Linux, where Linux runs</td><td><span class="tag tc">Foundation</span></td></tr>
+        <tr><td>02</td><td style="color:var(--t2)">Architecture Deep Dive</td><td style="color:var(--t2)">Monolithic kernel, syscalls, CFS, VFS, IPC, boot</td><td><span class="tag tc">Engineer</span></td></tr>
+        <tr><td>03</td><td style="color:var(--t2)">File System Architecture</td><td style="color:var(--t2)">FHS, inodes, permissions, ext4, LVM, mounting</td><td><span class="tag tg">Admin</span></td></tr>
+        <tr><td>04</td><td style="color:var(--t2)">Users, Permissions & IAM</td><td style="color:var(--t2)">UID/GID, sudo, PAM, capabilities, SELinux, PrivEsc</td><td><span class="tag tr2">Security</span></td></tr>
+        <tr><td>05</td><td style="color:var(--t2)">Process & Service Mgmt</td><td style="color:var(--t2)">Lifecycle, signals, daemons, systemd, cgroups, cron</td><td><span class="tag tg">Admin</span></td></tr>
+        <tr><td>06</td><td style="color:var(--t2)">Networking Deep Dive</td><td style="color:var(--t2)">TCP/IP, routing, DNS, sockets, nftables, packet flow</td><td><span class="tag tc">NetEng</span></td></tr>
+        <tr><td>07</td><td style="color:var(--t2)">Security Deep Dive</td><td style="color:var(--t2)">SSH hardening, LUKS, auditd, AIDE, attack vectors, IR</td><td><span class="tag tr2">SecEng</span></td></tr>
+        <tr><td>08</td><td style="color:var(--t2)">Boot Process</td><td style="color:var(--t2)">UEFI, GRUB, initramfs, systemd targets, Secure Boot</td><td><span class="tag tg">Admin</span></td></tr>
+        <tr><td>09</td><td style="color:var(--t2)">Package Management</td><td style="color:var(--t2)">apt, dnf, GPG, deps, snap, flatpak, source build</td><td><span class="tag tg">Admin</span></td></tr>
+        <tr><td>10</td><td style="color:var(--t2)">Logging & Monitoring</td><td style="color:var(--t2)">journalctl, rsyslog, top, vmstat, strace, lsof, perf</td><td><span class="tag tp">SRE</span></td></tr>
+        <tr><td>11</td><td style="color:var(--t2)">Enterprise Linux</td><td style="color:var(--t2)">nginx, PostgreSQL, K8s, HA, CI/CD, Ansible, backup</td><td><span class="tag tp">Architect</span></td></tr>
+        <tr><td>12</td><td style="color:var(--t2)">Risks, Benefits & Trade-offs</td><td style="color:var(--t2)">Risk register, decision framework, TCO, hardening master checklist</td><td><span class="tag ty">All Roles</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 07 — CAREER PATHS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🎯</span><span class="pt">Career Paths — Linux Knowledge Applied</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="g3">
+      <div class="cb cbg">
+        <div class="cbt">System Administrator / SRE</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          Core steps: 1-6, 8-10<br><br>
+          Skills: Service management, package management, performance tuning, log analysis, backup/restore, HA configuration<br><br>
+          Certifications: <span class="hl">RHCSA</span>, <span class="hl">RHCE</span>, <span class="hc">LFCS</span>, <span class="hc">LFCE</span>
+        </div>
+      </div>
+      <div class="cb cbr">
+        <div class="cbt">Security Engineer / Pentester</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          Core steps: 4, 6, 7, and all others<br><br>
+          Skills: PrivEsc, network attacks, hardening, auditd, forensics, incident response<br><br>
+          Certifications: <span class="hl">OSCP</span>, <span class="hc">CompTIA Security+</span>, <span class="hc">CEH</span>, <span class="hp">GPEN</span>
+        </div>
+      </div>
+      <div class="cb cbp">
+        <div class="cbt">DevOps / Platform Engineer</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          Core steps: 5, 9, 10, 11<br><br>
+          Skills: CI/CD, containers, K8s, Ansible, Terraform, monitoring, IaC<br><br>
+          Certifications: <span class="hl">CKA</span>, <span class="hc">AWS SysOps</span>, <span class="hp">Ansible Automation</span>, <span class="hc">Terraform Associate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 08 — FINAL CHECKLIST -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✔</span><span class="pt">Final Mastery Checklist — Step 12</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you quantify Linux benefits across security, performance, cost, and automation with real data?<span class="tag tg" style="margin-left:auto">BENEFITS</span></li>
+      <li><div class="chk">✓</div>Can you articulate the 7 Linux risks with severity ratings and specific mitigations for each?<span class="tag tr2" style="margin-left:auto">RISKS</span></li>
+      <li><div class="chk">✓</div>Can you compare Linux vs Windows security posture across 12 dimensions and justify each conclusion?<span class="tag tc" style="margin-left:auto">COMPARE</span></li>
+      <li><div class="chk">✓</div>Can you advise whether Linux or Windows is the right choice for a given enterprise scenario?<span class="tag ty" style="margin-left:auto">DECISION</span></li>
+      <li><div class="chk">✓</div>Can you complete the master production hardening checklist (30+ controls) for a new Linux server?<span class="tag tr2" style="margin-left:auto">HARDEN</span></li>
+      <li><div class="chk">✓</div>Can you calculate rough TCO comparison between Linux and Windows at enterprise scale?<span class="tag tp" style="margin-left:auto">TCO</span></li>
+      <li><div class="chk">✓</div>Do you understand every topic across all 12 steps from kernel architecture to enterprise deployment?<span class="tag tg" style="margin-left:auto">MASTERY</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PANEL 09 — FINAL GRADUATION -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🎓</span><span class="pt">Curriculum Complete — Linux Mastery Achieved</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div class="final-banner">
+      <div class="fb-title">🐧 Linux Learning Lab — Complete</div>
+      <div class="fb-sub">
+        You have completed a <strong style="color:var(--g)">FAANG-level L5–L7 Linux curriculum</strong> spanning 12 steps, 130+ panels, and every domain from kernel internals to enterprise production deployment.<br><br>
+        You can now approach Linux as a <strong style="color:var(--c)">System Engineer</strong>, <strong style="color:var(--r)">Security Professional</strong>, <strong style="color:var(--g)">Site Reliability Engineer</strong>, and <strong style="color:var(--y)">Auditor</strong> — understanding not just <em>how</em> to run commands, but <em>why</em> every component exists, <em>what</em> can go wrong, and <em>how</em> to fix it.
+      </div>
+      <div class="cert-row">
+        <span class="tag tg" style="font-size:12px;padding:5px 12px">✓ Kernel Architecture</span>
+        <span class="tag tc" style="font-size:12px;padding:5px 12px">✓ Security Hardening</span>
+        <span class="tag ty" style="font-size:12px;padding:5px 12px">✓ Enterprise Operations</span>
+        <span class="tag tp" style="font-size:12px;padding:5px 12px">✓ Red / Blue Team</span>
+        <span class="tag to" style="font-size:12px;padding:5px 12px">✓ DevOps & CI/CD</span>
+        <span class="tag tr2" style="font-size:12px;padding:5px 12px">✓ Incident Response</span>
+      </div>
+    </div>
+
+    <!-- What to do next -->
+    <div style="margin-top:16px">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Recommended Next Steps</div>
+      <div class="g3">
+        <div class="sum-card">
+          <div class="sc-l">Practice Labs</div>
+          <div class="sc-v">Spin up VMs on VirtualBox/KVM. Practice every checklist from each step. Build a 3-node HA cluster. Deploy a containerised app with monitoring. Break things and fix them.</div>
+        </div>
+        <div class="sum-card">
+          <div class="sc-l">Certifications</div>
+          <div class="sc-v">RHCSA (Red Hat) — practical exam, no MCQ. LFCS (Linux Foundation). CompTIA Linux+. For security: OSCP. For DevOps: CKA (Kubernetes). Each validates a specific role.</div>
+        </div>
+        <div class="sum-card">
+          <div class="sc-l">Advanced Topics</div>
+          <div class="sc-v">eBPF (kernel observability), XDP networking, io_uring, cgroup v2 deep dive, memory management internals, kernel module development, Rust for systems programming.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Your Linux journey — commands you now know cold</span></div>
+      <div class="tb">
+        <span class="sec">──── YOU NOW KNOW ALL OF THIS ────</span>
+        <span class="ogn">uname -a | lscpu | lsmod | strace -c ls | pstree -p</span>
+        <span class="ogn">ps aux --sort=-%cpu | top -bn1 | htop | vmstat 1 | iostat -x</span>
+        <span class="ogn">ip addr | ip route | ss -tlnp | tcpdump | nmap -sV | netstat</span>
+        <span class="ogn">nft list ruleset | iptables -L | fail2ban-client status</span>
+        <span class="ogn">journalctl -u sshd -p err --since today | ausearch -k identity_changes</span>
+        <span class="ogn">find / -perm -4000 | find / -perm -002 | getcap -r / | dpkg --verify</span>
+        <span class="ogn">systemctl status | systemd-analyze blame | systemd-analyze critical-chain</span>
+        <span class="ogn">chmod 750 | chown user:group | setfacl -m | lsattr | chattr +i</span>
+        <span class="ogn">cryptsetup luksDump | mokutil --sb-state | grub-install | update-grub</span>
+        <span class="ogn">apt install | dpkg -L | gpg --verify | lynis audit system | trivy fs</span>
+        <span class="ogn">lsof -p | strace -p | perf top | valgrind --leak-check=full</span>
+        <span class="ogn">borg create | rsync -avz | pg_dump | lvcreate -s | virsh snapshot-create</span>
+        <span class="ogn">kubectl get pods | docker run --cap-drop ALL | ansible-playbook | terraform apply</span>
+        <span class="ogn">nginx -t && systemctl reload | haproxy -c | keepalived status | ceph -s</span>
+        <span class="ogn">openssl s_client | ssh-keygen -t ed25519 | sshd -t | logrotate --force</span>
+        <span class="sec">──── THE LINUX MINDSET ────</span>
+        <span class="ocn">"Everything is a file. Every problem has a log. Every process is traceable."</span>
+        <span class="ocn">"Security is not a product — it is a process of continuous hardening and monitoring."</span>
+        <span class="ogn">"With great power comes great responsibility. Linux gives you the power."</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

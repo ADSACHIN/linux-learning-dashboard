@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg3:#111820;--panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--c:#00d4ff;--y:#ffd700;--o:#ff8c00;--r:#ff3b3b;--p:#9d4edd;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;--sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.orn{display:block;color:var(--o)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}.opu{display:block;color:var(--p)}
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.good{display:flex;gap:8px;padding:8px 12px;background:rgba(0,255,136,.06);border-left:3px solid var(--g);margin:10px 0;font-size:12px;color:var(--t2)}
+.danger{display:flex;gap:8px;padding:8px 12px;background:rgba(255,59,59,.07);border-left:3px solid var(--r);margin:10px 0;font-size:12px;color:var(--t2)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top;font-size:12px}
+.tbl td:first-child{color:var(--g);font-family:var(--mono)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px;flex-shrink:0}
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:10px 0}
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+.nxt{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,212,255,.05));border:1px solid rgba(0,255,136,.3);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}
+.nb{background:var(--bg);border:1px solid var(--b);padding:6px 16px;font-size:12px;color:var(--g);cursor:pointer;font-family:var(--mono)}
+.nb:hover{background:rgba(0,255,136,.1);border-color:var(--g)}
+/* process state badges */
+.ps{display:inline-block;padding:2px 8px;font-size:10px;font-family:var(--sans);font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px}
+.ps-r{background:rgba(0,255,136,.15);color:var(--g);border:1px solid rgba(0,255,136,.4)}
+.ps-s{background:rgba(0,212,255,.12);color:var(--c);border:1px solid rgba(0,212,255,.4)}
+.ps-d{background:rgba(255,215,0,.12);color:var(--y);border:1px solid rgba(255,215,0,.4)}
+.ps-z{background:rgba(255,59,59,.12);color:var(--r);border:1px solid rgba(255,59,59,.4)}
+.ps-t{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.4)}
+/* lifecycle flow */
+.lc-row{display:flex;align-items:center;flex-wrap:wrap;gap:0}
+.lc-box{background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;text-align:center;min-width:110px;flex:1}
+.lc-title{font-family:var(--sans);font-weight:700;font-size:12px;margin-bottom:3px}
+.lc-sub{font-size:10px;color:var(--t3);line-height:1.4}
+.lc-arrow{padding:0 6px;color:var(--t3);font-size:18px;flex-shrink:0}
+/* signal table color rows */
+.sig-r{color:var(--r)}.sig-y{color:var(--y)}.sig-g{color:var(--g)}.sig-p{color:var(--p)}
+/* cgroup meter */
+.cg-bar{height:8px;background:rgba(255,255,255,.05);margin:4px 0;overflow:hidden}
+.cg-fill{height:100%;transition:width .4s}
+/* systemd unit */
+.unit-file{background:#050810;border:1px solid #1a2d45;padding:14px 18px;font-size:12px;line-height:1.9}
+.uf-section{color:var(--y);display:block;margin-top:8px}
+.uf-key{color:var(--c)}
+.uf-val{color:var(--t2)}
+.uf-secure{color:var(--g)}
+.uf-comment{color:var(--t3);font-style:italic}
+/* cron grid */
+.cron-card{background:var(--bg3);border:1px solid var(--b2);padding:12px}
+.cron-expr{font-size:13px;color:var(--g);font-family:var(--mono);margin-bottom:6px;letter-spacing:1px}
+.cron-label{font-family:var(--sans);font-size:11px;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.cron-desc{font-size:11px;color:var(--t2);line-height:1.5}
+/* ps output simulator */
+.ps-row{display:flex;gap:0;font-size:11.5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);font-family:var(--mono)}
+.ps-col{overflow:hidden;white-space:nowrap}
+/* resource limit visual */
+.rl-row{display:flex;align-items:center;gap:10px;margin:5px 0}
+.rl-lbl{width:140px;min-width:140px;font-size:11px;color:var(--t3);font-family:var(--sans)}
+.rl-bg{flex:1;height:14px;background:rgba(255,255,255,.04);position:relative;overflow:hidden}
+.rl-fill{height:100%;position:absolute;left:0;top:0;display:flex;align-items:center;padding-left:6px;font-size:9px;font-weight:700;font-family:var(--sans);letter-spacing:.5px}
+.rl-cap{position:absolute;right:6px;top:0;height:100%;display:flex;align-items:center;font-size:9px;color:var(--t3);font-family:var(--sans)}
+/* daemon types */
+.daemon-card{background:var(--bg3);border:1px solid var(--b2);padding:12px;text-align:center}
+.dc-icon{font-size:22px;margin-bottom:6px}
+.dc-name{font-family:var(--sans);font-weight:700;font-size:12px;color:var(--t);margin-bottom:4px}
+.dc-desc{font-size:10.5px;color:var(--t3);line-height:1.5}
+/* vs comparison */
+.vs-row{display:flex;gap:0}
+.vs-col{flex:1;padding:9px 12px;border-bottom:1px solid var(--b2);font-size:12px;color:var(--t2)}
+.vs-label{width:180px;min-width:180px;padding:9px 12px;border-bottom:1px solid var(--b2);font-size:12px;color:var(--t);font-family:var(--sans);font-weight:500;border-right:1px solid var(--b2)}
+.vs-header{background:var(--panel2);padding:9px 12px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 05 / MODULE 1 ● ACTIVE</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">Process &amp; <span style="color:var(--g)">Service Management</span></h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Intermediate</span>
+        <span class="tag tc">⊞ Process Lifecycle</span>
+        <span class="tag ty">⊛ Daemons & Services</span>
+        <span class="tag tp">⬡ systemd Deep Dive</span>
+        <span class="tag to">⊕ cron & Resources</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">proc-svc-05</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">13</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01–04 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ PID 1 READY</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 01 — PROCESS LIFECYCLE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚡</span><span class="pt">Process Lifecycle — Birth, States &amp; Death</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Every process in Linux descends from <strong style="color:var(--c)">systemd (PID 1)</strong> via <code>fork()</code>. A process is the kernel's unit of resource ownership — it has its own PID, address space, file descriptors, and credentials. Threads share the address space but each has its own kernel task struct.</span></div>
+
+    <!-- Lifecycle flow -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Process Birth → Execution → Termination</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px;overflow-x:auto">
+      <div class="lc-row">
+        <div class="lc-box" style="border-left:3px solid var(--c)">
+          <div class="lc-title" style="color:var(--c)">fork()</div>
+          <div class="lc-sub">kernel clones parent address space (copy-on-write). Child gets new PID, inherits FDs, signal handlers, env.</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-box" style="border-left:3px solid var(--y)">
+          <div class="lc-title" style="color:var(--y)">exec()</div>
+          <div class="lc-sub">replaces child's memory with new program binary. COW pages discarded. argc/argv/envp set up.</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-box" style="border-left:3px solid var(--g)">
+          <div class="lc-title" style="color:var(--g)">RUNNING</div>
+          <div class="lc-sub">CFS scheduler grants CPU timeslice. Process executes instructions in user-space Ring 3.</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-box" style="border-left:3px solid var(--o)">
+          <div class="lc-title" style="color:var(--o)">WAITING</div>
+          <div class="lc-sub">blocked on I/O, sleep(), mutex, network. Moved off run queue. Woken by IRQ or signal.</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-box" style="border-left:3px solid var(--r)">
+          <div class="lc-title" style="color:var(--r)">exit()</div>
+          <div class="lc-sub">releases memory, closes FDs, sends SIGCHLD to parent. Entry stays as zombie until parent calls wait().</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-box" style="border-left:3px solid var(--t3)">
+          <div class="lc-title" style="color:var(--t3)">reaped</div>
+          <div class="lc-sub">parent calls wait()/waitpid(). Kernel removes PCB. PID released back to pool.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process states -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">All Process States (ps STAT column)</div>
+    <div class="g2" style="margin-bottom:14px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;display:flex;align-items:flex-start;gap:12px">
+          <span class="ps ps-r">R</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600;font-size:12px;color:var(--g)">Running / Runnable</div>
+            <div style="font-size:11px;color:var(--t2)">On CPU or in run queue waiting for CPU timeslice. R+ = foreground process group leader.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;display:flex;align-items:flex-start;gap:12px">
+          <span class="ps ps-s">S</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600;font-size:12px;color:var(--c)">Interruptible Sleep</div>
+            <div style="font-size:11px;color:var(--t2)">Waiting for event (I/O complete, timer, signal). Can be woken by a signal. Most daemons spend time here.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;display:flex;align-items:flex-start;gap:12px">
+          <span class="ps ps-d">D</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600;font-size:12px;color:var(--y)">Uninterruptible Sleep</div>
+            <div style="font-size:11px;color:var(--t2)"><strong style="color:var(--y)">Cannot be killed with SIGKILL.</strong> Waiting for hardware I/O (disk, NFS). High D count = storage bottleneck or NFS hang.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;display:flex;align-items:flex-start;gap:12px">
+          <span class="ps ps-z">Z</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600;font-size:12px;color:var(--r)">Zombie</div>
+            <div style="font-size:11px;color:var(--t2)">Process exited but parent hasn't called wait(). Holds PID and exit status only. Many zombies = parent bug or resource leak.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;display:flex;align-items:flex-start;gap:12px">
+          <span class="ps ps-t">T</span>
+          <div>
+            <div style="font-family:var(--sans);font-weight:600;font-size:12px;color:var(--p)">Stopped</div>
+            <div style="font-size:11px;color:var(--t2)">Paused by SIGSTOP or Ctrl+Z. Resume with SIGCONT or <code>fg</code>. Also set by ptrace debugger attach.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <!-- State transition diagram -->
+        <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;font-size:11px;height:100%">
+          <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">State Transition Map</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;line-height:2">
+            <div style="color:var(--t2)"><span style="color:var(--c)">NEW</span> <span style="color:var(--t3)">──fork()──▶</span> <span class="ps ps-r" style="font-size:9px">R</span> <span style="color:var(--g)">Runnable</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-r" style="font-size:9px">R</span> <span style="color:var(--t3)">──I/O wait──▶</span> <span class="ps ps-d" style="font-size:9px">D</span> <span style="color:var(--y)">Uninterruptible</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-r" style="font-size:9px">R</span> <span style="color:var(--t3)">──event wait──▶</span> <span class="ps ps-s" style="font-size:9px">S</span> <span style="color:var(--c)">Interruptible</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-s" style="font-size:9px">S</span> <span style="color:var(--t3)">──event/signal──▶</span> <span class="ps ps-r" style="font-size:9px">R</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-d" style="font-size:9px">D</span> <span style="color:var(--t3)">──I/O complete──▶</span> <span class="ps ps-r" style="font-size:9px">R</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-r" style="font-size:9px">R</span> <span style="color:var(--t3)">──SIGSTOP/Ctrl+Z──▶</span> <span class="ps ps-t" style="font-size:9px">T</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-t" style="font-size:9px">T</span> <span style="color:var(--t3)">──SIGCONT/fg──▶</span> <span class="ps ps-r" style="font-size:9px">R</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-r" style="font-size:9px">R</span> <span style="color:var(--t3)">──exit()──▶</span> <span class="ps ps-z" style="font-size:9px">Z</span> <span style="color:var(--r)">Zombie</span></div>
+            <div style="color:var(--t2)"><span class="ps ps-z" style="font-size:9px">Z</span> <span style="color:var(--t3)">──parent wait()──▶</span> <span style="color:var(--t3)">GONE (reaped)</span></div>
+            <div class="div" style="margin:8px 0"></div>
+            <div style="color:var(--t3);font-size:10px">Modifier flags in ps STAT column:</div>
+            <div style="font-size:11px;color:var(--t2)"><span style="color:var(--g)">s</span> = session leader &nbsp;&nbsp; <span style="color:var(--c)">l</span> = multi-threaded</div>
+            <div style="font-size:11px;color:var(--t2)"><span style="color:var(--y)">N</span> = low priority (nice) &nbsp; <span style="color:var(--o)">&lt;</span> = high priority</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Process lifecycle commands</span></div>
+      <div class="tb">
+        <span class="sec">──── fork + exec trace ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">strace -e trace=clone,execve,wait4 bash -c "ls /tmp" 2>&1 | grep -E "clone|execve|wait"</span></span>
+        <span class="ocn">clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|SIGCHLD) = 4210</span>
+        <span class="ocn">execve("/usr/bin/ls", ["ls", "/tmp"], 0x... env) = 0</span>
+        <span class="ocn">wait4(4210, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 4210</span>
+        <span class="sec">──── zombie detection ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps aux | awk '$8=="Z" {print "ZOMBIE:", $2, $11}'</span></span>
+        <span class="ored">ZOMBIE: 3819 [myapp]</span>
+        <span class="out"># find parent of zombie — that's the buggy process</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps -o pid,ppid,stat,comm | awk '$3~/Z/{print $0}'</span></span>
+        <span class="ored"> 3819  3801  Z  myapp   # parent PID 3801 not calling wait()</span>
+        <span class="sec">──── foreground vs background ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sleep 300 &         # background job</span></span>
+        <span class="out">[1] 4301</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">jobs -l</span></span>
+        <span class="out">[1]+  4301  Running   sleep 300 &</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">fg %1              # bring to foreground</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">Ctrl+Z             # suspend → state T</span></span>
+        <span class="out">[1]+  Stopped   sleep 300</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">bg %1              # resume in background → SIGCONT</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 02 — SIGNALS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📡</span><span class="pt">Signals — Asynchronous Process Notification</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbg">
+        <div class="cbt">How Signals Work</div>
+        <div class="ct">
+          A signal is a <span class="hl">software interrupt</span> — an asynchronous notification delivered to a process. The kernel sets a pending signal bit in the process's task struct. When the process returns from kernel mode, pending signals are checked and delivered.<br><br>
+          Each signal has a <span class="hc">default action</span>: terminate, core dump, stop, or ignore. Processes can <span class="hy">handle</span> most signals with a custom handler (sigaction) or <span class="hy">block</span> them temporarily — except <span class="hr">SIGKILL (9)</span> and <span class="hr">SIGSTOP (19)</span> which are always delivered.
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">Signal Delivery Path</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span class="hy">1.</span> Sender calls <code>kill(pid, sig)</code> or keyboard (Ctrl+C)<br>
+          <span class="hy">2.</span> Kernel sets pending bit in target's task_struct<br>
+          <span class="hy">3.</span> On next return to user-space: kernel checks TIF_SIGPENDING<br>
+          <span class="hy">4.</span> If signal is blocked → stays pending. If not → check handler:<br>
+          <span class="hy">5a.</span> Default action (SIG_DFL) → terminate/stop/ignore<br>
+          <span class="hy">5b.</span> Custom handler → kernel sets up user-space stack frame, calls handler<br>
+          <span class="hy">5c.</span> SIG_IGN → discard
+        </div>
+      </div>
+    </div>
+
+    <table class="tbl" style="margin-bottom:14px">
+      <thead><tr><th>Signal</th><th>#</th><th>Default</th><th>Catchable</th><th>Common Use — Enterprise Context</th></tr></thead>
+      <tbody>
+        <tr><td>SIGHUP</td><td style="color:var(--t3)">1</td><td class="sig-y">Term/Reload</td><td style="color:var(--g)">Yes</td><td>Reload config without restart: <code>kill -HUP $(pidof nginx)</code> — nginx re-reads nginx.conf, zero downtime</td></tr>
+        <tr><td>SIGINT</td><td style="color:var(--t3)">2</td><td class="sig-y">Terminate</td><td style="color:var(--g)">Yes</td><td>Ctrl+C from terminal. Process can catch to do cleanup before exit.</td></tr>
+        <tr><td>SIGQUIT</td><td style="color:var(--t3)">3</td><td class="sig-y">Core dump</td><td style="color:var(--g)">Yes</td><td>Ctrl+\. Like SIGINT but produces core dump for debugging.</td></tr>
+        <tr><td>SIGSEGV</td><td style="color:var(--t3)">11</td><td class="sig-r">Core dump</td><td style="color:var(--g)">Yes</td><td>Segmentation fault — invalid memory access. Indicates bug. Check coredump with gdb.</td></tr>
+        <tr><td>SIGTERM</td><td style="color:var(--t3)">15</td><td class="sig-y">Terminate</td><td style="color:var(--g)">Yes</td><td>Graceful shutdown. systemctl stop sends SIGTERM first, waits TimeoutStopSec, then SIGKILL.</td></tr>
+        <tr><td>SIGKILL</td><td style="color:var(--t3)">9</td><td class="sig-r">Terminate</td><td style="color:var(--r)"><strong>NO</strong></td><td>Immediate kill. Cannot be caught, blocked, or ignored. Last resort — may leave resources dirty.</td></tr>
+        <tr><td>SIGSTOP</td><td style="color:var(--t3)">19</td><td class="sig-p">Stop</td><td style="color:var(--r)"><strong>NO</strong></td><td>Pause process. Cannot be caught. Used by debuggers (ptrace) to pause target.</td></tr>
+        <tr><td>SIGCONT</td><td style="color:var(--t3)">18</td><td class="sig-g">Continue</td><td style="color:var(--g)">Yes</td><td>Resume stopped process. Shell sends this on <code>fg</code> or <code>bg</code> commands.</td></tr>
+        <tr><td>SIGUSR1/2</td><td style="color:var(--t3)">10/12</td><td class="sig-y">Terminate</td><td style="color:var(--g)">Yes</td><td>Application-defined. Apache: rotate logs. Many apps: trigger debug dump or stats output.</td></tr>
+        <tr><td>SIGCHLD</td><td style="color:var(--t3)">17</td><td class="sig-g">Ignore</td><td style="color:var(--g)">Yes</td><td>Child changed state. Parent must handle to reap zombies (call wait()). Ignored by default in most shells.</td></tr>
+        <tr><td>SIGALRM</td><td style="color:var(--t3)">14</td><td class="sig-y">Terminate</td><td style="color:var(--g)">Yes</td><td>Timer expired (alarm() syscall). Used for timeouts in network code.</td></tr>
+        <tr><td>SIGPIPE</td><td style="color:var(--t3)">13</td><td class="sig-y">Terminate</td><td style="color:var(--g)">Yes</td><td>Write to pipe/socket with no reader. Daemons SIG_IGN this to avoid crash on client disconnect.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Signal operations</span></div>
+      <div class="tb">
+        <span class="sec">──── SEND SIGNALS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">kill -SIGHUP  1500       # reload nginx config</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">kill -SIGTERM 4301       # graceful stop</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">kill -9       4301       # force kill (SIGKILL)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">killall -SIGTERM nginx   # kill all processes named nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">pkill -f "python3 app"  # kill by command pattern</span></span>
+        <span class="sec">──── SIGNAL A PROCESS GROUP ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">kill -- -1500    # send SIGTERM to all processes in PGID 1500</span></span>
+        <span class="sec">──── TRAP SIGNALS IN BASH SCRIPT ────</span>
+        <span class="oyn">#!/bin/bash</span>
+        <span class="oyn">cleanup() { echo "Cleaning up..."; rm -f /tmp/lockfile; exit 0; }</span>
+        <span class="oyn">trap cleanup SIGTERM SIGINT SIGHUP</span>
+        <span class="oyn">touch /tmp/lockfile</span>
+        <span class="oyn">while true; do sleep 1; done  # wait — signal will trigger cleanup()</span>
+        <span class="sec">──── WHAT SIGNALS IS A PROCESS BLOCKING? ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /proc/1500/status | grep -E "SigBlk|SigIgn|SigCgt"</span></span>
+        <span class="out">SigBlk: 0000000000000000   # no blocked signals</span>
+        <span class="out">SigIgn: 0000000000001000   # SIGPIPE ignored (bit 12)</span>
+        <span class="ocn">SigCgt: 0000000180014203   # SIGHUP,SIGINT,SIGTERM,SIGUSR1 caught</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03 — DAEMONS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">👻</span><span class="pt">Daemons — Background Service Processes</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>A <strong style="color:var(--c)">daemon</strong> is a long-running background process that provides a service. It detaches from its controlling terminal (setsid), runs as a non-root service account, closes stdin/stdout/stderr, and listens for work. All daemons on modern Linux are managed by systemd.</span></div>
+
+    <div class="g4" style="margin-bottom:14px">
+      <div class="daemon-card">
+        <div class="dc-icon">🌐</div>
+        <div class="dc-name">nginx / apache2</div>
+        <div class="dc-desc">Web server daemon. Forks worker processes. Master manages workers via signals.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">🔑</div>
+        <div class="dc-name">sshd</div>
+        <div class="dc-desc">SSH daemon. Forks child per connection. Child drops to user privilege.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">🗄</div>
+        <div class="dc-name">mysqld / postgres</div>
+        <div class="dc-desc">Database daemon. Manages connections, transactions, WAL journal.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">🐳</div>
+        <div class="dc-name">dockerd</div>
+        <div class="dc-desc">Container daemon. Manages cgroups, namespaces, overlay FS per container.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">⏰</div>
+        <div class="dc-name">crond</div>
+        <div class="dc-desc">Cron daemon. Wakes every minute, checks crontab, forks jobs.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">🌍</div>
+        <div class="dc-name">NetworkManager</div>
+        <div class="dc-desc">Network config daemon. Manages interfaces, DHCP, VPN via D-Bus.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">📋</div>
+        <div class="dc-name">auditd</div>
+        <div class="dc-desc">Audit daemon. Receives kernel audit events, writes to /var/log/audit/.</div>
+      </div>
+      <div class="daemon-card">
+        <div class="dc-icon">📝</div>
+        <div class="dc-name">rsyslogd</div>
+        <div class="dc-desc">Syslog daemon. Receives log messages via socket, routes to files/remote.</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Daemon anatomy — how a daemon daemonizes itself</span></div>
+      <div class="tb">
+        <span class="sec">──── CLASSIC DAEMON CREATION (double-fork pattern) ────</span>
+        <span class="oyn">/* Step 1: fork() — parent exits, orphan child adopted by init/systemd */</span>
+        <span class="oyn">pid = fork(); if (pid > 0) exit(0);</span>
+        <span class="oyn">/* Step 2: setsid() — new session, detach from controlling terminal */</span>
+        <span class="oyn">setsid();</span>
+        <span class="oyn">/* Step 3: fork() again — ensure can never reacquire terminal */</span>
+        <span class="oyn">pid = fork(); if (pid > 0) exit(0);</span>
+        <span class="oyn">/* Step 4: redirect stdin/out/err to /dev/null */</span>
+        <span class="oyn">open("/dev/null", O_RDWR); dup2(fd,0); dup2(fd,1); dup2(fd,2);</span>
+        <span class="oyn">/* Step 5: chdir("/") — don't hold any mountpoint open */</span>
+        <span class="oyn">/* Step 6: write PID file, start work loop */</span>
+        <span class="sec">──── WITH SYSTEMD (Type=forking → Type=notify is preferred) ────</span>
+        <span class="ocn">[Service]</span>
+        <span class="out">Type=notify          # process signals readiness via sd_notify()</span>
+        <span class="out">ExecStart=/usr/sbin/nginxd</span>
+        <span class="out">Restart=on-failure   # systemd handles respawn — no double-fork needed</span>
+        <span class="sec">──── CHECK IF PROCESS IS A SESSION LEADER (daemon) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps -eo pid,sid,tty,comm | awk '$3=="?"'| head -8</span></span>
+        <span class="out">  PID   SID TT   COMMAND</span>
+        <span class="out">    1     1  ?    systemd</span>
+        <span class="out"> 1102  1102  ?    sshd</span>
+        <span class="out"> 1500  1500  ?    nginx</span>
+        <span class="out"> 1890  1890  ?    dockerd</span>
+        <span class="out"># TT=? means no controlling terminal = daemon</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 04 — SYSTEMD DEEP DIVE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚙</span><span class="pt">systemd — Complete Service Management Deep Dive</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">systemd Architecture</div>
+        <div class="ct">
+          systemd is PID 1 — the <span class="hl">init system, service manager, journal, socket activator, timer, and device manager</span> in one. It starts all other processes and adopts orphaned ones.<br><br>
+          Key design: <span class="hc">parallel activation</span> — services start simultaneously when their socket is ready, not sequentially. Socket activation: systemd creates the socket, passes it to the service when it starts — clients never see "connection refused".<br><br>
+          State stored in <span class="hy">cgroups</span> — every service unit gets its own cgroup slice. systemd can track and kill <em>all</em> processes spawned by a service, including grandchildren.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Unit File Types Recap</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span class="hl">.service</span> — daemon process management<br>
+          <span class="hc">.socket</span> — socket-activated service<br>
+          <span class="hy">.timer</span> — scheduled execution (cron replacement)<br>
+          <span class="ho">.path</span> — trigger on filesystem path change<br>
+          <span class="hp">.mount</span> — mount point management<br>
+          <span class="hl">.target</span> — synchronization/grouping point<br>
+          <span class="hc">.slice</span> — cgroup resource hierarchy<br>
+          <span class="hy">.scope</span> — externally created process groups (sessions)
+        </div>
+      </div>
+    </div>
+
+    <!-- Full hardened unit file -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Production-Grade Hardened Service Unit File</div>
+    <div class="unit-file">
+      <span class="uf-section">[Unit]</span>
+      <span><span class="uf-key">Description</span>=<span class="uf-val">Production API Server</span></span>
+      <span><span class="uf-key">Documentation</span>=<span class="uf-val">https://internal.wiki/api-server</span></span>
+      <span><span class="uf-key">After</span>=<span class="uf-val">network-online.target postgresql.service redis.service</span></span>
+      <span><span class="uf-key">Requires</span>=<span class="uf-val">postgresql.service</span>  <span class="uf-comment"># hard dep: if postgres dies, this dies too</span></span>
+      <span><span class="uf-key">Wants</span>=<span class="uf-val">redis.service</span>       <span class="uf-comment"># soft dep: start redis if not running</span></span>
+      <span class="uf-section">[Service]</span>
+      <span><span class="uf-key">Type</span>=<span class="uf-val">notify</span>              <span class="uf-comment"># process uses sd_notify() to signal readiness</span></span>
+      <span><span class="uf-key">User</span>=<span class="uf-val">apiserver</span></span>
+      <span><span class="uf-key">Group</span>=<span class="uf-val">apiserver</span></span>
+      <span><span class="uf-key">WorkingDirectory</span>=<span class="uf-val">/opt/api</span></span>
+      <span><span class="uf-key">EnvironmentFile</span>=<span class="uf-val">-/etc/api/env</span>  <span class="uf-comment"># '-' means ignore if file missing</span></span>
+      <span><span class="uf-key">ExecStartPre</span>=<span class="uf-val">/opt/api/bin/migrate --check</span></span>
+      <span><span class="uf-key">ExecStart</span>=<span class="uf-val">/opt/api/bin/server --port 8080</span></span>
+      <span><span class="uf-key">ExecReload</span>=<span class="uf-val">/bin/kill -HUP $MAINPID</span></span>
+      <span><span class="uf-key">ExecStopPost</span>=<span class="uf-val">/opt/api/bin/cleanup.sh</span></span>
+      <span><span class="uf-key">Restart</span>=<span class="uf-val">on-failure</span></span>
+      <span><span class="uf-key">RestartSec</span>=<span class="uf-val">5s</span></span>
+      <span><span class="uf-key">StartLimitIntervalSec</span>=<span class="uf-val">60s</span></span>
+      <span><span class="uf-key">StartLimitBurst</span>=<span class="uf-val">3</span>            <span class="uf-comment"># fail permanently after 3 crashes in 60s</span></span>
+      <span class="uf-comment">  # ── RESOURCE LIMITS ──</span>
+      <span><span class="uf-key">CPUQuota</span>=<span class="uf-val">200%</span>              <span class="uf-comment"># max 2 CPU cores</span></span>
+      <span><span class="uf-key">MemoryMax</span>=<span class="uf-val">1G</span>               <span class="uf-comment"># hard RAM limit (OOM kill at 1G)</span></span>
+      <span><span class="uf-key">MemoryHigh</span>=<span class="uf-val">800M</span>             <span class="uf-comment"># soft limit: throttle above 800M</span></span>
+      <span><span class="uf-key">TasksMax</span>=<span class="uf-val">512</span>               <span class="uf-comment"># max PIDs in cgroup</span></span>
+      <span><span class="uf-key">LimitNOFILE</span>=<span class="uf-val">65536</span>          <span class="uf-comment"># open file descriptors</span></span>
+      <span class="uf-comment">  # ── SECURITY HARDENING ──</span>
+      <span><span class="uf-secure">NoNewPrivileges</span>=<span class="uf-val">true</span>        <span class="uf-comment"># cannot gain new capabilities via execve</span></span>
+      <span><span class="uf-secure">PrivateTmp</span>=<span class="uf-val">true</span>             <span class="uf-comment"># isolated /tmp — other services cannot see its tmp files</span></span>
+      <span><span class="uf-secure">PrivateDevices</span>=<span class="uf-val">true</span>         <span class="uf-comment"># no access to /dev/sda, /dev/mem etc.</span></span>
+      <span><span class="uf-secure">ProtectSystem</span>=<span class="uf-val">strict</span>        <span class="uf-comment"># /usr, /etc, /boot are read-only</span></span>
+      <span><span class="uf-secure">ProtectHome</span>=<span class="uf-val">true</span>            <span class="uf-comment"># /home, /root, /run/user invisible</span></span>
+      <span><span class="uf-secure">ReadWritePaths</span>=<span class="uf-val">/var/lib/api /var/log/api</span></span>
+      <span><span class="uf-secure">CapabilityBoundingSet</span>=<span class="uf-val">CAP_NET_BIND_SERVICE</span></span>
+      <span><span class="uf-secure">AmbientCapabilities</span>=<span class="uf-val">CAP_NET_BIND_SERVICE</span></span>
+      <span><span class="uf-secure">SystemCallFilter</span>=<span class="uf-val">@system-service</span> <span class="uf-comment"># seccomp: only safe syscalls</span></span>
+      <span><span class="uf-secure">RestrictAddressFamilies</span>=<span class="uf-val">AF_INET AF_INET6 AF_UNIX</span></span>
+      <span><span class="uf-secure">IPAddressAllow</span>=<span class="uf-val">10.0.0.0/8 172.16.0.0/12</span></span>
+      <span><span class="uf-secure">IPAddressDeny</span>=<span class="uf-val">any</span></span>
+      <span><span class="uf-key">StandardOutput</span>=<span class="uf-val">journal</span></span>
+      <span><span class="uf-key">StandardError</span>=<span class="uf-val">journal</span></span>
+      <span class="uf-section">[Install]</span>
+      <span><span class="uf-key">WantedBy</span>=<span class="uf-val">multi-user.target</span></span>
+    </div>
+
+    <div class="term" style="margin-top:14px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">systemctl essential operations</span></div>
+      <div class="tb">
+        <span class="sec">──── SERVICE LIFECYCLE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl start|stop|restart|reload nginx</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl enable --now nginx   # enable at boot + start now</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl disable --now nginx  # disable at boot + stop now</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl mask nginx           # prevent ANY start (even manual)</span></span>
+        <span class="sec">──── STATUS & INSPECTION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl status nginx</span></span>
+        <span class="ogn">● nginx.service - A high performance web server</span>
+        <span class="out">   Loaded: loaded (/lib/systemd/system/nginx.service; enabled)</span>
+        <span class="ogn">   Active: active (running) since Mon 2026-05-03 08:00:01 UTC; 2h 14m ago</span>
+        <span class="out"> Main PID: 1500 (nginx)</span>
+        <span class="out">   CGroup: /system.slice/nginx.service</span>
+        <span class="out">           ├─1500 nginx: master process</span>
+        <span class="out">           ├─1501 nginx: worker process</span>
+        <span class="out">           └─1502 nginx: worker process</span>
+        <span class="sec">──── LIST ALL UNIT STATES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl list-units --state=failed</span></span>
+        <span class="ored">  UNIT                        LOAD    ACTIVE SUB    DESCRIPTION</span>
+        <span class="ored">● myapp.service               loaded  failed failed  My Application</span>
+        <span class="sec">──── SHOW UNIT SECURITY SCORE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze security nginx.service | head -5</span></span>
+        <span class="out">NAME                             DESCRIPTION                            EXPOSURE</span>
+        <span class="ored">PrivateNetwork=                  Service has access to the host network  0.5</span>
+        <span class="ored">ProtectHome=                     Service has full access to home dirs     0.5</span>
+        <span class="oyn">NoNewPrivileges=                 yes                                     ✓</span>
+        <span class="oyn">→ Overall exposure level: 4.2 MEDIUM (lower is better)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 05 — CRON -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⏰</span><span class="pt">Cron &amp; systemd Timers — Scheduled Task Management</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cby">
+        <div class="cbt">Cron Anatomy</div>
+        <div class="ct">
+          crond wakes every minute, reads all crontab files, and forks a shell for any matching jobs. Jobs run with the user's environment and permissions (or root for system crontabs).<br><br>
+          Files: <span class="hl">/etc/crontab</span> (system, has username field), <span class="hc">/etc/cron.d/</span> (package crontabs), <span class="hc">/var/spool/cron/crontabs/</span> (per-user via crontab -e), <span class="hy">/etc/cron.{hourly,daily,weekly,monthly}/</span> (run-parts directories).
+        </div>
+      </div>
+      <div class="cb cbp">
+        <div class="cbt">systemd Timers (Modern cron)</div>
+        <div class="ct">
+          Timers (.timer units) are more powerful: <span class="hp">monotonic</span> (relative: OnBootSec, OnUnitActiveSec) or <span class="hp">realtime</span> (calendar: OnCalendar=daily). Integrated with journald logging. Accurate to milliseconds. Persistent across reboots.<br><br>
+          Each timer activates a corresponding .service unit. Check with <code>systemctl list-timers</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- cron field breakdown -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px;overflow-x:auto">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Cron Expression Field Reference</div>
+      <div style="display:flex;gap:4px;margin-bottom:8px;min-width:500px">
+        <div style="flex:1;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);padding:8px;text-align:center">
+          <div style="font-size:18px;color:var(--g);font-family:var(--mono);font-weight:700">*</div>
+          <div style="font-size:9px;color:var(--g);font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Minute</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:2px">0–59</div>
+        </div>
+        <div style="flex:1;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.3);padding:8px;text-align:center">
+          <div style="font-size:18px;color:var(--c);font-family:var(--mono);font-weight:700">*</div>
+          <div style="font-size:9px;color:var(--c);font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Hour</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:2px">0–23</div>
+        </div>
+        <div style="flex:1;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.3);padding:8px;text-align:center">
+          <div style="font-size:18px;color:var(--y);font-family:var(--mono);font-weight:700">*</div>
+          <div style="font-size:9px;color:var(--y);font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Day/Month</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:2px">1–31</div>
+        </div>
+        <div style="flex:1;background:rgba(255,140,0,.07);border:1px solid rgba(255,140,0,.3);padding:8px;text-align:center">
+          <div style="font-size:18px;color:var(--o);font-family:var(--mono);font-weight:700">*</div>
+          <div style="font-size:9px;color:var(--o);font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Month</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:2px">1–12</div>
+        </div>
+        <div style="flex:1;background:rgba(157,78,221,.08);border:1px solid rgba(157,78,221,.3);padding:8px;text-align:center">
+          <div style="font-size:18px;color:var(--p);font-family:var(--mono);font-weight:700">*</div>
+          <div style="font-size:9px;color:var(--p);font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Weekday</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:2px">0–7 (0,7=Sun)</div>
+        </div>
+        <div style="flex:2;background:rgba(41,121,255,.07);border:1px solid rgba(41,121,255,.3);padding:8px;text-align:center">
+          <div style="font-size:14px;color:#5599ff;font-family:var(--mono);font-weight:700">/path/to/command</div>
+          <div style="font-size:9px;color:#5599ff;font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Command + Args</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g3" style="margin-bottom:14px">
+      <div class="cron-card">
+        <div class="cron-label">Every 5 minutes</div>
+        <div class="cron-expr">*/5 * * * *</div>
+        <div class="cron-desc">Health check, metric collection. */N means "every N units".</div>
+      </div>
+      <div class="cron-card">
+        <div class="cron-label">Daily at 2:30 AM</div>
+        <div class="cron-expr">30 2 * * *</div>
+        <div class="cron-desc">Nightly backup, log rotation, database vacuum.</div>
+      </div>
+      <div class="cron-card">
+        <div class="cron-label">Weekdays at 8 AM</div>
+        <div class="cron-expr">0 8 * * 1-5</div>
+        <div class="cron-desc">Business hours tasks. 1=Mon, 5=Fri.</div>
+      </div>
+      <div class="cron-card">
+        <div class="cron-label">1st of each month</div>
+        <div class="cron-expr">0 0 1 * *</div>
+        <div class="cron-desc">Monthly reports, certificate renewal checks, billing.</div>
+      </div>
+      <div class="cron-card">
+        <div class="cron-label">Every Sunday 3 AM</div>
+        <div class="cron-expr">0 3 * * 0</div>
+        <div class="cron-desc">Weekly full backup, system updates, disk cleanup.</div>
+      </div>
+      <div class="cron-card">
+        <div class="cron-label">Multiple times/hour</div>
+        <div class="cron-expr">0,15,30,45 * * * *</div>
+        <div class="cron-desc">Explicit list with commas. Runs at :00, :15, :30, :45.</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">cron management + security audit</span></div>
+      <div class="tb">
+        <span class="sec">──── MANAGE CRONTABS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">crontab -e              # edit current user's crontab</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">crontab -l              # list current user's crontab</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">crontab -l -u alice     # list alice's crontab (root only)</span></span>
+        <span class="sec">──── SECURITY AUDIT: ALL CRON SOURCES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /etc/crontab</span></span>
+        <span class="out">SHELL=/bin/sh</span>
+        <span class="out">PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</span>
+        <span class="oyn">17 *  * * *  root  cd / && run-parts --report /etc/cron.hourly</span>
+        <span class="oyn">25 6  * * *  root  test -x /usr/sbin/anacron || run-parts /etc/cron.daily</span>
+        <span class="sec">──── LIST ALL USER CRONTABS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">for u in $(cut -d: -f1 /etc/passwd); do crontab -l -u $u 2>/dev/null && echo "^^^ $u"; done</span></span>
+        <span class="ored">* * * * * /tmp/backdoor.sh   # attacker planted cron!</span>
+        <span class="ored">^^^ www-data</span>
+        <span class="sec">──── SYSTEMD TIMERS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl list-timers --all</span></span>
+        <span class="out">NEXT                         LEFT     LAST                         UNIT</span>
+        <span class="ocn">Mon 2026-05-04 02:30:00 UTC  14h left Mon 2026-05-03 02:30:01 UTC  logrotate.timer</span>
+        <span class="ocn">Mon 2026-05-04 00:00:00 UTC  12h left Mon 2026-05-03 00:00:03 UTC  apt-daily.timer</span>
+        <span class="sec">──── SYSTEMD TIMER UNIT ────</span>
+        <span class="oyn">[Timer]</span>
+        <span class="out">OnCalendar=*-*-* 02:30:00  # every day at 2:30 AM</span>
+        <span class="out">Persistent=true            # catch up if system was off</span>
+        <span class="out">Unit=backup.service</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 06 — CGROUPS & RESOURCE LIMITS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📊</span><span class="pt">cgroups &amp; Resource Limits — CPU, Memory, I/O Control</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">Control Groups (cgroups v2)</div>
+        <div class="ct">
+          cgroups are a kernel mechanism to <span class="hl">group processes and enforce resource limits</span>. Every systemd service gets its own cgroup. Resource controllers: <span class="hc">cpu</span> (quota/shares), <span class="hc">memory</span> (max/high), <span class="hc">io</span> (bandwidth), <span class="hc">pids</span> (process count).<br><br>
+          Hierarchy: slices → services → scopes. <span class="hy">system.slice</span> holds all system services. <span class="hy">user.slice</span> holds user sessions. Each slice limits its children collectively.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">ulimit — Per-Process Limits</div>
+        <div class="ct">
+          <code>ulimit</code> sets limits for the current shell and children. <span class="hl">Soft limit</span>: current limit (user can lower). <span class="hl">Hard limit</span>: ceiling (only root can raise).<br><br>
+          Critical limits: <span class="hc">nofile</span> (open FDs — too low = EMFILE errors), <span class="hc">nproc</span> (process count — too low = fork bomb protection), <span class="hc">core</span> (core dump size), <span class="hc">stack</span> (stack size).
+        </div>
+      </div>
+    </div>
+
+    <!-- Resource usage visual -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:12px">system.slice Resource Allocation</div>
+      <div class="rl-row">
+        <span class="rl-lbl">nginx.service CPU</span>
+        <div class="rl-bg">
+          <div class="rl-fill" style="width:35%;background:rgba(0,255,136,.3);color:var(--g)">35%</div>
+          <span class="rl-cap">quota: 50%</span>
+        </div>
+      </div>
+      <div class="rl-row">
+        <span class="rl-lbl">nginx.service MEM</span>
+        <div class="rl-bg">
+          <div class="rl-fill" style="width:28%;background:rgba(0,255,136,.25);color:var(--g)">280M</div>
+          <span class="rl-cap">max: 1G</span>
+        </div>
+      </div>
+      <div class="rl-row">
+        <span class="rl-lbl">mysqld.service CPU</span>
+        <div class="rl-bg">
+          <div class="rl-fill" style="width:55%;background:rgba(255,215,0,.3);color:var(--y)">55%</div>
+          <span class="rl-cap">quota: 200%</span>
+        </div>
+      </div>
+      <div class="rl-row">
+        <span class="rl-lbl">mysqld.service MEM</span>
+        <div class="rl-bg">
+          <div class="rl-fill" style="width:72%;background:rgba(255,140,0,.35);color:var(--o)">2.9G</div>
+          <span class="rl-cap">max: 4G</span>
+        </div>
+      </div>
+      <div class="rl-row">
+        <span class="rl-lbl">myapp.service CPU</span>
+        <div class="rl-bg">
+          <div class="rl-fill" style="width:91%;background:rgba(255,59,59,.4);color:var(--r)">91% !</div>
+          <span class="rl-cap">quota: 100%</span>
+        </div>
+      </div>
+      <div class="rl-row">
+        <span class="rl-lbl">myapp.service MEM</span>
+        <div class="rl-bg">
+          <div class="rl-fill" style="width:97%;background:rgba(255,59,59,.5);color:var(--r)">970M !</div>
+          <span class="rl-cap">max: 1G</span>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--r);margin-top:8px;font-family:var(--sans)">⚠ myapp.service approaching CPU and memory limits — OOM kill imminent if memory hits 1G</div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Resource limits & cgroup inspection</span></div>
+      <div class="tb">
+        <span class="sec">──── VIEW CGROUP TREE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-cgls | head -20</span></span>
+        <span class="out">Control group /:</span>
+        <span class="out">-.slice</span>
+        <span class="ocn">├─system.slice</span>
+        <span class="out">│ ├─nginx.service</span>
+        <span class="out">│ │ ├─1500 nginx: master</span>
+        <span class="out">│ │ └─1501 nginx: worker</span>
+        <span class="out">│ ├─mysqld.service</span>
+        <span class="out">│ │ └─1650 /usr/sbin/mysqld</span>
+        <span class="oyn">├─user.slice</span>
+        <span class="out">│ └─user-1001.slice</span>
+        <span class="out">│   └─session-3.scope: alice's ssh session</span>
+        <span class="sec">──── SET LIMITS AT RUNTIME ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl set-property nginx.service CPUQuota=50% MemoryMax=512M</span></span>
+        <span class="ocn"># persisted to /etc/systemd/system.control/nginx.service.d/</span>
+        <span class="sec">──── PER-PROCESS ulimits ────</span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">ulimit -a</span></span>
+        <span class="out">open files                    (-n) 65536</span>
+        <span class="out">max user processes            (-u) 100</span>
+        <span class="out">virtual memory                (-v) unlimited</span>
+        <span class="out">core file size (blocks)       (-c) 0</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ulimit -u 50    # limit to 50 processes (fork bomb protection)</span></span>
+        <span class="sec">──── MEMORY PRESSURE MONITORING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /sys/fs/cgroup/system.slice/myapp.service/memory.pressure</span></span>
+        <span class="ored">some avg10=88.52 avg60=71.23 avg300=45.12 total=192849812</span>
+        <span class="out"># avg10=88% = severe memory pressure last 10s → add RAM or reduce MemoryMax</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 07 — PROCESS MONITORING TOOLS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔍</span><span class="pt">Process Monitoring — Tools &amp; Interpretation</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">ps · top · htop · pgrep · lsof · strace</span></div>
+      <div class="tb">
+        <span class="sec">──── ps — PROCESS SNAPSHOT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps aux --sort=-%cpu | head -8</span></span>
+        <span class="out">USER       PID  %CPU %MEM    VSZ    RSS TTY STAT  COMMAND</span>
+        <span class="ored">root      1234  89.2  2.1 876432  85420 ?   R    /usr/bin/python3 runaway.py</span>
+        <span class="ocn">www-data  1500   3.1  0.4 325604  16920 ?   Ss   nginx: master</span>
+        <span class="out">root      1890   1.2  1.8 1242880 74096 ?   Ssl  /usr/bin/dockerd</span>
+        <span class="sec">──── ps — USEFUL FORMAT STRINGS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps -eo pid,ppid,user,stat,pcpu,pmem,comm --sort=-pcpu | head -10</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps -eo pid,lstart,etime,comm | grep nginx  # start time + elapsed</span></span>
+        <span class="sec">──── top — REAL-TIME ────</span>
+        <span class="out">top - 10:15:22 up 5 days,  2:14,  1 user,  load average: 2.81, 1.44, 0.92</span>
+        <span class="out">Tasks: 184 total, 3 running, 181 sleeping, 0 stopped, 1 zombie</span>
+        <span class="ocn">%Cpu(s): 45.2 us, 12.3 sy,  0.0 ni, 38.8 id,  3.5 wa,  0.0 hi,  0.2 si</span>
+        <span class="out">MiB Mem : 15814.5 total,  4102.1 free,  8219.4 used,  3493.0 buff/cache</span>
+        <span class="oyn">  wa=3.5%  ← I/O wait — disk is the bottleneck</span>
+        <span class="sec">──── pgrep / pstree ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">pgrep -u www-data -la     # all www-data processes with args</span></span>
+        <span class="out">1500 nginx: master process /usr/sbin/nginx -g daemon on;</span>
+        <span class="out">1501 nginx: worker process</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">pstree -p -u $(pgrep -o nginx)</span></span>
+        <span class="sec">──── lsof — OPEN FILES / SOCKETS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsof -i :80 -i :443       # what's listening on web ports?</span></span>
+        <span class="ocn">COMMAND  PID     USER   FD  TYPE DEVICE  NODE NAME</span>
+        <span class="ocn">nginx   1500 www-data  6u  IPv4  14821  TCP *:http (LISTEN)</span>
+        <span class="ocn">nginx   1500 www-data  7u  IPv6  14822  TCP *:https (LISTEN)</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsof -p 1234 | wc -l      # how many FDs does PID 1234 have?</span></span>
+        <span class="oyn">2841   ← very high FD count, check for FD leak</span>
+        <span class="sec">──── strace — REAL-TIME SYSCALL TRACING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">strace -p 1234 -e trace=network  # trace network calls of running process</span></span>
+        <span class="ocn">connect(4, {sa_family=AF_INET, sin_port=htons(6379),...} = 0  # connecting to redis</span>
+        <span class="ocn">sendto(4, "*2\r\n$3\r\nGET\r\n$7\r\nsession\r\n", ...) = 26</span>
+        <span class="sec">──── FIND PROCESS USING PORT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ss -tlnp | grep ':8080'</span></span>
+        <span class="ocn">LISTEN  0  128  0.0.0.0:8080  0.0.0.0:*  users:(("node",pid=4821,fd=12))</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 08 — ENTERPRISE SCENARIOS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🏢</span><span class="pt">Enterprise Scenarios — Real-World Process Incidents</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div class="cb cbr">
+        <div class="cbt">Scenario A — CPU Runaway at 3AM</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          <span class="hr">Alert:</span> Server load average 28 on 4-core system. SSH barely works.<br><br>
+          <span class="hy">1.</span> <code>uptime</code> → load: 28.4, 19.2, 11.3 (growing)<br>
+          <span class="hy">2.</span> <code>ps aux --sort=-%cpu | head -5</code> → PID 8841 python3 at 780% CPU<br>
+          <span class="hy">3.</span> <code>cat /proc/8841/cmdline</code> → crypto miner (malware!)<br>
+          <span class="hy">4.</span> <code>kill -9 8841</code> → immediate relief<br>
+          <span class="hy">5.</span> <code>last</code> + <code>ausearch</code> → trace how it got there<br>
+          <span class="hy">6.</span> <code>find / -newer /etc/passwd -type f 2>/dev/null</code> → find dropped files<br>
+          <span class="hl">Root cause:</span> Compromised web app ran RCE payload. Hardened cgroups + CPUQuota would have limited blast radius.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Scenario B — Service Crash Loop</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          <span class="hl">Alert:</span> myapp.service failed 3 times in 60s — systemd gave up.<br><br>
+          <span class="hy">1.</span> <code>systemctl status myapp</code> → failed, exit-code=1<br>
+          <span class="hy">2.</span> <code>journalctl -u myapp -n 50</code> → "Cannot connect to database"<br>
+          <span class="hy">3.</span> <code>systemctl status postgresql</code> → OOM-killed by kernel<br>
+          <span class="hy">4.</span> <code>dmesg | grep -i "killed process"</code> → postgres OOM<br>
+          <span class="hy">5.</span> <code>free -h</code> → only 120MB RAM free<br>
+          <span class="hy">6.</span> <code>ps aux --sort=-%mem | head -5</code> → java heap leak<br>
+          <span class="hl">Fix:</span> Add MemoryMax to java service. Set <code>StartLimitBurst=5</code> and alert on StartLimitHit.
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">Scenario C — Fork Bomb Attack</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          <span class="hy">Attack:</span> <code>:(){ :|:& };:</code> — bash fork bomb from compromised user<br><br>
+          <span class="hy">Effect:</span> PID table exhausted → no new processes possible → effectively DoS<br><br>
+          <span class="yl">Prevention:</span><br>
+          <code>/etc/security/limits.conf:</code><br>
+          <code>*  hard  nproc  200</code><br><br>
+          <span class="hy">systemd protection:</span><br>
+          <code>TasksMax=200</code> in user slice or session scope<br><br>
+          <span class="hl">Detection:</span> <code>watch -n1 'ps aux | wc -l'</code> — rapid process count growth
+        </div>
+      </div>
+      <div class="cb cbp">
+        <div class="cbt">Scenario D — Zombie Accumulation</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          <span class="hp">Symptom:</span> 2000+ zombie processes. PID table at 80% capacity.<br><br>
+          <span class="hy">1.</span> <code>ps aux | grep Z | wc -l</code> → 2147 zombies<br>
+          <span class="hy">2.</span> <code>ps -eo pid,ppid,stat | awk '$3~/Z/{print $2}' | sort -u</code> → all zombies have PPID 4201<br>
+          <span class="hy">3.</span> <code>ps -p 4201 -o comm</code> → "workerd" (custom process pool)<br>
+          <span class="hy">4.</span> Bug: worker pool not calling <code>waitpid()</code> after child exit<br>
+          <span class="hl">Fix:</span> Signal parent: <code>kill -SIGCHLD 4201</code> — triggers wait() if handled. Else restart the pool with a patched binary.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 09 — LINUX VS WINDOWS PROCESS MGMT -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⇄</span><span class="pt">Linux vs Windows — Process &amp; Service Management</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div style="overflow-x:auto">
+      <div style="min-width:600px">
+        <div style="display:flex">
+          <div class="vs-label vs-header" style="color:var(--t3)">Dimension</div>
+          <div class="vs-header" style="flex:1;color:var(--y);border-left:1px solid var(--b2)">🐧 Linux</div>
+          <div class="vs-header" style="flex:1;color:var(--bl);border-left:1px solid var(--b2)">🪟 Windows</div>
+        </div>
+        <div style="display:flex"><div class="vs-label">Process creation</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">fork() + exec() — copy-on-write cloning</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">CreateProcess() — no fork concept, spawn new process from scratch</div></div>
+        <div style="display:flex"><div class="vs-label">Init system / PID 1</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">systemd — service manager, logger, timer, socket activator</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">smss.exe (Session Manager) → wininit.exe → services.exe</div></div>
+        <div style="display:flex"><div class="vs-label">Service management</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--g)">systemctl — unified, declarative unit files, dependency graph</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">SCM (services.exe) — registry-based, sc.exe / Get-Service</div></div>
+        <div style="display:flex"><div class="vs-label">Scheduling tasks</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">cron + systemd timers — text config, per-user + system</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">Task Scheduler — XML-based, GUI or schtasks.exe</div></div>
+        <div style="display:flex"><div class="vs-label">Process signals</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--g)">POSIX signals (kill/raise) — 30+ signals, fully controllable</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--r)">TerminateProcess() only — no graceful signal equivalent; WM_CLOSE for GUI</div></div>
+        <div style="display:flex"><div class="vs-label">Viewing processes</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">ps, top, htop, pgrep, pstree, /proc/PID/</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">Task Manager, Get-Process, Process Explorer (Sysinternals)</div></div>
+        <div style="display:flex"><div class="vs-label">Resource control</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--g)">cgroups v2 — CPU/memory/IO/pids per service, enforced by kernel</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">Job Objects — CPU rate/memory limits, less granular</div></div>
+        <div style="display:flex"><div class="vs-label">Logging</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--g)">journald (structured binary) + syslog text — journalctl queries</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">Event Log (.evtx) — Event IDs, binary, Get-EventLog / wevtutil</div></div>
+        <div style="display:flex"><div class="vs-label">IPC mechanisms</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">Pipes, Unix sockets, SHM, mqueue, D-Bus, signals</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">COM/DCOM, Named Pipes, LPC, WCF, RPC</div></div>
+        <div style="display:flex"><div class="vs-label">Config reload</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--g)">kill -HUP / systemctl reload — zero downtime</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--r)">Usually requires service restart — no SIGHUP equivalent</div></div>
+        <div style="display:flex"><div class="vs-label">Service sandboxing</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--g)">systemd: PrivateTmp, NoNewPrivileges, ProtectSystem, seccomp</div><div class="vs-col" style="border-left:1px solid var(--b2);color:var(--t2)">AppContainer, Integrity Levels, less declarative</div></div>
+        <div style="display:flex;border-bottom:none"><div class="vs-label" style="border-bottom:none">Malicious process detection</div><div class="vs-col" style="border-left:1px solid var(--b2);border-bottom:none;color:var(--t2)">/proc/PID/exe, cmdline, maps, fd — full transparency</div><div class="vs-col" style="border-left:1px solid var(--b2);border-bottom:none;color:var(--t2)">Process hollowing harder to detect; Sysinternals tools needed</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 10 — SECURITY PERSPECTIVE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔒</span><span class="pt">Security Perspective — Process &amp; Service Attack Vectors</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div class="cb cbr">
+        <div class="cbt">Red Team — Process Attacks</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Cron backdoor:</strong> plant <code>* * * * * /tmp/.hidden/shell.sh</code> in any writable crontab — executes every minute. Hard to detect without comprehensive cron audit.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Process masquerading:</strong> rename malware to <code>sshd</code> or <code>[kworker/0:0]</code> (kernel thread notation) to hide in ps output. Check <code>/proc/PID/exe</code> for true binary path.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Malicious systemd unit:</strong> drop <code>/etc/systemd/system/evil.service</code> + enable → persistent across reboots, starts before most defenses.</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">LD_PRELOAD hijack:</strong> set in <code>/etc/environment</code> or per-user <code>.bashrc</code> → custom shared library loaded into every process — intercept system calls.</div></li>
+          <li style="padding:5px 0;display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span><div><strong style="color:var(--r)">Fork bomb DoS:</strong> exhaust PID table → system unresponsive. Requires no privileges beyond shell access.</div></li>
+        </ul>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Blue Team — Process Hardening</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Audit ALL cron sources weekly: <code>/etc/crontab</code>, <code>/etc/cron.d/</code>, all user crontabs, <code>at</code> jobs, systemd timers</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Check <code>/proc/PID/exe</code> for deleted or replaced binaries: <code>ls -la /proc/*/exe 2>/dev/null | grep deleted</code></div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Enforce TasksMax per user slice: <code>UserTasksMax=200</code> in /etc/systemd/logind.conf</div></li>
+          <li style="padding:5px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Audit systemd units: <code>systemctl list-units --type=service --all</code> → look for unknown units</div></li>
+          <li style="padding:5px 0;display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span><div>Monitor <code>LD_PRELOAD</code> in process environments: <code>cat /proc/*/environ 2>/dev/null | tr '\0' '\n' | grep LD_PRELOAD</code></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="term" style="margin-top:12px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Process security audit commands</span></div>
+      <div class="tb">
+        <span class="sec">──── DETECT REPLACED/DELETED BINARIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -la /proc/*/exe 2>/dev/null | grep "(deleted)"</span></span>
+        <span class="ored">lrwxrwxrwx 1 root root 0 /proc/8841/exe -> /tmp/.x (deleted)  ← malware!</span>
+        <span class="sec">──── DETECT LD_PRELOAD INJECTION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /proc/*/environ 2>/dev/null | tr '\0' '\n' | grep "LD_PRELOAD"</span></span>
+        <span class="ored">LD_PRELOAD=/tmp/.hook.so   ← library hijack active!</span>
+        <span class="sec">──── AUDIT ALL CRON SOURCES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /etc/crontab /etc/cron.d/* 2>/dev/null</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">for u in $(cut -d: -f1 /etc/passwd); do crontab -l -u $u 2>/dev/null | grep -v "^#" | grep -v "^$" && echo "==$u=="; done</span></span>
+        <span class="ored">* * * * * /tmp/.x/backdoor  ==www-data==   ← cron implant!</span>
+        <span class="sec">──── AUDIT UNKNOWN SYSTEMD UNITS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl list-unit-files --type=service | grep enabled</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">find /etc/systemd /usr/lib/systemd -name "*.service" -newer /etc/passwd 2>/dev/null</span></span>
+        <span class="ored">/etc/systemd/system/miner.service   ← new unit file!</span>
+        <span class="sec">──── PROCESS NETWORK CONNECTIONS (C2 detection) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ss -tunp | grep -v "127.0.0.1\|::1\|10\.\|172\.\|192\.168"</span></span>
+        <span class="ored">tcp ESTAB 0 0 192.168.1.10:51234 203.0.113.99:4444 users:(("python3",pid=8841))</span>
+        <span class="out"># python3 (PID 8841) connected to external IP:4444 — likely C2 channel!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 11 — MONITORING & TROUBLESHOOTING -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📈</span><span class="pt">Monitoring &amp; Troubleshooting — Service Health</span><span class="pn">PANEL 11</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">journalctl · systemd-analyze · top · vmstat</span></div>
+      <div class="tb">
+        <span class="sec">──── journalctl — STRUCTURED LOG QUERYING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u nginx -f                        # follow nginx logs live</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u nginx --since "1 hour ago"       # last hour</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -p err -b                          # all errors since last boot</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -k                                  # kernel messages (= dmesg)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --disk-usage                        # how much disk logs use</span></span>
+        <span class="out">Archived and active journals take up 2.4G in the filesystem.</span>
+        <span class="sec">──── SERVICE FAILURE INVESTIGATION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl --failed</span></span>
+        <span class="ored">  UNIT              LOAD    ACTIVE  SUB    DESCRIPTION</span>
+        <span class="ored">● myapp.service     loaded  failed  failed My Application</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u myapp -n 30 --no-pager</span></span>
+        <span class="ored">May 03 10:02:11 lab myapp[4821]: FATAL: Cannot connect to PostgreSQL on localhost:5432</span>
+        <span class="ored">May 03 10:02:11 lab systemd[1]: myapp.service: Main process exited, code=exited, status=1/FAILURE</span>
+        <span class="ored">May 03 10:02:11 lab systemd[1]: myapp.service: Failed with result 'exit-code'.</span>
+        <span class="sec">──── BOOT TIME ANALYSIS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze time</span></span>
+        <span class="out">Startup finished in 1.4s (firmware) + 2.9s (loader) + 1.2s (kernel) + 4.3s (userspace) = 9.8s</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemd-analyze blame | head -8</span></span>
+        <span class="oyn"> 4.201s apt-daily-upgrade.service</span>
+        <span class="oyn"> 1.840s snapd.service</span>
+        <span class="out"> 0.921s NetworkManager-wait-online.service</span>
+        <span class="sec">──── LOAD AVERAGE INTERPRETATION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">uptime</span></span>
+        <span class="out">10:15:22 up 5 days, load average: 2.81, 1.44, 0.92</span>
+        <span class="ocn"># 4-core system: load 2.81 = 70% utilized (normal)</span>
+        <span class="ocn"># load > 4.0 on 4-core = overloaded</span>
+        <span class="ocn"># 1min >> 5min >> 15min = sudden spike (investigate now)</span>
+        <span class="ocn"># 1min << 5min << 15min = load is dropping (recovering)</span>
+        <span class="sec">──── vmstat — SYSTEM-WIDE RESOURCE VIEW ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">vmstat 1 5</span></span>
+        <span class="out">procs ----memory---- --swap-- ---io---- -system-- ------cpu------</span>
+        <span class="out"> r  b   swpd   free   si  so   bi    bo   in   cs  us sy id wa st</span>
+        <span class="ocn"> 3  2 131072  81920   0   0  892   480  1240 2810 45 12 35  8  0</span>
+        <span class="oyn"> r=3  ← 3 processes waiting for CPU (normal on 4 cores)</span>
+        <span class="oyn"> b=2  ← 2 processes in uninterruptible sleep (I/O wait)</span>
+        <span class="oyn"> wa=8 ← 8% CPU time waiting for I/O (moderate)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 12 — CHECKLIST -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✔</span><span class="pt">Auditor / Security Checklist — Step 5 Verification</span><span class="pn">PANEL 12</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you explain all 5 process states (R/S/D/Z/T) and diagnose a high D-state count?<span class="tag ty" style="margin-left:auto">STATES</span></li>
+      <li><div class="chk">✓</div>Can you send SIGHUP for config reload, SIGTERM for graceful stop, SIGKILL as last resort?<span class="tag tg" style="margin-left:auto">SIGNALS</span></li>
+      <li><div class="chk">✓</div>Can you identify a zombie process, find its parent, and determine the fix?<span class="tag tr2" style="margin-left:auto">ZOMBIE</span></li>
+      <li><div class="chk">✓</div>Can you write a production hardened systemd unit with resource limits and security directives?<span class="tag tp" style="margin-left:auto">SYSTEMD</span></li>
+      <li><div class="chk">✓</div>Can you audit ALL cron sources (crontab, cron.d, user crontabs, at, systemd timers)?<span class="tag tr2" style="margin-left:auto">CRON</span></li>
+      <li><div class="chk">✓</div>Can you use journalctl to query logs by unit, priority level, and time window?<span class="tag tc" style="margin-left:auto">JOURNAL</span></li>
+      <li><div class="chk">✓</div>Can you set CPUQuota, MemoryMax, TasksMax on a running service via systemctl set-property?<span class="tag to" style="margin-left:auto">CGROUPS</span></li>
+      <li><div class="chk">✓</div>Can you use ps, lsof, ss, and strace to diagnose a misbehaving process?<span class="tag tg" style="margin-left:auto">TOOLS</span></li>
+      <li><div class="chk">✓</div>Can you detect replaced/deleted binaries via /proc/PID/exe and LD_PRELOAD injection?<span class="tag tr2" style="margin-left:auto">FORENSICS</span></li>
+      <li><div class="chk">✓</div>Can you find unknown systemd units and cron implants planted by an attacker?<span class="tag tr2" style="margin-left:auto">HUNT</span></li>
+      <li><div class="chk">✓</div>Can you interpret load average, vmstat wa%, and identify CPU vs I/O bottleneck?<span class="tag ty" style="margin-left:auto">PERF</span></li>
+      <li><div class="chk">✓</div>Can you detect a process connecting to an external C2 IP using ss and lsof?<span class="tag tp" style="margin-left:auto">C2 DETECT</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PANEL 13 — SUMMARY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">◉</span><span class="pt">Summary — Step 5 Complete</span><span class="pn">PANEL 13</span></div>
+  <div class="pb">
+    <div class="g3" style="margin-bottom:0">
+      <div class="sum-card">
+        <div class="sc-l">Process Lifecycle & Signals</div>
+        <div class="sc-v">Every process: fork() → exec() → run → exit() → reaped by parent. Five states: R/S/D/Z/T. SIGKILL and SIGSTOP are uncatchable. SIGHUP reloads config. Signals are the primary IPC between admin and daemon.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">systemd & Service Security</div>
+        <div class="sc-v">systemd is PID 1, service manager, journal, timer, and cgroup controller. Hardened unit files: NoNewPrivileges, PrivateTmp, ProtectSystem=strict, CapabilityBoundingSet, SystemCallFilter, IPAddressDeny. MemoryMax prevents OOM cascade.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Cron, cgroups & Threat Hunting</div>
+        <div class="sc-v">Cron is a top persistence mechanism — audit ALL sources. cgroups v2 enforces CPU/memory/pid limits per service. Detect threats: /proc/PID/exe deleted, LD_PRELOAD in environ, unknown systemd units, external C2 connections via ss.</div>
+      </div>
+    </div>
+    <div class="nxt">
+      <div>
+        <div style="font-family:var(--sans);font-weight:600;font-size:14px;color:var(--g)">▶ Next: Step 6 — Linux Networking Deep Understanding</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Interfaces · IP config · routing · DNS · firewall (nftables/iptables) · NAT · sockets · packet flow · tcpdump · network troubleshooting</div>
+      </div>
+      <button class="nb" onclick="window.sendPrompt && window.sendPrompt('Start Step 6')">$ Start Step 6 →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg3:#111820;--panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--c:#00d4ff;--y:#ffd700;--o:#ff8c00;--r:#ff3b3b;--p:#9d4edd;--bl:#2979ff;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;--sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.orn{display:block;color:var(--o)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}.opu{display:block;color:var(--p)}
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.good{display:flex;gap:8px;padding:8px 12px;background:rgba(0,255,136,.06);border-left:3px solid var(--g);margin:10px 0;font-size:12px;color:var(--t2)}
+.danger{display:flex;gap:8px;padding:8px 12px;background:rgba(255,59,59,.07);border-left:3px solid var(--r);margin:10px 0;font-size:12px;color:var(--t2)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top;font-size:12px}
+.tbl td:first-child{color:var(--g);font-family:var(--mono)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px;flex-shrink:0}
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:10px 0}
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+.nxt{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,212,255,.05));border:1px solid rgba(0,255,136,.3);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}
+.nb{background:var(--bg);border:1px solid var(--b);padding:6px 16px;font-size:12px;color:var(--g);cursor:pointer;font-family:var(--mono)}
+.nb:hover{background:rgba(0,255,136,.1);border-color:var(--g)}
+/* monitoring specific */
+.tool-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.tc-icon{font-size:22px;margin-bottom:6px}
+.tc-name{font-family:var(--sans);font-weight:700;font-size:14px;margin-bottom:3px}
+.tc-cat{font-size:10px;color:var(--t3);font-family:var(--sans);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.tc-body{font-size:11.5px;color:var(--t2);line-height:1.6}
+.tc-cmd{font-size:11px;color:var(--c);background:var(--bg);padding:3px 8px;border-left:2px solid var(--c);margin-top:6px}
+/* metric bar */
+.met-row{display:flex;align-items:center;gap:10px;margin:4px 0;font-size:11px}
+.met-lbl{width:130px;min-width:130px;color:var(--t3);font-family:var(--sans);font-size:11px}
+.met-bg{flex:1;height:8px;background:rgba(255,255,255,.05);overflow:hidden}
+.met-fill{height:100%}
+.met-val{width:45px;text-align:right;font-size:11px;font-family:var(--sans);font-weight:700}
+/* log level badges */
+.lv{display:inline-block;padding:1px 7px;font-size:10px;font-family:var(--sans);font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px}
+.lv-emg{background:rgba(255,59,59,.2);color:var(--r);border:1px solid rgba(255,59,59,.5)}
+.lv-crit{background:rgba(255,59,59,.15);color:var(--r);border:1px solid rgba(255,59,59,.4)}
+.lv-err{background:rgba(255,140,0,.18);color:var(--o);border:1px solid rgba(255,140,0,.5)}
+.lv-warn{background:rgba(255,215,0,.15);color:var(--y);border:1px solid rgba(255,215,0,.4)}
+.lv-notice{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.lv-info{background:rgba(0,255,136,.1);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.lv-debug{background:rgba(157,78,221,.1);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+/* top simulation */
+.top-sim{background:#050810;border:1px solid #1a2d45;padding:14px 16px;font-family:var(--mono);font-size:11.5px}
+.top-header{color:var(--c);margin-bottom:6px}
+.top-bar-bg{height:14px;background:rgba(255,255,255,.05);margin:2px 0;display:flex;overflow:hidden}
+.top-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--sans);font-weight:700;letter-spacing:.3px}
+.top-row{display:flex;gap:0;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.top-col{overflow:hidden;white-space:nowrap}
+/* log arch flow */
+.log-box{background:var(--bg3);border:1px solid var(--b2);padding:8px 12px;text-align:center;flex:1;min-width:100px}
+.lb-title{font-family:var(--sans);font-size:11px;font-weight:700;margin-bottom:2px}
+.lb-sub{font-size:9px;color:var(--t3)}
+.lb-arrow{padding:0 4px;color:var(--t3);font-size:14px;flex-shrink:0;display:flex;align-items:center}
+/* scenario card */
+.sc-card{background:var(--bg3);border:1px solid var(--b2);padding:14px;border-top:2px solid var(--y)}
+.scc-title{font-family:var(--sans);font-weight:700;font-size:12px;color:var(--y);margin-bottom:6px}
+.scc-body{font-size:12px;color:var(--t2);line-height:1.7}
+.scc-cmd{margin-top:6px;background:var(--bg);padding:4px 10px;font-size:11px;color:var(--g);border-left:2px solid var(--g)}
+/* logrotate config */
+.lr-line{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--b2);font-size:12px}
+.lr-key{width:180px;min-width:180px;color:var(--c);font-family:var(--mono)}
+.lr-why{flex:1;color:var(--t3);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 10 / MODULE 1 ● ACTIVE</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">Logging, <span style="color:var(--g)">Monitoring</span> &amp; Troubleshooting</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Intermediate</span>
+        <span class="tag tc">⊞ journald & syslog</span>
+        <span class="tag ty">⊛ Performance Tools</span>
+        <span class="tag tp">⬡ strace & lsof</span>
+        <span class="tag to">⊕ Log Rotation</span>
+        <span class="tag tr2">⊘ Enterprise Scenarios</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">logs-mon-10</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">13</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01–09 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ MONITORING ACTIVE</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 01 — LOGGING ARCHITECTURE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📋</span><span class="pt">Linux Logging Architecture — Data Flow</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Linux logging is a <strong style="color:var(--c)">multi-layer pipeline</strong>. Applications write to the kernel audit subsystem, syslog socket, or directly to files. journald aggregates everything into a structured binary journal. rsyslog/syslog-ng can forward to remote SIEMs.</span></div>
+
+    <!-- Log flow diagram -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:16px;margin-bottom:14px;overflow-x:auto">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Logging Data Flow</div>
+      <div style="display:flex;gap:0;flex-wrap:nowrap;align-items:stretch;min-width:600px">
+        <div class="log-box" style="border-top:2px solid var(--p)"><div class="lb-title" style="color:var(--p)">Applications</div><div class="lb-sub">nginx, sshd, app code, scripts — write via syslog() or stderr</div></div>
+        <div class="lb-arrow">→</div>
+        <div class="log-box" style="border-top:2px solid var(--c)"><div class="lb-title" style="color:var(--c)">systemd-journald</div><div class="lb-sub">PID 1 child. Captures stdout/stderr of all services + kernel messages</div></div>
+        <div class="lb-arrow">→</div>
+        <div class="log-box" style="border-top:2px solid var(--y)"><div class="lb-title" style="color:var(--y)">/run/log/journal/</div><div class="lb-sub">Structured binary journal. /var/log/journal/ if persistent storage enabled</div></div>
+        <div class="lb-arrow">→</div>
+        <div class="log-box" style="border-top:2px solid var(--g)"><div class="lb-title" style="color:var(--g)">rsyslog / syslog-ng</div><div class="lb-sub">Reads from journald, routes to /var/log/*.log files and remote SIEM</div></div>
+        <div class="lb-arrow">→</div>
+        <div class="log-box" style="border-top:2px solid var(--o)"><div class="lb-title" style="color:var(--o)">Remote SIEM / ELK</div><div class="lb-sub">Splunk, Elastic, Graylog, Loki — centralised analysis and alerting</div></div>
+      </div>
+      <div style="display:flex;gap:0;flex-wrap:nowrap;min-width:600px;margin-top:6px">
+        <div class="log-box" style="border-top:2px solid var(--r)"><div class="lb-title" style="color:var(--r)">Kernel / auditd</div><div class="lb-sub">Syscall-level audit trail — /var/log/audit/audit.log</div></div>
+        <div class="lb-arrow" style="visibility:hidden">→</div>
+        <div class="log-box" style="border-top:2px solid var(--r)"><div class="lb-title" style="color:var(--r)">dmesg ring buffer</div><div class="lb-sub">Kernel messages — volatile (lost on reboot unless saved)</div></div>
+        <div class="lb-arrow" style="visibility:hidden">→</div>
+        <div class="log-box" style="border:none;background:transparent"></div>
+        <div class="lb-arrow" style="visibility:hidden">→</div>
+        <div class="log-box" style="border:none;background:transparent"></div>
+        <div class="lb-arrow" style="visibility:hidden">→</div>
+        <div class="log-box" style="border:none;background:transparent"></div>
+      </div>
+    </div>
+
+    <!-- Log levels -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Syslog Severity Levels (RFC 5424)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;align-items:center">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-emg">0 EMERG</span><span style="font-size:9px;color:var(--t3)">system unusable</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-crit">1 ALERT</span><span style="font-size:9px;color:var(--t3)">action required</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-crit">2 CRIT</span><span style="font-size:9px;color:var(--t3)">critical condition</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-err">3 ERR</span><span style="font-size:9px;color:var(--t3)">error condition</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-warn">4 WARN</span><span style="font-size:9px;color:var(--t3)">warning</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-notice">5 NOTICE</span><span style="font-size:9px;color:var(--t3)">normal but significant</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-info">6 INFO</span><span style="font-size:9px;color:var(--t3)">informational</span>
+      </div>
+      <div style="color:var(--t3)">←</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <span class="lv lv-debug">7 DEBUG</span><span style="font-size:9px;color:var(--t3)">debug messages</span>
+      </div>
+      <div style="color:var(--t3);font-size:11px;margin-left:8px">← severity</div>
+    </div>
+
+    <!-- Key log files -->
+    <table class="tbl">
+      <thead><tr><th>Log File</th><th>Content</th><th>Key for</th></tr></thead>
+      <tbody>
+        <tr><td>/var/log/auth.log</td><td style="color:var(--t2)">PAM auth, sudo, SSH logins, su, user management</td><td><span class="tag tr2">SECURITY</span></td></tr>
+        <tr><td>/var/log/syslog</td><td style="color:var(--t2)">General system messages — all facilities except auth and kernel</td><td><span class="tag tg">GENERAL</span></td></tr>
+        <tr><td>/var/log/kern.log</td><td style="color:var(--t2)">Kernel messages — hardware events, driver errors, OOM kills</td><td><span class="tag tc">KERNEL</span></td></tr>
+        <tr><td>/var/log/nginx/access.log</td><td style="color:var(--t2)">HTTP requests — client IP, method, URL, status, bytes</td><td><span class="tag tg">WEB</span></td></tr>
+        <tr><td>/var/log/nginx/error.log</td><td style="color:var(--t2)">Nginx errors — 404s, 50x, upstream failures, config errors</td><td><span class="tag to">WEB ERR</span></td></tr>
+        <tr><td>/var/log/audit/audit.log</td><td style="color:var(--t2)">auditd — syscall-level events, file access, execve, network</td><td><span class="tag tr2">AUDIT</span></td></tr>
+        <tr><td>/var/log/dpkg.log</td><td style="color:var(--t2)">Package installs, upgrades, removals with timestamps</td><td><span class="tag ty">PKG</span></td></tr>
+        <tr><td>/var/log/cron.log</td><td style="color:var(--t2)">All cron job executions — what ran, when, exit status</td><td><span class="tag tp">SCHED</span></td></tr>
+        <tr><td>/var/log/mail.log</td><td style="color:var(--t2)">Postfix/sendmail — SMTP connections, delivery, bounce</td><td><span class="tag tg">MAIL</span></td></tr>
+        <tr><td>/run/log/journal/</td><td style="color:var(--t2)">journald binary journal — all above sources in structured form</td><td><span class="tag tc">JOURNAL</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 02 — JOURNALCTL -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📖</span><span class="pt">journalctl — Structured Log Query Engine</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">journald vs Traditional syslog</div>
+        <div class="ct">
+          <span class="hl">journald</span> stores logs as <span class="hc">structured binary</span> — each entry is a JSON-like record with typed fields: <code>_PID</code>, <code>_UID</code>, <code>_COMM</code>, <code>_EXE</code>, <code>SYSLOG_FACILITY</code>, <code>PRIORITY</code>, <code>MESSAGE</code>. You can query on any field, not just regex on text.<br><br>
+          Advantages: <span class="hl">tamper detection</span> (FSS sealing), <span class="hl">rate limiting</span>, <span class="hl">structured queries</span>, <span class="hl">kernel+user in one store</span>.<br>
+          Trade-off: binary format — need <code>journalctl</code> to read.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Persistent Journal</div>
+        <div class="ct">
+          By default journal is <span class="hr">volatile</span> (lost on reboot). Enable persistent storage:<br><br>
+          <code style="color:var(--c)">mkdir -p /var/log/journal</code><br>
+          <code style="color:var(--c)">systemd-tmpfiles --create --prefix /var/log/journal</code><br><br>
+          Or set in <code>/etc/systemd/journald.conf</code>:<br>
+          <code style="color:var(--y)">Storage=persistent</code><br><br>
+          Control size: <code style="color:var(--y)">SystemMaxUse=2G</code><br>
+          Control retention: <code style="color:var(--y)">MaxRetentionSec=30d</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">journalctl — complete query reference</span></div>
+      <div class="tb">
+        <span class="sec">──── BASIC QUERIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl                          # all logs, paged</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -f                       # follow (like tail -f)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -n 50                    # last 50 lines</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --no-pager | wc -l       # total log entries</span></span>
+        <span class="sec">──── FILTER BY UNIT / SERVICE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u nginx                 # nginx unit logs</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u nginx -u postgresql   # multiple units</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u nginx -f              # follow nginx logs</span></span>
+        <span class="sec">──── FILTER BY PRIORITY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -p err                   # errors and above (0-3)</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -p warning..err          # warnings to errors</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -p 0..3 -b               # emerg/alert/crit/err in this boot</span></span>
+        <span class="sec">──── FILTER BY TIME ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --since "2026-05-03 02:00" --until "2026-05-03 04:00"</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --since "1 hour ago"</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --since today</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -b                       # current boot</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -b -1                    # previous boot</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --list-boots             # all recorded boots</span></span>
+        <span class="sec">──── FILTER BY PROCESS / USER ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl _PID=1234                # specific PID</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl _UID=0                   # all root activity</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl _COMM=sshd               # by command name</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl _EXE=/usr/bin/sudo       # by exact binary</span></span>
+        <span class="sec">──── OUTPUT FORMATS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -o json-pretty -u nginx | head -30  # JSON output</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -o cat -u nginx          # message only, no metadata</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -o verbose -u nginx      # all fields</span></span>
+        <span class="sec">──── KERNEL & DISK USAGE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -k                       # kernel messages only</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --disk-usage</span></span>
+        <span class="oyn">Archived and active journals take up 1.8 GiB in the filesystem.</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --vacuum-size=500M       # trim to 500MB</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl --vacuum-time=7d         # keep only last 7 days</span></span>
+        <span class="sec">──── SECURITY FORENSICS QUERIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl -u sshd --since "24h ago" | grep -E "Accepted|Failed|Invalid"</span></span>
+        <span class="ogn">May 03 10:12:01 sshd: Accepted publickey for alice from 192.168.1.50</span>
+        <span class="ored">May 03 02:44:11 sshd: Failed password for root from 10.10.10.5 — 142 times</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">journalctl _COMM=sudo --since today</span></span>
+        <span class="oyn">May 03 10:15 alice: COMMAND=/usr/bin/systemctl restart nginx</span>
+        <span class="ored">May 03 02:11 unknown: 3 incorrect password attempts ; COMMAND=/bin/bash</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03 — RSYSLOG & LOG ROUTING -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📡</span><span class="pt">rsyslog — Log Routing, Filtering &amp; Remote Forwarding</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cby">
+        <div class="cbt">rsyslog Architecture</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          rsyslog reads from <span class="hy">/dev/log</span> (syslog socket), <span class="hy">journald</span> (imjournal module), and <span class="hy">network</span> (imudp/imtcp). Routes messages based on <span class="hy">facility.severity</span> rules to files, remote hosts, databases.<br><br>
+          Priority: <span class="hl">rsyslog config</span> → <span class="hc">/etc/rsyslog.conf</span> + <span class="hc">/etc/rsyslog.d/*.conf</span><br><br>
+          Facilities: kern(0) user(1) mail(2) daemon(3) auth(4) syslog(5) lpr(6) news(7) local0-7(16-23)
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Remote Log Forwarding to SIEM</div>
+        <div class="ct" style="font-size:12px;line-height:1.8">
+          Forward logs to centralised SIEM (Splunk, Elastic, Graylog) over TCP/TLS.<br><br>
+          <span class="hl">Why it matters:</span> If attacker compromises host and clears local logs, SIEM retains all events. Non-repudiation of security events.<br><br>
+          Protocol: <span class="hc">RFC 3164</span> (legacy) or <span class="hc">RFC 5424</span> (modern, structured). TLS: <code>@@(o)host:6514</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">rsyslog configuration — routing & forwarding</span></div>
+      <div class="tb">
+        <span class="sec">──── /etc/rsyslog.conf — KEY ROUTING RULES ────</span>
+        <span class="oyn"># Auth logs → dedicated file</span>
+        <span class="ocn">auth,authpriv.*                  /var/log/auth.log</span>
+        <span class="oyn"># All errors → syslog</span>
+        <span class="ocn">*.error                          /var/log/error.log</span>
+        <span class="oyn"># Kernel messages → kern.log</span>
+        <span class="ocn">kern.*                           /var/log/kern.log</span>
+        <span class="oyn"># Everything except debug to syslog</span>
+        <span class="ocn">*.*;auth,authpriv.none           -/var/log/syslog</span>
+        <span class="ocn"># '-' prefix = async write (performance, risk data loss on crash)</span>
+        <span class="sec">──── FORWARD ALL LOGS TO SIEM (TCP+TLS) ────</span>
+        <span class="oyn"># /etc/rsyslog.d/99-siem.conf</span>
+        <span class="oyn">module(load="imjournal" StateFile="imjournal.state")</span>
+        <span class="oyn">$DefaultNetstreamDriverCAFile /etc/ssl/certs/siem-ca.crt</span>
+        <span class="oyn">$ActionSendStreamDriver gtls</span>
+        <span class="oyn">$ActionSendStreamDriverMode 1</span>
+        <span class="oyn">$ActionSendStreamDriverAuthMode anon</span>
+        <span class="oyn">*.* @@(o)siem.internal.company.com:6514  # TCP+TLS</span>
+        <span class="oyn">*.* @192.168.1.200:514                   # UDP (legacy)</span>
+        <span class="sec">──── FILTER & ROUTE SPECIFIC LOGS ────</span>
+        <span class="oyn"># Send all ssh failures to security team</span>
+        <span class="oyn">:msg, contains, "Failed password"  /var/log/ssh-failures.log</span>
+        <span class="oyn">:msg, contains, "Failed password"  @@soc.internal:514</span>
+        <span class="oyn">&amp; stop  # don't process further</span>
+        <span class="sec">──── TEST RSYSLOG CONFIG ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">rsyslogd -N1   # validate config</span></span>
+        <span class="ogn">rsyslogd: version 8.2312.0, config validation run (level 1), master config /etc/rsyslog.conf</span>
+        <span class="ogn">rsyslogd: End of config validation run — no issues found.</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">logger -t myapp -p auth.warning "Test alert from myapp"</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">tail -1 /var/log/auth.log</span></span>
+        <span class="out">May 03 10:15:44 lab myapp: Test alert from myapp</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 04 — LOG ROTATION -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔄</span><span class="pt">Log Rotation — logrotate Configuration &amp; Policy</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Without log rotation, <code>/var/log/</code> grows until the disk is full — causing application crashes, service failures, and data loss. <strong style="color:var(--c)">logrotate</strong> runs daily via cron/systemd timer and rotates, compresses, and prunes old logs automatically.</span></div>
+
+    <!-- logrotate config annotated -->
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">/etc/logrotate.d/nginx — Annotated Production Config</div>
+      <div style="display:flex;font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);padding:4px 0;border-bottom:2px solid var(--b)">
+        <span style="width:180px">DIRECTIVE</span><span>EXPLANATION</span>
+      </div>
+      <div class="lr-line"><span class="lr-key">/var/log/nginx/*.log {</span><span class="lr-why">Match all nginx log files</span></div>
+      <div class="lr-line"><span class="lr-key">  daily</span><span class="lr-why">Rotate every day. Alternatives: weekly, monthly, size 100M</span></div>
+      <div class="lr-line"><span class="lr-key">  missingok</span><span class="lr-why">Don't error if log file missing (service might be stopped)</span></div>
+      <div class="lr-line"><span class="lr-key">  rotate 30</span><span class="lr-why">Keep 30 old rotated files before deleting. 30 days of history.</span></div>
+      <div class="lr-line"><span class="lr-key">  compress</span><span class="lr-why">Compress rotated files with gzip</span></div>
+      <div class="lr-line"><span class="lr-key">  delaycompress</span><span class="lr-why">Don't compress the most recent rotated file — nginx may still write to it</span></div>
+      <div class="lr-line"><span class="lr-key">  notifempty</span><span class="lr-why">Don't rotate empty log files</span></div>
+      <div class="lr-line"><span class="lr-key">  create 0640 www-data adm</span><span class="lr-why">Create new empty log with these permissions after rotation</span></div>
+      <div class="lr-line"><span class="lr-key">  sharedscripts</span><span class="lr-why">Run postrotate script once for all matched files (not per file)</span></div>
+      <div class="lr-line"><span class="lr-key">  postrotate</span><span class="lr-why">Run after rotation — tell nginx to reopen log files</span></div>
+      <div class="lr-line"><span class="lr-key">    nginx -s reopen</span><span class="lr-why">Send USR1 equivalent — nginx closes old FD, opens new file</span></div>
+      <div class="lr-line" style="border:none"><span class="lr-key">}</span><span class="lr-why"></span></div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">logrotate management</span></div>
+      <div class="tb">
+        <span class="sec">──── TEST LOGROTATE CONFIG ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">logrotate --debug /etc/logrotate.d/nginx</span></span>
+        <span class="out">reading config file /etc/logrotate.d/nginx</span>
+        <span class="ocn">Handling 1 logs</span>
+        <span class="ocn">rotating log /var/log/nginx/access.log, log->rotateCount is 30</span>
+        <span class="ocn">dateext suffix '-20260503'</span>
+        <span class="ogn">  renaming /var/log/nginx/access.log to /var/log/nginx/access.log-20260503</span>
+        <span class="sec">──── FORCE ROTATION NOW ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">logrotate --force /etc/logrotate.d/nginx</span></span>
+        <span class="sec">──── VERIFY ROTATED FILES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -lh /var/log/nginx/</span></span>
+        <span class="out">-rw-r----- 1 www-data adm    0B  access.log           ← new empty file</span>
+        <span class="out">-rw-r----- 1 www-data adm  1.2G  access.log-20260503   ← yesterday</span>
+        <span class="out">-rw-r----- 1 www-data adm   89M  access.log-20260502.gz ← compressed</span>
+        <span class="out">-rw-r----- 1 www-data adm   92M  access.log-20260501.gz</span>
+        <span class="sec">──── SIZE-BASED ROTATION (disk emergency) ────</span>
+        <span class="oyn"># /etc/logrotate.d/emergency</span>
+        <span class="oyn">/var/log/nginx/access.log {</span>
+        <span class="oyn">  size 500M    # rotate when file reaches 500MB</span>
+        <span class="oyn">  rotate 5     # keep only 5 files</span>
+        <span class="oyn">  compress</span>
+        <span class="oyn">}</span>
+        <span class="sec">──── SYSTEMD TIMER THAT RUNS LOGROTATE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">systemctl status logrotate.timer</span></span>
+        <span class="out">  logrotate.timer - Daily rotation of log files</span>
+        <span class="ogn">  Active: active (waiting) — next: Sat 2026-05-04 00:00:00 UTC</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 05 — TOP, HTOP, PERFORMANCE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📊</span><span class="pt">top &amp; htop — Real-Time Performance Monitoring</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <!-- top simulation -->
+    <div style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">top Output — Annotated</div>
+    <div class="top-sim" style="margin-bottom:14px">
+      <div class="top-header">top - 10:15:22 up 5 days, 2:14, 2 users, <span style="color:var(--y)">load average: 2.81, 1.44, 0.92</span></div>
+      <div class="top-header">Tasks: <span style="color:var(--g)">184 total</span>, <span style="color:var(--r)">3 running</span>, <span style="color:var(--c)">181 sleeping</span>, 0 stopped, <span style="color:var(--r)">1 zombie</span></div>
+      <div class="top-header" style="margin-bottom:4px">
+        %Cpu(s): <span style="color:var(--r)">45.2 us</span>, <span style="color:var(--y)">12.3 sy</span>, 0.0 ni, <span style="color:var(--g)">38.8 id</span>, <span style="color:var(--o)">3.5 wa</span>, 0.0 hi, 0.2 si, 0.0 st
+      </div>
+      <!-- CPU bar -->
+      <div style="display:flex;gap:4px;align-items:center;margin-bottom:4px;font-size:10px">
+        <span style="color:var(--t3);width:30px">CPU%</span>
+        <div class="top-bar-bg" style="flex:1">
+          <div class="top-seg" style="width:45.2%;background:rgba(255,59,59,.25);color:var(--r)">us 45%</div>
+          <div class="top-seg" style="width:12.3%;background:rgba(255,215,0,.2);color:var(--y)">sy 12%</div>
+          <div class="top-seg" style="width:3.5%;background:rgba(255,140,0,.25);color:var(--o)">wa</div>
+          <div class="top-seg" style="width:38.8%;background:rgba(255,255,255,.03);color:var(--t3)">id 39%</div>
+        </div>
+      </div>
+      <div class="top-header" style="margin-bottom:4px">
+        MiB Mem: <span style="color:var(--g)">15814.5 total</span>, <span style="color:var(--c)">3102.1 free</span>, <span style="color:var(--y)">9219.4 used</span>, <span style="color:var(--o)">3493.0 buff/cache</span>
+      </div>
+      <div class="top-header" style="margin-bottom:8px">
+        MiB Swap: 4096.0 total, <span style="color:var(--r)">3521.2 free</span>, <span style="color:var(--r)">574.8 used</span> — <span style="color:var(--r)">HIGH SWAP USAGE!</span>
+      </div>
+      <!-- Process list header -->
+      <div class="top-row" style="color:var(--c);font-weight:700;background:rgba(0,212,255,.05)">
+        <span class="top-col" style="width:55px">PID</span>
+        <span class="top-col" style="width:90px">USER</span>
+        <span class="top-col" style="width:45px">%CPU</span>
+        <span class="top-col" style="width:45px">%MEM</span>
+        <span class="top-col" style="width:80px">VSZ</span>
+        <span class="top-col" style="width:80px">RSS</span>
+        <span class="top-col" style="width:35px">S</span>
+        <span class="top-col" style="flex:1">COMMAND</span>
+      </div>
+      <div class="top-row" style="color:var(--r)">
+        <span class="top-col" style="width:55px">8841</span>
+        <span class="top-col" style="width:90px">www-data</span>
+        <span class="top-col" style="width:45px;color:var(--r)">89.2</span>
+        <span class="top-col" style="width:45px">2.1</span>
+        <span class="top-col" style="width:80px">876432</span>
+        <span class="top-col" style="width:80px">85420</span>
+        <span class="top-col" style="width:35px">R</span>
+        <span class="top-col" style="flex:1">python3 runaway.py ← high CPU!</span>
+      </div>
+      <div class="top-row">
+        <span class="top-col" style="width:55px">1500</span>
+        <span class="top-col" style="width:90px;color:var(--g)">www-data</span>
+        <span class="top-col" style="width:45px;color:var(--g)">3.1</span>
+        <span class="top-col" style="width:45px">0.4</span>
+        <span class="top-col" style="width:80px">325604</span>
+        <span class="top-col" style="width:80px">16920</span>
+        <span class="top-col" style="width:35px;color:var(--c)">S</span>
+        <span class="top-col" style="flex:1;color:var(--g)">nginx: worker process</span>
+      </div>
+      <div class="top-row">
+        <span class="top-col" style="width:55px">1890</span>
+        <span class="top-col" style="width:90px">root</span>
+        <span class="top-col" style="width:45px">1.2</span>
+        <span class="top-col" style="width:45px;color:var(--y)">1.8</span>
+        <span class="top-col" style="width:80px">1242880</span>
+        <span class="top-col" style="width:80px">74096</span>
+        <span class="top-col" style="width:35px;color:var(--c)">Ssl</span>
+        <span class="top-col" style="flex:1">/usr/bin/dockerd</span>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--t3);line-height:1.8">
+        <span style="color:var(--y)">wa=3.5%</span> = I/O wait — disk bottleneck &nbsp;|&nbsp;
+        <span style="color:var(--r)">us=45%</span> = user CPU (application) &nbsp;|&nbsp;
+        <span style="color:var(--y)">sy=12%</span> = system/kernel CPU &nbsp;|&nbsp;
+        <span style="color:var(--g)">id=39%</span> = idle &nbsp;|&nbsp;
+        <span style="color:var(--r)">S=R</span> = running
+      </div>
+    </div>
+
+    <!-- top vs htop -->
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cby">
+        <div class="cbt">top — Keyboard Commands</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          <span class="hy">k</span> — kill process (enter PID)<br>
+          <span class="hy">r</span> — renice process<br>
+          <span class="hy">u</span> — filter by user<br>
+          <span class="hy">M</span> — sort by memory<br>
+          <span class="hy">P</span> — sort by CPU (default)<span class="hy">T</span> — sort by time<br>
+          <span class="hy">1</span> — toggle per-CPU display<br>
+          <span class="hy">c</span> — show full command line<br>
+          <span class="hy">H</span> — show threads<br>
+          <span class="hy">f</span> — field configuration<br>
+          <span class="hy">W</span> — save config to ~/.toprc
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">htop — Extended View</div>
+        <div class="ct" style="font-size:12px;line-height:1.9">
+          htop extends top with:<br>
+          <span class="hl">Colour-coded CPU bars</span> per core<br>
+          <span class="hl">Scrollable</span> process list + tree view<br>
+          <span class="hl">Mouse support</span> — click to sort, select<br>
+          <span class="hl">F9</span> — send signal interactively<br>
+          <span class="hl">F5</span> — tree view (parent → children)<br>
+          <span class="hl">F4</span> — filter by name<br>
+          <span class="hl">F6</span> — sort by any column<br>
+          <span class="hl">t</span> — show process tree
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">top/htop advanced usage</span></div>
+      <div class="tb">
+        <span class="sec">──── NON-INTERACTIVE ONE-LINERS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">top -bn1 | head -20              # single snapshot, no interaction</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">top -b -d 5 -n 3 > top.log       # 3 snapshots every 5s to file</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">htop -d 10 --no-color            # htop 1s interval, no color (for pipes)</span></span>
+        <span class="sec">──── CPU AFFINITY / ISOLATION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">taskset -c 2,3 python3 app.py   # run on CPUs 2 and 3 only</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">taskset -p 1234                 # show current CPU affinity mask</span></span>
+        <span class="sec">──── FIND HIGH-CPU PROCESS AND PROFILE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps aux --sort=-%cpu | head -5    # snapshot</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">pidstat -u 1 5                   # CPU per process, 5 samples</span></span>
+        <span class="out">  PID    %usr %system  %guest  %CPU  Command</span>
+        <span class="ored"> 8841   88.0    1.2     0.0    89.2  python3   ← runaway!</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">py-spy top --pid 8841            # Python-specific profiler (non-invasive)</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 06 — VMSTAT, IOSTAT, SAR -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚡</span><span class="pt">vmstat, iostat, sar — System-Wide Performance Analysis</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">vmstat · iostat · sar · free · dmesg</span></div>
+      <div class="tb">
+        <span class="sec">──── vmstat — VIRTUAL MEMORY & CPU OVERVIEW ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">vmstat 1 5</span></span>
+        <span class="out">procs ----memory---- --swap-- ---io-- --system-- --------cpu------</span>
+        <span class="out"> r  b   swpd   free   si   so   bi    bo   in   cs  us sy id wa st</span>
+        <span class="ocn"> 1  0      0 3102016  0    0   124   48  820 1240 12  3 84  1  0  ← healthy</span>
+        <span class="ored"> 4  2  589824   81920 128  256  892  480 1240 2810 45 12 35  8  0  ← swap+I/O issue</span>
+        <span class="out">─────────────────────────────────────────────────────────────────────</span>
+        <span class="oyn">r=4: 4 processes waiting for CPU (overloaded if > ncpus)</span>
+        <span class="oyn">b=2: 2 in uninterruptible I/O wait (D state)</span>
+        <span class="ored">si/so > 0: swap in/out = memory pressure, performance degraded</span>
+        <span class="oyn">wa=8%: I/O wait — disk is the bottleneck</span>
+        <span class="sec">──── iostat — DISK I/O STATISTICS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">iostat -x 1 3</span></span>
+        <span class="out">Device    r/s    w/s  rkB/s   wkB/s  await r_await w_await  %util</span>
+        <span class="ogn">nvme0n1  124.0   81.0  4960.0  3240.0   1.20    0.90    1.80   12.4  ← healthy</span>
+        <span class="ored">sdb        8.0  891.0   320.0 82944.0  120.40   15.00  125.00   98.4  ← saturated!</span>
+        <span class="out">─────────────────────────────────────────────────────────────────────</span>
+        <span class="ored">%util=98.4 = disk saturated. await=120ms = very slow (SSD: 1-2ms expected)</span>
+        <span class="sec">──── sar — HISTORICAL PERFORMANCE DATA ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sar -u 1 10                      # CPU every 1s for 10 samples</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sar -r 1 5                       # memory statistics</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sar -n DEV 1 5                   # network interface stats</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sar -f /var/log/sysstat/sa03      # replay yesterday's data</span></span>
+        <span class="ocn"># sar stores 30 days of data in /var/log/sysstat/ — requires sysstat package</span>
+        <span class="sec">──── free — MEMORY USAGE ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">free -h</span></span>
+        <span class="out">              total   used   free  shared  buff/cache  available</span>
+        <span class="ocn">Mem:           15Gi   9.2Gi  3.1Gi  512Mi     2.9Gi      5.8Gi</span>
+        <span class="oyn">Swap:           4Gi   574Mi  3.4Gi</span>
+        <span class="out">─────────────────────────────────────────────────────────────────</span>
+        <span class="ocn">available = free + reclaimable cache. This is the real free RAM.</span>
+        <span class="oyn">Swap used: 574MB — monitor closely. If growing: memory leak or insufficient RAM.</span>
+        <span class="sec">──── dmesg — KERNEL RING BUFFER ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dmesg -T | tail -20              # with human-readable timestamps</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dmesg -T | grep -iE "error|fail|warn|oom|kill" | tail -10</span></span>
+        <span class="ored">[May 3 02:44] Buffer I/O error on dev sdb1 — disk failing!</span>
+        <span class="ored">[May 3 10:01] Out of memory: Killed process 4821 (java) — OOM kill</span>
+        <span class="ored">[May 3 10:01] oom_kill_process: Total page cache size 0MB</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">dmesg -w                         # watch kernel messages live</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 07 — STRACE & DEBUGGING -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔬</span><span class="pt">strace, ltrace &amp; perf — Deep Process Debugging</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbp">
+        <div class="cbt">strace — System Call Tracer</div>
+        <div class="ct">
+          strace intercepts and records all <span class="hp">system calls</span> made by a process. Essential for debugging: "why is this program failing?", "what files is it opening?", "why is it slow?", "is it stuck in a syscall?".<br><br>
+          Attaches to running processes (<code>-p PID</code>) or starts new ones. Output shows: syscall name, arguments, return value, time spent.<br><br>
+          <span class="hr">Performance note:</span> strace adds ~5-10x overhead. Don't use in production for extended periods.
+        </div>
+      </div>
+      <div class="cb cbl">
+        <div class="cbt">perf — Linux Performance Counters</div>
+        <div class="ct">
+          <span class="hl">perf</span> uses hardware performance counters (PMU) for low-overhead profiling. Can profile CPU cycles, cache misses, branch mispredictions, page faults, context switches.<br><br>
+          <span class="hc">perf top</span> — live CPU hotspot (like top but function-level)<br>
+          <span class="hc">perf record</span> — record events for a command<br>
+          <span class="hc">perf report</span> — analyse recorded data<br>
+          <span class="hc">perf stat</span> — event counts summary
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">strace · ltrace · perf · gdb</span></div>
+      <div class="tb">
+        <span class="sec">──── STRACE BASICS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">strace ls /etc 2>&1 | tail -10</span></span>
+        <span class="out">openat(AT_FDCWD, "/etc", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</span>
+        <span class="out">getdents64(3, /* 142 entries */, 32768) = 4672</span>
+        <span class="out">write(1, "adduser.conf  alternatives  ..."</span>
+        <span class="sec">──── TRACE A RUNNING PROCESS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">strace -p 8841 -e trace=network,read,write 2>&1 | head -20</span></span>
+        <span class="ocn">connect(5, {AF_INET, 10.10.10.5, 4444}, 16) = 0  ← C2 connection!</span>
+        <span class="ocn">write(5, "GET /payload HTTP/1.1\r\n...", 64) = 64</span>
+        <span class="sec">──── TRACE SLOW SYSCALLS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">strace -T -e trace=openat,read -p 1234 2>&1 | awk '$NF ~ /[0-9]+/ && $NF > 0.01'</span></span>
+        <span class="ored">openat(AT_FDCWD, "/slow/nfs/file") = 4   &lt;3.421&gt;  ← 3.4s NFS read!</span>
+        <span class="sec">──── SYSCALL SUMMARY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">strace -c -p 8841 sleep 10 2>&1</span></span>
+        <span class="out">% time   seconds  calls  syscall</span>
+        <span class="oyn"> 82.1   0.821041  92441  futex     ← mostly waiting on mutex</span>
+        <span class="out"> 12.4   0.124002   8821  read</span>
+        <span class="out">  3.1   0.031000    210  write</span>
+        <span class="sec">──── PERF — CPU PROFILING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">perf top -p 8841              # live function-level hotspot</span></span>
+        <span class="out">Samples: 12K of event 'cpu-cycles'</span>
+        <span class="oyn">  78.2%  python3  crypto.cpython-312.so  AES_encrypt</span>
+        <span class="oyn">  12.4%  python3  [kernel]               copy_to_user</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">perf stat ./mybinary 2>&1 | tail -15</span></span>
+        <span class="out">Performance counter stats for './mybinary':</span>
+        <span class="ocn">   12,841,204,812  cycles           # 3.421 GHz</span>
+        <span class="ocn">    9,124,892,421  instructions     # 0.71 insn/cycle ← low IPC!</span>
+        <span class="ored">    2,841,234,100  cache-misses     # 22% miss rate ← L3 cache thrash</span>
+        <span class="sec">──── LTRACE — LIBRARY CALL TRACING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ltrace -e "malloc,free,open*" -p 8841 2>&1 | head -10</span></span>
+        <span class="out">malloc(1048576) = 0x7f...  ← 1MB allocation every iteration = memory leak!</span>
+        <span class="out">malloc(1048576) = 0x7f...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 08 — LSOF & NETWORK DIAGNOSTICS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔍</span><span class="pt">lsof &amp; Network Diagnostics — Open Files &amp; Connections</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">lsof · ss · netstat · nc — comprehensive diagnostics</span></div>
+      <div class="tb">
+        <span class="sec">──── LSOF — LIST OPEN FILES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsof -p 8841 | head -15          # all files open by PID</span></span>
+        <span class="out">COMMAND  PID     USER  FD  TYPE  DEVICE  SIZE  NODE  NAME</span>
+        <span class="out">python3 8841  www-data cwd   DIR   8,2   4096       /opt/app</span>
+        <span class="out">python3 8841  www-data  0u  CHR   136,0            /dev/pts/0</span>
+        <span class="ocn">python3 8841  www-data  3r  REG   8,2  65536       /etc/ssl/certs/ca.crt</span>
+        <span class="ored">python3 8841  www-data  5u  IPv4  14821            TCP 192.168.1.10:51234->10.10.10.5:4444 (ESTABLISHED)</span>
+        <span class="sec">──── FIND WHAT'S USING A FILE/DIR ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsof /var/log/nginx/access.log   # who has this file open?</span></span>
+        <span class="ocn">COMMAND  PID     USER  FD  TYPE DEVICE NAME</span>
+        <span class="ocn">nginx   1501 www-data  4w  REG  8,2   /var/log/nginx/access.log</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">fuser -v /dev/sdb1                # who is using this device?</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsof +D /var/data/                # all files open under directory</span></span>
+        <span class="sec">──── FIND DELETED FILES STILL OPEN (disk leak) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lsof | grep deleted</span></span>
+        <span class="ored">nginx   1501 www-data  7w  REG  8,2  8.1G /var/log/nginx/access.log (deleted)</span>
+        <span class="out"># File was deleted but nginx still holds FD open → disk space not freed!</span>
+        <span class="out"># Fix: nginx -s reopen OR logrotate with postrotate script</span>
+        <span class="sec">──── FD COUNT PER PROCESS (detect FD leak) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls /proc/8841/fd | wc -l</span></span>
+        <span class="ored">2841   ← very high! ulimit -n is 65536 — approaching limit</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /proc/sys/fs/file-nr         # system-wide FD usage</span></span>
+        <span class="out">48291   0   1048576   (open/free/max)</span>
+        <span class="sec">──── SS — SOCKET STATE INVESTIGATION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ss -tulnp                        # all listening TCP+UDP with process</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ss -tnp state established         # active connections</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ss -tn state time-wait | wc -l   # TIME_WAIT count</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ss -o state established '( dport = :80 or sport = :80 )'</span></span>
+        <span class="sec">──── NETWORK BANDWIDTH PER PROCESS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">nethogs enp3s0                   # bandwidth per process</span></span>
+        <span class="ored">python3  8841 www-data: 24.5 MB/s sent  ← abnormal outbound!</span>
+        <span class="out">nginx    1500 www-data:  4.2 MB/s recv</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 09 — ENTERPRISE TROUBLESHOOTING SCENARIOS -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🏢</span><span class="pt">Enterprise Troubleshooting Scenarios — Root Cause Analysis</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div class="g2">
+      <div class="sc-card">
+        <div class="scc-title">① High Load Average — Server Unresponsive</div>
+        <div class="scc-body">
+          <strong style="color:var(--y)">Symptom:</strong> load avg 28 on 4-core system. SSH barely connects.<br><br>
+          <strong style="color:var(--c)">Diagnosis:</strong><br>
+          1. <code>uptime</code> → confirm load<br>
+          2. <code>vmstat 1</code> → r=26 (26 waiting for CPU), wa=0 (not I/O)<br>
+          3. <code>ps aux --sort=-%cpu | head -5</code> → PID 8841 at 780% CPU<br>
+          4. <code>cat /proc/8841/cmdline</code> → crypto miner malware<br>
+          5. <code>strace -p 8841 -e trace=network</code> → mining pool connections
+        </div>
+        <div class="scc-cmd">kill -9 8841 && ausearch -k root_commands | grep 8841</div>
+      </div>
+
+      <div class="sc-card">
+        <div class="scc-title">② Disk Full — Application Crashes</div>
+        <div class="scc-body">
+          <strong style="color:var(--y)">Symptom:</strong> nginx 502 errors. Application logs stop. New files can't be created.<br><br>
+          <strong style="color:var(--c)">Diagnosis:</strong><br>
+          1. <code>df -h</code> → /var at 100%<br>
+          2. <code>du -sh /var/* | sort -rh | head</code> → /var/log = 98GB<br>
+          3. <code>lsof | grep deleted</code> → 8.1GB deleted log still open by nginx<br>
+          4. <code>ls -lhS /var/log/nginx/</code> → access.log is 78GB, no rotation<br>
+          5. Root cause: logrotate misconfigured, access.log unbounded
+        </div>
+        <div class="scc-cmd">nginx -s reopen && logrotate --force /etc/logrotate.d/nginx</div>
+      </div>
+
+      <div class="sc-card">
+        <div class="scc-title">③ Memory Leak — OOM Kill Loop</div>
+        <div class="scc-body">
+          <strong style="color:var(--y)">Symptom:</strong> Service restarts every few hours. Logs stop abruptly.<br><br>
+          <strong style="color:var(--c)">Diagnosis:</strong><br>
+          1. <code>journalctl -u myapp | grep "Out of memory"</code><br>
+          2. <code>dmesg | grep "Killed process"</code> → confirms OOM kill<br>
+          3. <code>sar -r 1 60</code> → memory growing linearly<br>
+          4. <code>valgrind --leak-check=full ./myapp 2>&1 | grep "lost"</code><br>
+          5. Found: SSL context not freed in connection handler
+        </div>
+        <div class="scc-cmd">systemctl set-property myapp.service MemoryMax=512M  # immediate mitigation</div>
+      </div>
+
+      <div class="sc-card">
+        <div class="scc-title">④ Intermittent 500 Errors — Service Investigation</div>
+        <div class="scc-body">
+          <strong style="color:var(--y)">Symptom:</strong> Users report random 500 errors ~every 2 minutes, 5-10s duration.<br><br>
+          <strong style="color:var(--c)">Diagnosis:</strong><br>
+          1. <code>tail -f /var/log/nginx/error.log</code> → "upstream timed out"<br>
+          2. <code>journalctl -u myapp -f</code> → GC pause messages every 2min<br>
+          3. <code>jstat -gc $(pgrep java)</code> → full GC taking 8s<br>
+          4. <code>ss -tn state time-wait | wc -l</code> → 24k TIME_WAIT sockets<br>
+          5. Root cause: Java heap too small → frequent full GC → blocking requests
+        </div>
+        <div class="scc-cmd">JAVA_OPTS="-Xmx4G -XX:+UseG1GC" systemctl restart myapp</div>
+      </div>
+
+      <div class="sc-card">
+        <div class="scc-title">⑤ Slow Database Queries — I/O Investigation</div>
+        <div class="scc-body">
+          <strong style="color:var(--y)">Symptom:</strong> MySQL queries taking 10-30s instead of milliseconds.<br><br>
+          <strong style="color:var(--c)">Diagnosis:</strong><br>
+          1. <code>iostat -x 1</code> → sdb %util=98%, await=180ms<br>
+          2. <code>iotop -o</code> → mysqld writing 120MB/s continuously<br>
+          3. <code>strace -e trace=write -p $(pgrep mysqld)</code> → writes to redo log<br>
+          4. <code>vmstat 1</code> → wa=45% — I/O bottleneck confirmed<br>
+          5. Root cause: redo log on HDD instead of SSD after migration
+        </div>
+        <div class="scc-cmd">mv /var/lib/mysql/ib_logfile* /ssd/mysql/ && ln -s /ssd/mysql/ /var/lib/mysql/</div>
+      </div>
+
+      <div class="sc-card">
+        <div class="scc-title">⑥ SSH Connection Drops — Network/Timeout</div>
+        <div class="scc-body">
+          <strong style="color:var(--y)">Symptom:</strong> SSH sessions drop after ~5 minutes of inactivity.<br><br>
+          <strong style="color:var(--c)">Diagnosis:</strong><br>
+          1. <code>journalctl -u sshd | grep "Timeout"</code><br>
+          2. <code>sshd -T | grep -E "alive|timeout"</code> → ClientAliveInterval=300<br>
+          3. Network device (firewall/NAT) drops idle connections at 4min<br>
+          4. <code>tcpdump -i enp3s0 port 22</code> → keepalive packets sent but dropped by firewall
+        </div>
+        <div class="scc-cmd">echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config && systemctl reload sshd</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 10 — LINUX VS WINDOWS MONITORING -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⇄</span><span class="pt">Linux vs Windows — Monitoring &amp; Logging Comparison</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <table class="tbl">
+      <thead><tr><th>Dimension</th><th>🐧 Linux</th><th>🪟 Windows</th></tr></thead>
+      <tbody>
+        <tr><td>Primary log viewer</td><td style="color:var(--g)">journalctl — structured queries, JSON output, field filtering</td><td style="color:var(--t2)">Event Viewer — GUI-focused, Event IDs, binary .evtx format</td></tr>
+        <tr><td>Log format</td><td style="color:var(--g)">Plain text (/var/log/) + structured binary (journal) — both human-readable</td><td style="color:var(--r)">Binary .evtx — requires Event Viewer or wevtutil/Get-EventLog to read</td></tr>
+        <tr><td>Real-time monitoring</td><td style="color:var(--g)">top, htop, vmstat, iostat, sar — all native CLI tools</td><td style="color:var(--t2)">Task Manager (GUI), Performance Monitor (GUI), Perfmon counters</td></tr>
+        <tr><td>Process syscall tracing</td><td style="color:var(--g)">strace — attach to any process, filter by syscall type</td><td style="color:var(--t2)">Process Monitor (Sysinternals) — GUI, less scriptable</td></tr>
+        <tr><td>Open file tracking</td><td style="color:var(--g)">lsof — query by process, file, port, user, deleted files</td><td style="color:var(--t2)">Handle.exe (Sysinternals) — close equivalent</td></tr>
+        <tr><td>Network monitoring</td><td style="color:var(--g)">ss, netstat, tcpdump, nethogs, iftop — all CLI scriptable</td><td style="color:var(--t2)">netstat, Wireshark, Network Monitor — less integrated</td></tr>
+        <tr><td>Kernel-level audit</td><td style="color:var(--g)">auditd — syscall-granular, cannot be bypassed by root</td><td style="color:var(--t2)">ETW (Event Tracing for Windows) — powerful but complex</td></tr>
+        <tr><td>Log rotation</td><td style="color:var(--g)">logrotate — declarative, compress, prune, post-script hooks</td><td style="color:var(--y)">No built-in equivalent — apps manage their own; some use circular logs</td></tr>
+        <tr><td>Remote forwarding</td><td style="color:var(--g)">rsyslog/syslog-ng — flexible routing, TLS, multiple targets</td><td style="color:var(--t2)">WEF (Windows Event Forwarding) — AD-integrated, complex setup</td></tr>
+        <tr><td>Performance history</td><td style="color:var(--g)">sar (sysstat) — 30 days of data, query any time range</td><td style="color:var(--t2)">Perfmon Data Collector Sets — GUI setup required</td></tr>
+        <tr><td>Application profiling</td><td style="color:var(--g)">perf, strace, valgrind, gdb — comprehensive, free</td><td style="color:var(--t2)">Visual Studio Profiler, Windows Performance Analyzer — feature-rich but paid</td></tr>
+        <tr><td>Scriptability</td><td style="color:var(--g)">Every tool has machine-readable output, grep/awk/jq pipeline</td><td style="color:var(--y)">PowerShell — good, but GUI-centric tools harder to automate</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 11 — MONITORING TOOLS REFERENCE -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔧</span><span class="pt">Complete Monitoring Tool Reference</span><span class="pn">PANEL 11</span></div>
+  <div class="pb">
+    <div class="g4">
+      <div class="tool-card">
+        <div class="tc-icon">📊</div>
+        <div class="tc-name" style="color:var(--g)">top</div>
+        <div class="tc-cat">CPU / Memory</div>
+        <div class="tc-body">Real-time process list. CPU, memory, load avg, swap. Every Unix system has it.</div>
+        <div class="tc-cmd">top -bn1 | head -20</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🎨</div>
+        <div class="tc-name" style="color:var(--g)">htop</div>
+        <div class="tc-cat">CPU / Memory</div>
+        <div class="tc-body">Colour top with per-core bars, tree view, mouse support, signal menu.</div>
+        <div class="tc-cmd">htop -d 10</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">💾</div>
+        <div class="tc-name" style="color:var(--c)">vmstat</div>
+        <div class="tc-cat">Memory / Swap / CPU</div>
+        <div class="tc-body">System-wide: CPU states, memory, swap in/out, I/O ops, context switches.</div>
+        <div class="tc-cmd">vmstat 1 10</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">💿</div>
+        <div class="tc-name" style="color:var(--c)">iostat</div>
+        <div class="tc-cat">Disk I/O</div>
+        <div class="tc-body">Per-device I/O: r/s, w/s, await, %util. Identifies disk saturation.</div>
+        <div class="tc-cmd">iostat -x 1</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">📈</div>
+        <div class="tc-name" style="color:var(--y)">sar</div>
+        <div class="tc-cat">Historical</div>
+        <div class="tc-body">Records and replays CPU/memory/network/disk history. 30-day retention.</div>
+        <div class="tc-cmd">sar -u 1 10</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🌐</div>
+        <div class="tc-name" style="color:var(--y)">nethogs</div>
+        <div class="tc-cat">Network / Process</div>
+        <div class="tc-body">Bandwidth per process. Find which app is consuming network.</div>
+        <div class="tc-cmd">nethogs enp3s0</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🔬</div>
+        <div class="tc-name" style="color:var(--o)">strace</div>
+        <div class="tc-cat">Syscall Tracing</div>
+        <div class="tc-body">Trace every syscall. Debug: what files opened, network calls, slowness.</div>
+        <div class="tc-cmd">strace -p PID -e network</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🔍</div>
+        <div class="tc-name" style="color:var(--o)">lsof</div>
+        <div class="tc-cat">Open Files</div>
+        <div class="tc-body">List all open files, sockets, pipes per process. Find deleted-but-open files.</div>
+        <div class="tc-cmd">lsof -p PID</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">⚡</div>
+        <div class="tc-name" style="color:var(--p)">perf</div>
+        <div class="tc-cat">CPU Profiling</div>
+        <div class="tc-body">Hardware counter profiling. Function-level hotspots, cache misses, IPC.</div>
+        <div class="tc-cmd">perf top -p PID</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🚰</div>
+        <div class="tc-name" style="color:var(--p)">iotop</div>
+        <div class="tc-cat">Disk I/O per Process</div>
+        <div class="tc-body">Top-like view of disk I/O per process. Find which process hammers disk.</div>
+        <div class="tc-cmd">iotop -o</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🧠</div>
+        <div class="tc-name" style="color:var(--r)">valgrind</div>
+        <div class="tc-cat">Memory Analysis</div>
+        <div class="tc-body">Detect memory leaks, buffer overflows, use-after-free. Significant overhead.</div>
+        <div class="tc-cmd">valgrind --leak-check=full ./app</div>
+      </div>
+      <div class="tool-card">
+        <div class="tc-icon">🕸</div>
+        <div class="tc-name" style="color:var(--r)">tcpdump</div>
+        <div class="tc-cat">Network Capture</div>
+        <div class="tc-body">Raw packet capture. Filter by host, port, protocol. Save to pcap.</div>
+        <div class="tc-cmd">tcpdump -i any port 80 -w cap.pcap</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 12 — CHECKLIST -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✔</span><span class="pt">Auditor / Security Checklist — Step 10 Verification</span><span class="pn">PANEL 12</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you describe the Linux logging pipeline from application to SIEM and name each component?<span class="tag tg" style="margin-left:auto">ARCH</span></li>
+      <li><div class="chk">✓</div>Can you query journalctl by unit, priority, time, PID, UID, and command in JSON format?<span class="tag tc" style="margin-left:auto">JOURNAL</span></li>
+      <li><div class="chk">✓</div>Can you configure rsyslog to route auth logs to a dedicated file and forward via TLS to a SIEM?<span class="tag ty" style="margin-left:auto">RSYSLOG</span></li>
+      <li><div class="chk">✓</div>Can you write a logrotate config with daily rotation, 30-day retention, compression, and postrotate?<span class="tag tg" style="margin-left:auto">LOGROTATE</span></li>
+      <li><div class="chk">✓</div>Can you interpret top output: identify CPU states (us/sy/wa/id), swap usage, D-state processes?<span class="tag tc" style="margin-left:auto">TOP</span></li>
+      <li><div class="chk">✓</div>Can you use vmstat to identify whether a system is CPU-bound, I/O-bound, or memory-pressured?<span class="tag ty" style="margin-left:auto">VMSTAT</span></li>
+      <li><div class="chk">✓</div>Can you use iostat to identify a saturated disk device (high %util, high await)?<span class="tag to" style="margin-left:auto">IOSTAT</span></li>
+      <li><div class="chk">✓</div>Can you use strace to trace network syscalls of a running process and identify C2 connections?<span class="tag tr2" style="margin-left:auto">STRACE</span></li>
+      <li><div class="chk">✓</div>Can you use lsof to find deleted-but-open files causing disk space not being freed?<span class="tag tp" style="margin-left:auto">LSOF</span></li>
+      <li><div class="chk">✓</div>Can you diagnose all 6 enterprise scenarios: high load, disk full, OOM, 500 errors, slow DB, SSH drops?<span class="tag tg" style="margin-left:auto">SCENARIOS</span></li>
+      <li><div class="chk">✓</div>Can you use dmesg to identify OOM kills, I/O errors, and kernel panics?<span class="tag tc" style="margin-left:auto">DMESG</span></li>
+      <li><div class="chk">✓</div>Can you use perf top to find CPU hotspot functions in a running process?<span class="tag ty" style="margin-left:auto">PERF</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PANEL 13 — SUMMARY -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">◉</span><span class="pt">Summary — Step 10 Complete</span><span class="pn">PANEL 13</span></div>
+  <div class="pb">
+    <div class="g3" style="margin-bottom:0">
+      <div class="sum-card">
+        <div class="sc-l">Logging Stack</div>
+        <div class="sc-v">Applications → journald → rsyslog → files + remote SIEM. journalctl: query by any field, boot, time, priority. rsyslog: route by facility.severity, forward via TLS. logrotate: daily rotation, 30-day retention, postrotate hooks. chattr +a protects log integrity.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Performance Tools</div>
+        <div class="sc-v">top/htop: real-time process view. vmstat: CPU/swap/I/O snapshot. iostat: per-disk saturation. sar: 30-day historical replay. iotop: I/O per process. nethogs: bandwidth per process. perf: function-level CPU profiling. strace: syscall debugging.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">Troubleshooting Method</div>
+        <div class="sc-v">Layer approach: symptom → metric (top/vmstat) → identify culprit process → deep-dive (strace/lsof/perf) → root cause → fix. Every scenario has a command chain. dmesg for kernel issues. journalctl -b -p err for boot problems. lsof for disk/FD leaks.</div>
+      </div>
+    </div>
+    <div class="nxt">
+      <div>
+        <div style="font-family:var(--sans);font-weight:600;font-size:14px;color:var(--g)">▶ Next: Step 11 — Real-World Enterprise Linux Usage</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Web servers · database servers · containers · virtualization · cloud infrastructure · DevOps · CI/CD · HA · load balancing · backup · disaster recovery</div>
+      </div>
+      <button class="nb" onclick="window.sendPrompt && window.sendPrompt('Start Step 11')">$ Start Step 11 →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

