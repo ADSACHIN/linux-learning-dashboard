@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# 🐧 Linux Learning Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive, visually rich learning platform for mastering Linux — from fundamentals to advanced system administration.
 
-Currently, two official plugins are available:
+## 🌐 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**[View Dashboard →](https://adsachin.github.io/linux-learning-dashboard/)**
 
-## React Compiler
+## 📚 Lessons Covered
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| # | Topic | Description |
+|---|-------|-------------|
+| 🔧 Lab | Lab Setup & Test | Environment configuration and verification |
+| 1 | What Is Linux | History, distributions, and core philosophy |
+| 2 | Architecture Deep Dive | Kernel, userspace, system calls |
+| 3 | Filesystem Architecture | FHS, mount points, inodes |
+| 4 | Users & Permissions | Users, groups, ACLs, sudo |
+| 5 | Processes & Services | Process lifecycle, systemd, cgroups |
+| 6 | Networking Deep Dive | TCP/IP, DNS, firewall, troubleshooting |
+| 7 | Security Deep Understanding | SELinux, AppArmor, hardening |
+| 8 | Boot Process Deep Dive | BIOS/UEFI, GRUB, initramfs, systemd |
+| 9 | Package Management | APT, YUM/DNF, compilation from source |
+| 10 | Logging & Monitoring | journald, syslog, monitoring tools |
+| 12 | Risks, Benefits & Tradeoffs | Enterprise considerations |
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19** — UI framework
+- **Vite 8** — Build tool
+- **Framer Motion** — Smooth animations
+- **Lucide React** — Icons
+- **Tailwind CSS 4** — Styling
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# Clone the repo
+git clone https://github.com/ADSACHIN/linux-learning-dashboard.git
+cd linux-learning-dashboard
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📦 Build & Deploy
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The project auto-deploys to GitHub Pages via GitHub Actions on every push to `main`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Manual build
+npm run build
+
+# Preview production build
+npm run preview
 ```
+
+## 📄 License
+
+MIT
