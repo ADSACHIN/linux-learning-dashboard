@@ -1,9 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: black;
-  color: #22c55e;
-  font-family: monospace;
+  margin: 0;
+  background-color: #0a0c0f;
+  color: #e8edf3;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar on nav */
+nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth hover effects on nav buttons */
+nav button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.1) !important;
+}
+
+nav button:active {
+  transform: translateY(0);
+}
+
+/* Bottom nav hover */
+footer button:hover {
+  background: rgba(0, 255, 136, 0.04) !important;
+}
+
+/* Custom scrollbar for content */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0c0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e3a5f;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a5a8f;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(0, 255, 136, 0.2);
+  color: #e8edf3;
 }
