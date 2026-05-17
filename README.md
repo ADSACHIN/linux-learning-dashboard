@@ -57,6 +57,15 @@ npm run build
 npm run preview
 ```
 
+## Vercel deployment
+
+This project can be deployed to Vercel with the Vite build settings.
+
+- Build command: `npm run build`
+- Output directory: `dist`
+
+Connect the `linux-learning-dashboard` repository to Vercel and deploy the `main` branch.
+
 ## 📄 License
 
 MIT
